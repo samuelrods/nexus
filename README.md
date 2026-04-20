@@ -4,7 +4,7 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 
 ![Dashboard Screenshot](./public/images/dashboard_screen.png)
 
-## 🎯 **Key Features**
+## **Key Features**
 
 ### Core CRM Functionality
 - **Contact Management**: Comprehensive contact records with organizational affiliations
@@ -25,7 +25,7 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 - **Deal Status Management**: Track deals through the sales pipeline
 - **Activity History**: Complete audit trail of all customer interactions
 
-## 🛠️ **Tech Stack**
+## **Tech Stack**
 
 **Backend:**
 - Laravel 10.x (PHP 8.1+)
@@ -50,7 +50,7 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 - Feature and unit test coverage
 - Database factories and seeders
 
-<!-- ## 🚀 **Live Demo**
+<!-- ## **Live Demo**
 
 _Demo available upon request_ (or add deployed link here when ready) -->
 
@@ -78,7 +78,7 @@ _Demo available upon request_ (or add deployed link here when ready) -->
 
 You can set up NexusCRM using either Docker (recommended) or traditional PHP/MySQL installation.
 
-### **Option 1: Docker Setup (Recommended)** ⭐
+### **Option 1: Docker Setup (Recommended)**
 
 **Prerequisites:**
 - Docker
@@ -260,10 +260,10 @@ The application features a sophisticated multi-tenant database architecture with
 - **Relationships**: Complex many-to-many and one-to-many relationships
 
 ### Key Database Patterns
-✅ Proper normalization and referential integrity  
-✅ Organization-scoped data isolation (multi-tenancy)  
-✅ Flexible role and permission system  
-✅ Audit trail capability through activity tracking
+- Proper normalization and referential integrity  
+- Organization-scoped data isolation (multi-tenancy)  
+- Flexible role and permission system  
+- Audit trail capability through activity tracking
 
 ## **Testing**
 
@@ -316,7 +316,7 @@ NexusCRM/
 
 See `composer.json` and `package.json` for complete dependency lists.
 
-## 🎓 **What I Learned**
+## **What I Learned**
 
 Building this enterprise-level CRM application provided deep hands-on experience with:
 
@@ -341,7 +341,7 @@ Building this enterprise-level CRM application provided deep hands-on experience
 
 This project represents a production-ready application architecture and significantly enhanced my understanding of enterprise software development patterns.
 
-## 📝 **Future Improvements**
+## **Future Improvements**
 
 - [ ] Email notifications for follow-up reminders
 - [ ] Advanced search and filtering capabilities
@@ -360,7 +360,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ---
 
-<!-- ## 📧 **Contact**
+<!-- ## **Contact**
 
 Samuel Rodrigues - [Your LinkedIn] - [Your Email]
 
