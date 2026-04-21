@@ -16,7 +16,26 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { useEffect, useState } from "react";
-import { Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { Pencil, Trash2, AlertTriangle, Inbox } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const StatusBadge = ({ status }) => {
+    const statusStyles = {
+        pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+        won: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+        lost: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+        active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+        inactive: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+    };
+
+    const style = statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+
+    return (
+        <span className={cn("px-2.5 py-0.5 rounded-full text-xs font-medium capitalize", style)}>
+            {status}
+        </span>
+    );
+};
 
 function EditButton({
     item,
@@ -61,9 +80,9 @@ function EditButton({
     return (
         <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogTrigger asChild>
-                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    <Pencil className="h-4 w-4 mr-2" />
-                    Edit
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-gray-700">
+                    <Pencil className="h-4 w-4" />
+                    <span className="sr-only">Edit</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
@@ -106,9 +125,9 @@ function DeleteButton({ resourceRoute }) {
     return (
         <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogTrigger asChild>
-                <Button variant="destructive" size="sm">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-gray-700">
+                    <Trash2 className="h-4 w-4" />
+                    <span className="sr-only">Delete</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -167,16 +186,16 @@ const Table = ({
         return result;
     };
     return (
-        <div className="rounded-md border overflow-hidden">
-            <TableUI>
-                <TableHeader className="bg-blue-600 dark:bg-gray-700">
-                    <TableRow className="hover:bg-transparent border-none">
+        <div className="relative overflow-hidden shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700">
+            <TableUI className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <TableHeader className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <TableRow className="border-b dark:border-gray-700">
                         {columns.map((column) => (
-                            <TableHead key={column.key} className="text-white dark:text-gray-200 uppercase font-bold px-6 py-3">
+                            <TableHead key={column.key} className="px-6 py-3 font-semibold">
                                 {column.header}
                             </TableHead>
                         ))}
-                        <TableHead className="text-white dark:text-gray-200 uppercase font-bold px-6 py-3 text-right">
+                        <TableHead className="px-6 py-3 text-right font-semibold">
                             Actions
                         </TableHead>
                     </TableRow>
@@ -186,15 +205,21 @@ const Table = ({
                         data.map((item) => (
                             <TableRow
                                 key={resourceName + "-" + item.id}
-                                className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                             >
                                 {columns.map((column) => (
-                                    <TableCell key={column.key + "body"} className="px-6 py-4">
-                                        {item[column.key] ?? "Not yet"}
+                                    <TableCell key={column.key + "body"} className="px-6 py-4 whitespace-nowrap">
+                                        {column.key === "status" ? (
+                                            <StatusBadge status={item[column.key]} />
+                                        ) : (
+                                            <span className="text-gray-900 dark:text-white font-medium">
+                                                {item[column.key] ?? "—"}
+                                            </span>
+                                        )}
                                     </TableCell>
                                 ))}
                                 <TableCell className="px-6 py-4 text-right">
-                                    <div className="flex justify-end gap-2">
+                                    <div className="flex justify-end gap-1">
                                         <EditButton
                                             item={item}
                                             resourceRoute={route(
@@ -222,8 +247,12 @@ const Table = ({
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={columns.length + 1} className="h-24 text-center">
-                                No results.
+                            <TableCell colSpan={columns.length + 1} className="py-20 text-center">
+                                <div className="flex flex-col items-center justify-center">
+                                    <Inbox className="h-12 w-12 text-gray-400 mb-4" />
+                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">No data found</h3>
+                                    <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or add a new {resourceName.slice(0, -1)}.</p>
+                                </div>
                             </TableCell>
                         </TableRow>
                     )}

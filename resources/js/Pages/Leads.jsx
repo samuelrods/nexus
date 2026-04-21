@@ -144,7 +144,7 @@ const LeadForm = ({
 
 const Leads = ({ pagination }) => {
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <TableActions
                 searchRoute={"leads.index"}
                 resourceType={"Leads"}
@@ -181,6 +181,7 @@ const Leads = ({ pagination }) => {
         </div>
     );
 };
+
 
 Leads.layout = (page) => (
     <Layout>

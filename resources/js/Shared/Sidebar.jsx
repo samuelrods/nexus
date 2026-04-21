@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, ShieldCheck, Users, Contact, Building2, Target, Handshake, CalendarDays } from 'lucide-react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { 
+    LayoutDashboard, 
+    ShieldCheck, 
+    Users, 
+    Contact, 
+    Building2, 
+    Target, 
+    Handshake, 
+    CalendarDays,
+    ChevronDown,
+    ChevronRight,
+    Briefcase,
+    Settings,
+    TrendingUp
+} from 'lucide-react';
 import { cn } from "@/lib/utils";
 
-const SidebarItem = ({ href, icon: Icon, children, collapsed }) => {
+const SidebarItem = ({ href, icon: Icon, children, collapsed, isSubItem }) => {
     const { url } = usePage();
     const active = url.startsWith(href);
 
@@ -13,24 +27,77 @@ const SidebarItem = ({ href, icon: Icon, children, collapsed }) => {
                 href={href}
                 className={cn(
                     "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-colors",
-                    active && "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400"
+                    active && "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400",
+                    isSubItem && !collapsed && "pl-11",
+                    collapsed && "justify-center"
                 )}
             >
-                <Icon className={cn(
-                    "w-5 h-5 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white",
-                    active ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
-                )} />
-                {!collapsed && <span className="ms-3 font-medium">{children}</span>}
+                {Icon && (
+                    <Icon className={cn(
+                        "w-5 h-5 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white",
+                        active ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
+                    )} />
+                )}
+                {!collapsed && <span className={cn("font-medium", Icon ? "ms-3" : "")}>{children}</span>}
             </Link>
         </li>
     );
 };
 
-const Sidebar = ({ sidebarOpen }) => {
-    const [collapsed, setCollapsed] = useState(sidebarOpen);
+const SidebarGroup = ({ title, icon: Icon, children, collapsed, activePaths = [] }) => {
+    const { url } = usePage();
+    const isActive = activePaths.some(path => url.startsWith(path));
+    const [isOpen, setIsOpen] = useState(isActive);
 
     useEffect(() => {
-        setCollapsed(sidebarOpen);
+        if (isActive && !collapsed) {
+            setIsOpen(true);
+        }
+    }, [isActive, collapsed]);
+
+    const handleToggle = () => {
+        if (collapsed && activePaths.length > 0) {
+            router.visit(activePaths[0]);
+        } else {
+            setIsOpen(!isOpen);
+        }
+    };
+
+    return (
+        <li>
+            <button
+                type="button"
+                onClick={handleToggle}
+                className={cn(
+                    "flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+                    isActive && !isOpen && "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400",
+                    collapsed && "justify-center"
+                )}
+                title={collapsed ? title : undefined}
+            >
+                <Icon className={cn(
+                    "w-5 h-5 transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white",
+                    isActive && !isOpen ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400"
+                )} />
+                {!collapsed && (
+                    <>
+                        <span className="flex-1 ms-3 text-left whitespace-nowrap font-medium">{title}</span>
+                        {isOpen ? <ChevronDown className="w-4 h-4 text-gray-500" /> : <ChevronRight className="w-4 h-4 text-gray-500" />}
+                    </>
+                )}
+            </button>
+            <ul className={cn("py-2 space-y-2", isOpen && !collapsed ? "block" : "hidden")}>
+                {children}
+            </ul>
+        </li>
+    );
+};
+
+const Sidebar = ({ sidebarOpen }) => {
+    const [collapsed, setCollapsed] = useState(!sidebarOpen);
+
+    useEffect(() => {
+        setCollapsed(!sidebarOpen);
     }, [sidebarOpen]);
 
     return (
@@ -46,27 +113,52 @@ const Sidebar = ({ sidebarOpen }) => {
                     <SidebarItem href="/dashboard" icon={LayoutDashboard} collapsed={collapsed}>
                         Dashboard
                     </SidebarItem>
-                    <SidebarItem href="/roles" icon={ShieldCheck} collapsed={collapsed}>
-                        Roles
-                    </SidebarItem>
-                    <SidebarItem href="/members" icon={Users} collapsed={collapsed}>
-                        Members
-                    </SidebarItem>
-                    <SidebarItem href="/contacts" icon={Contact} collapsed={collapsed}>
-                        Contacts
-                    </SidebarItem>
-                    <SidebarItem href="/companies" icon={Building2} collapsed={collapsed}>
-                        Companies
-                    </SidebarItem>
-                    <SidebarItem href="/leads" icon={Target} collapsed={collapsed}>
-                        Leads
-                    </SidebarItem>
-                    <SidebarItem href="/deals" icon={Handshake} collapsed={collapsed}>
-                        Deals
-                    </SidebarItem>
-                    <SidebarItem href="/activities" icon={CalendarDays} collapsed={collapsed}>
-                        Activities
-                    </SidebarItem>
+
+                    <SidebarGroup 
+                        title="CRM" 
+                        icon={Briefcase} 
+                        collapsed={collapsed} 
+                        activePaths={['/contacts', '/companies']}
+                    >
+                        <SidebarItem href="/contacts" icon={Contact} collapsed={collapsed} isSubItem>
+                            Contacts
+                        </SidebarItem>
+                        <SidebarItem href="/companies" icon={Building2} collapsed={collapsed} isSubItem>
+                            Companies
+                        </SidebarItem>
+                    </SidebarGroup>
+
+                    <SidebarGroup 
+                        title="Sales" 
+                        icon={TrendingUp} 
+                        collapsed={collapsed} 
+                        activePaths={['/leads', '/deals', '/activities']}
+                    >
+                        <SidebarItem href="/leads" icon={Target} collapsed={collapsed} isSubItem>
+                            Leads
+                        </SidebarItem>
+                        <SidebarItem href="/deals" icon={Handshake} collapsed={collapsed} isSubItem>
+                            Deals
+                        </SidebarItem>
+                        <SidebarItem href="/activities" icon={CalendarDays} collapsed={collapsed} isSubItem>
+                            Activities
+                        </SidebarItem>
+                    </SidebarGroup>
+
+                    <SidebarGroup 
+                        title="Settings" 
+                        icon={Settings} 
+                        collapsed={collapsed} 
+                        activePaths={['/roles', '/members']}
+                    >
+                        <SidebarItem href="/members" icon={Users} collapsed={collapsed} isSubItem>
+                            Members
+                        </SidebarItem>
+                        <SidebarItem href="/roles" icon={ShieldCheck} collapsed={collapsed} isSubItem>
+                            Roles
+                        </SidebarItem>
+                    </SidebarGroup>
+
                 </ul>
             </div>
         </aside>

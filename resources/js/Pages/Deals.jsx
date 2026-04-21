@@ -2,6 +2,7 @@ import Layout from "@/Shared/Layout";
 import ResouceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
+import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -18,7 +19,7 @@ import Table from "@/Shared/Table";
 import Select from "react-select";
 import ComboBox from "@/Shared/ComboBox";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2, DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function DealForm({
@@ -206,52 +207,93 @@ function DealForm({
 }
 
 const Deals = ({ pagination }) => {
+    // Derived stats for demonstration
+    const totalDeals = pagination.data.length;
+    const totalValue = pagination.data.reduce((acc, deal) => acc + (parseFloat(deal.value) || 0), 0);
+    const wonDeals = pagination.data.filter(d => d.status === 'won').length;
+    const pendingDeals = pagination.data.filter(d => d.status === 'pending').length;
+
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-            <TableActions
-                searchRoute={"deals.index"}
-                resourceType={"Deals"}
-                storeRoute={"deals.store"}
-                ResourceForm={DealForm}
-                resourceInfo={[
-                    ["lead_id", null],
-                    ["contact_id", null],
-                    ["company_id", null],
-                    ["name", null],
-                    ["value", null],
-                    ["currency", null],
-                    ["close_date", null],
-                    ["status", null],
-                    ["description", ""],
-                ]}
-            />
-            <Table
-                data={pagination.data}
-                columns={[
-                    { header: "Name", key: "name" },
-                    { header: "Value", key: "value" },
-                    { header: "Currency", key: "currency" },
-                    { header: "Close date", key: "close_date" },
-                    { header: "Status", key: "status" },
-                    { header: "Description", key: "description" },
-                    { header: "Company", key: "company_name" },
-                    { header: "Contact", key: "contact_fullname" },
-                ]}
-                resourceName={"deals"}
-                EditResourceForm={DealForm}
-                resourceInfoKeys={[
-                    "lead_id",
-                    "contact_id",
-                    "company_id",
-                    "name",
-                    "value",
-                    "currency",
-                    "close_date",
-                    "status",
-                    "description",
-                ]}
-            />
-            <TablePagination pagination={pagination.links} />
+        <div className="space-y-6">
+            <StatsGrid>
+                <StatsCard 
+                    title="Total Deals" 
+                    value={totalDeals} 
+                    icon={Handshake} 
+                    color="blue"
+                    description="Total deals in current view"
+                />
+                <StatsCard 
+                    title="Total Value" 
+                    value={`$${totalValue.toLocaleString()}`} 
+                    icon={DollarSign} 
+                    color="green"
+                    trend="up"
+                    trendValue={12}
+                    description="Cumulative deal value"
+                />
+                <StatsCard 
+                    title="Won Deals" 
+                    value={wonDeals} 
+                    icon={TrendingUp} 
+                    color="purple"
+                    description="Successfully closed deals"
+                />
+                <StatsCard 
+                    title="Pending" 
+                    value={pendingDeals} 
+                    icon={Clock} 
+                    color="yellow"
+                    description="Deals awaiting closure"
+                />
+            </StatsGrid>
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <TableActions
+                    searchRoute={"deals.index"}
+                    resourceType={"Deals"}
+                    storeRoute={"deals.store"}
+                    ResourceForm={DealForm}
+                    resourceInfo={[
+                        ["lead_id", null],
+                        ["contact_id", null],
+                        ["company_id", null],
+                        ["name", null],
+                        ["value", null],
+                        ["currency", null],
+                        ["close_date", null],
+                        ["status", null],
+                        ["description", ""],
+                    ]}
+                />
+                <Table
+                    data={pagination.data}
+                    columns={[
+                        { header: "Name", key: "name" },
+                        { header: "Value", key: "value" },
+                        { header: "Currency", key: "currency" },
+                        { header: "Close date", key: "close_date" },
+                        { header: "Status", key: "status" },
+                        { header: "Description", key: "description" },
+                        { header: "Company", key: "company_name" },
+                        { header: "Contact", key: "contact_fullname" },
+                    ]}
+                    resourceName={"deals"}
+                    EditResourceForm={DealForm}
+                    resourceInfoKeys={[
+                        "lead_id",
+                        "contact_id",
+                        "company_id",
+                        "name",
+                        "value",
+                        "currency",
+                        "close_date",
+                        "status",
+                        "description",
+                    ]}
+                />
+                <TablePagination pagination={pagination.links} />
+            </div>
         </div>
     );
 };
