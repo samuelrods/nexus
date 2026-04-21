@@ -24,7 +24,15 @@ class UserSeeder extends Seeder
         $numOfMembers = env('NUM_OF_MEMBERS', 5);
         $numOfRecByMember = env('NUM_OF_REC_BY_MEMBER', 5);
 
-        $owner = User::factory()->create();
+        $adminName = env('ADMIN_NAME', 'Admin');
+        $adminEmail = env('ADMIN_EMAIL', 'admin@example.com');
+        $adminPassword = env('ADMIN_PASSWORD', 'password');
+
+        $owner = User::factory()->create([
+            'name' => $adminName,
+            'email' => $adminEmail,
+            'password' => bcrypt($adminPassword),
+        ]);
         $organization = Organization::factory()->create(['user_id' => $owner->id]);
         $organization->memberships()->create(['user_id' => $owner->id]);
         $members = User::factory($numOfMembers)->create();

@@ -141,7 +141,9 @@ docker compose exec app php artisan migrate --seed
 docker compose exec app npm run build
 ```
 
-9. Access the application at `http://localhost:8000`
+9. Access the application at `http://localhost:8000` and login with:
+    - **Email**: `admin@example.com`
+    - **Password**: `password`
 
 **Useful Docker Commands:**
 ```sh
@@ -238,7 +240,9 @@ npm run dev
 
 3. The application will be available at `http://localhost:8000`
 
-4. Login with seeded credentials (if you ran the seeder) or create a new account
+4. Login with seeded credentials (if you ran the seeder) or create a new account:
+    - **Email**: `admin@example.com`
+    - **Password**: `password`
 
 ## **Database Schema**
 
