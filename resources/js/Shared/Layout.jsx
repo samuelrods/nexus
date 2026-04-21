@@ -2,29 +2,31 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Alert from "./Alert";
+import { cn } from "@/lib/utils";
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
-
-        const contentElement = document.getElementById("content");
-        if (!sidebarOpen) {
-            contentElement.style.paddingLeft = "";
-        } else {
-            contentElement.style.paddingLeft = "17rem";
-        }
     };
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             <Alert />
             <Navbar toggleSidebar={toggleSidebar} />
             <Sidebar sidebarOpen={sidebarOpen} />
-            <div id="content" className="pt-20 sm:pl-20 px-5 truncate">
-                {children}
-            </div>
+            <main
+                id="content"
+                className={cn(
+                    "pt-20 px-4 pb-8 transition-all duration-300 min-h-screen",
+                    sidebarOpen ? "sm:ml-64" : "sm:ml-20"
+                )}
+            >
+                <div className="max-w-7xl mx-auto">
+                    {children}
+                </div>
+            </main>
         </div>
     );
 };

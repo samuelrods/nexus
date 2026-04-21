@@ -1,164 +1,115 @@
 import { router } from "@inertiajs/react";
-import { Dropdown, Select } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
-import { HiArrowNarrowDown, HiArrowNarrowUp } from "react-icons/hi";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
+import React from "react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/Components/ui/chart";
+import { TrendingUp, TrendingDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const chartConfig = {
+    value: {
+        label: "Deals",
+        color: "hsl(var(--primary))",
+    },
+};
 
 const DealsChart = ({ data, range }) => {
-    const [series, setSeries] = useState([]);
-
-    const [options, setOptions] = useState({
-        chart: {
-            height: "100%",
-            maxWidth: "100%",
-            type: "area",
-            fontFamily: "Inter, sans-serif",
-            dropShadow: {
-                enabled: false,
-            },
-            toolbar: {
-                show: false,
-            },
-        },
-        tooltip: {
-            enabled: true,
-            x: {
-                show: false,
-            },
-            y: {
-                formatter: function (value) {
-                    return "$" + value;
-                },
-            },
-        },
-        fill: {
-            type: "gradient",
-            gradient: {
-                opacityFrom: 0.55,
-                opacityTo: 0,
-                shade: "#1C64F2",
-                gradientToColors: ["#1C64F2"],
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            width: 6,
-        },
-        grid: {
-            show: false,
-            strokeDashArray: 4,
-            padding: {
-                left: 2,
-                right: 2,
-                top: 0,
-            },
-        },
-        xaxis: {
-            labels: {
-                show: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
-        },
-        yaxis: {
-            show: false,
-        },
-    });
-
-    useEffect(() => {
-        let serieValues = data.dailyTotals.map(
-            (dailyTotal) => dailyTotal.value,
-        );
-        let serieCategories = data.dailyTotals.map(
-            (dailyTotal) => dailyTotal.date,
-        );
-
-        setSeries([
-            {
-                name: "Deals",
-                data: serieValues,
-            },
-        ]);
-
-        setOptions({
-            ...options,
-            xaxis: {
-                ...options.xaxis,
-                categories: serieCategories,
-            },
-        });
-    }, [data]);
-
-    useEffect(() => {}, [range]);
-
-    const handleRangeData = (range) => {
-        router.reload({
-            data: {
-                "deals-range": range,
-            },
+    const handleRangeData = (newRange) => {
+        router.get(route('dashboard'), {
+            "deals-range": newRange,
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+            only: ['dealAreaChartData', 'dealAreaChartRange']
         });
     };
 
     return (
-        <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-            <div className="flex justify-between">
+        <div className="w-full">
+            <div className="flex justify-between items-start mb-4">
                 <div>
-                    <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
+                    <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-1">
                         ${(data.total / 1000).toFixed(1)}k
                     </h5>
-                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Deals total
                     </p>
                 </div>
                 <div
-                    className={
-                        "flex items-center px-2.5 py-0.5 text-base font-semibold text-center " +
-                        (data.percentage !== 0
-                            ? data.percentage > 0
-                                ? "text-green-500 dark:text-green-500"
-                                : "text-red-500 dark:text-red-500"
-                            : null)
-                    }
+                    className={cn(
+                        "flex items-center px-2.5 py-1 text-sm font-bold text-center rounded-full",
+                        data.percentage > 0 ? "text-green-600 bg-green-50 dark:bg-green-900/20" : 
+                        data.percentage < 0 ? "text-red-600 bg-red-50 dark:bg-red-900/20" : 
+                        "text-gray-500 bg-gray-50"
+                    )}
                 >
                     {data.percentage.toFixed(1)}%
-                    {data.percentage !== 0 ? (
-                        data.percentage > 0 ? (
-                            <HiArrowNarrowUp />
-                        ) : (
-                            <HiArrowNarrowDown />
-                        )
+                    {data.percentage > 0 ? (
+                        <TrendingUp className="ml-1 h-4 w-4" />
+                    ) : data.percentage < 0 ? (
+                        <TrendingDown className="ml-1 h-4 w-4" />
                     ) : null}
                 </div>
             </div>
-            <div>
-                <Chart
-                    options={options}
-                    height={200}
-                    series={series}
-                    type="area"
-                />
-            </div>
-            <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-                <div className="flex justify-between items-center pt-5">
-                    <div>
-                        <Select
-                            id="countries"
-                            required
-                            onChange={(e) => handleRangeData(+e.target.value)}
-                            defaultValue={range}
-                        >
-                            <option value={7}>Last 7 days</option>
-                            <option value={30}>Last 30 days</option>
-                            <option value={90}>Last 90 days</option>
-                        </Select>
-                    </div>
-                </div>
+            
+            <ChartContainer config={chartConfig} className="h-[200px] w-full">
+                <AreaChart
+                    data={data.dailyTotals}
+                    margin={{
+                        left: 0,
+                        right: 0,
+                        top: 10,
+                        bottom: 0,
+                    }}
+                >
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis
+                        dataKey="date"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
+                        hide
+                    />
+                    <YAxis hide />
+                    <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent indicator="line" />}
+                    />
+                    <Area
+                        dataKey="value"
+                        type="natural"
+                        fill="var(--color-value)"
+                        fillOpacity={0.4}
+                        stroke="var(--color-value)"
+                        strokeWidth={2}
+                    />
+                </AreaChart>
+            </ChartContainer>
+
+            <div className="flex justify-between items-center pt-4 mt-4 border-t border-gray-100 dark:border-gray-700">
+                <Select
+                    defaultValue={range.toString()}
+                    onValueChange={(value) => handleRangeData(parseInt(value))}
+                >
+                    <SelectTrigger className="w-[180px] h-9">
+                        <SelectValue placeholder="Select range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="7">Last 7 days</SelectItem>
+                        <SelectItem value="30">Last 30 days</SelectItem>
+                        <SelectItem value="90">Last 90 days</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
         </div>
     );

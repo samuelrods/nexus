@@ -1,17 +1,22 @@
 import { router, useForm } from "@inertiajs/react";
+import { Button } from "@/Components/ui/button";
 import {
-    Button,
-    Label,
-    Modal,
-    Table as TableFlowbite,
-    TextInput,
-} from "flowbite-react";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/Components/ui/dialog";
+import {
+    Table as TableUI,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/Components/ui/table";
 import { useEffect, useState } from "react";
-import {
-    HiOutlineExclamationCircle,
-    HiPencilAlt,
-    HiTrash,
-} from "react-icons/hi";
+import { Pencil, Trash2, AlertTriangle } from "lucide-react";
 
 function EditButton({
     item,
@@ -54,14 +59,18 @@ function EditButton({
     }
 
     return (
-        <>
-            <Button onClick={() => setOpenModal(true)} color="blue">
-                <HiPencilAlt />
-                <span className="ml-2 font-semibold">Edit</span>
-            </Button>
-            <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
-                <Modal.Header />
-                <Modal.Body>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Edit
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px]">
+                <DialogHeader>
+                    <DialogTitle>Edit Resource</DialogTitle>
+                </DialogHeader>
+                <div className="py-4">
                     <EditResourceForm
                         item={item}
                         formData={editFormData}
@@ -72,9 +81,9 @@ function EditButton({
                         processing={processing}
                         updating={true}
                     />
-                </Modal.Body>
-            </Modal>
-        </>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 }
 
@@ -83,8 +92,6 @@ function DeleteButton({ resourceRoute }) {
     const [processing, setProcessing] = useState(false);
 
     const handleDelete = () => {
-        setOpenModal(false);
-
         router.delete(resourceRoute, {
             preserveState: true,
             onProgress: () => setProcessing(true),
@@ -92,52 +99,47 @@ function DeleteButton({ resourceRoute }) {
                 setProcessing(false);
                 setOpenModal(false);
             },
+            onFinish: () => setProcessing(false),
         });
     };
 
     return (
-        <>
-            <Button
-                onClick={() => setOpenModal(true)}
-                color="failure"
-                size="sm"
-                disabled={processing}
-            >
-                <HiTrash />
-                <span className="ml-1.5">Delete</span>
-            </Button>
-            <Modal
-                show={openModal}
-                size="md"
-                onClose={() => setOpenModal(false)}
-                popup
-            >
-                <Modal.Header />
-                <Modal.Body>
-                    <div className="text-center">
-                        <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            Are you sure you want to delete this member?
-                        </h3>
-                        <div className="flex justify-center gap-4">
-                            <Button
-                                disabled={processing}
-                                color="failure"
-                                onClick={handleDelete}
-                            >
-                                {"Yes, I'm sure"}
-                            </Button>
-                            <Button
-                                color="gray"
-                                onClick={() => setOpenModal(false)}
-                            >
-                                No, cancel
-                            </Button>
-                        </div>
-                    </div>
-                </Modal.Body>
-            </Modal>
-        </>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle className="flex flex-col items-center">
+                        <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
+                        Confirm Deletion
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="text-center py-4">
+                    <p className="text-gray-500 dark:text-gray-400">
+                        Are you sure you want to delete this resource? This action cannot be undone.
+                    </p>
+                </div>
+                <div className="flex justify-center gap-4 mt-4">
+                    <Button
+                        variant="destructive"
+                        disabled={processing}
+                        onClick={handleDelete}
+                    >
+                        Yes, I'm sure
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => setOpenModal(false)}
+                    >
+                        No, cancel
+                    </Button>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 }
 
@@ -165,68 +167,68 @@ const Table = ({
         return result;
     };
     return (
-        <div className="overflow-x-auto">
-            <TableFlowbite
-                hoverable
-                theme={{
-                    head: {
-                        base: "group/head text-xs uppercase text-white dark:text-gray-400",
-                        cell: {
-                            base: "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-blue-500 dark:bg-gray-700 px-6 py-3",
-                        },
-                    },
-                }}
-            >
-                <TableFlowbite.Head>
-                    {columns.map((column) => (
-                        <TableFlowbite.HeadCell key={column.key}>
-                            {column.header}
-                        </TableFlowbite.HeadCell>
-                    ))}
-                    <TableFlowbite.HeadCell>
-                        <span className="sr-only">Edit</span>
-                    </TableFlowbite.HeadCell>
-                </TableFlowbite.Head>
-                <TableFlowbite.Body className="divide-y">
-                    {data.map((item) => (
-                        <TableFlowbite.Row
-                            key={resourceName + "-" + item.id}
-                            className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                        >
-                            {columns.map((column) => (
-                                <TableFlowbite.Cell key={column.key + "body"}>
-                                    {item[column.key] ?? "Not yet"}
-                                </TableFlowbite.Cell>
-                            ))}
-                            <TableFlowbite.Cell>
-                                <div className="flex gap-2">
-                                    <EditButton
-                                        item={item}
-                                        resourceRoute={route(
-                                            resourceName + ".update",
-                                            item.id,
-                                        )}
-                                        EditResourceForm={EditResourceForm}
-                                        editFormData={editFormData}
-                                        resourceInfoKeys={resourceInfoKeys}
-                                    />
-                                    <DeleteButton
-                                        resourceRoute={route(
-                                            resourceName + ".destroy",
-                                            propertyIdPath
-                                                ? getPropertyByPath(
-                                                      item,
-                                                      propertyIdPath,
-                                                  )
-                                                : item.id,
-                                        )}
-                                    />
-                                </div>
-                            </TableFlowbite.Cell>
-                        </TableFlowbite.Row>
-                    ))}
-                </TableFlowbite.Body>
-            </TableFlowbite>
+        <div className="rounded-md border overflow-hidden">
+            <TableUI>
+                <TableHeader className="bg-blue-600 dark:bg-gray-700">
+                    <TableRow className="hover:bg-transparent border-none">
+                        {columns.map((column) => (
+                            <TableHead key={column.key} className="text-white dark:text-gray-200 uppercase font-bold px-6 py-3">
+                                {column.header}
+                            </TableHead>
+                        ))}
+                        <TableHead className="text-white dark:text-gray-200 uppercase font-bold px-6 py-3 text-right">
+                            Actions
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {data.length > 0 ? (
+                        data.map((item) => (
+                            <TableRow
+                                key={resourceName + "-" + item.id}
+                                className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            >
+                                {columns.map((column) => (
+                                    <TableCell key={column.key + "body"} className="px-6 py-4">
+                                        {item[column.key] ?? "Not yet"}
+                                    </TableCell>
+                                ))}
+                                <TableCell className="px-6 py-4 text-right">
+                                    <div className="flex justify-end gap-2">
+                                        <EditButton
+                                            item={item}
+                                            resourceRoute={route(
+                                                resourceName + ".update",
+                                                item.id,
+                                            )}
+                                            EditResourceForm={EditResourceForm}
+                                            editFormData={editFormData}
+                                            resourceInfoKeys={resourceInfoKeys}
+                                        />
+                                        <DeleteButton
+                                            resourceRoute={route(
+                                                resourceName + ".destroy",
+                                                propertyIdPath
+                                                    ? getPropertyByPath(
+                                                          item,
+                                                          propertyIdPath,
+                                                      )
+                                                    : item.id,
+                                            )}
+                                        />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={columns.length + 1} className="h-24 text-center">
+                                No results.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </TableUI>
         </div>
     );
 };

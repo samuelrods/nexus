@@ -12,6 +12,7 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 - **Lead Management**: Capture and track leads from multiple sources (website, referral, etc.)
 - **Deal Pipeline**: Manage deals with values, currencies, and status tracking (pending/won/lost)
 - **Activity Tracking**: Log all interactions (calls, emails, meetings) with contacts and leads
+- **Analytics Dashboard**: Dynamic visualizations of deal and activity distributions via Recharts-based shadcn components
 
 ### Advanced Features
 - **Multi-tenant Architecture**: Support for multiple organizations within a single application
@@ -36,7 +37,8 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 **Frontend:**
 - React.js with Hooks
 - Inertia.js (SPA without building separate API)
-- Tailwind CSS + Flowbite components
+- Tailwind CSS + shadcn/ui components
+- Lucide-React for modern iconography
 - Vite for blazing-fast builds
 
 **Architecture:**
@@ -311,7 +313,9 @@ NexusCRM/
 - **React.js**: UI component library
 - **Inertia.js**: Modern monolithic approach (SPA without building an API)
 - **Tailwind CSS**: Utility-first CSS framework
-- **Flowbite**: Tailwind component library
+- **shadcn/ui**: Modern, accessible UI components built with Radix UI
+- **Lucide-React**: Clean and consistent icon library
+- **Recharts**: Composable charting library for shadcn/ui charts
 - **Vite**: Fast build tool and dev server
 
 See `composer.json` and `package.json` for complete dependency lists.
@@ -345,7 +349,6 @@ This project represents a production-ready application architecture and signific
 
 - [ ] Email notifications for follow-up reminders
 - [ ] Advanced search and filtering capabilities
-- [ ] Analytics dashboard with charts and metrics
 - [ ] Export functionality (CSV, PDF reports)
 - [ ] API documentation with Swagger/OpenAPI
 - [ ] Calendar view for scheduled interactions

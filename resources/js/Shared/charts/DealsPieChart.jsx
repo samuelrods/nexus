@@ -1,51 +1,97 @@
 import { router } from "@inertiajs/react";
-import { Select } from "flowbite-react";
-import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
+import React from "react";
+import { Pie, PieChart, LabelList, Cell } from "recharts";
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+    ChartLegend,
+    ChartLegendContent,
+} from "@/Components/ui/chart";
+
+const chartConfig = {
+    pending: {
+        label: "Pending",
+        color: "#FACA15",
+    },
+    won: {
+        label: "Won",
+        color: "#1C64F2",
+    },
+    lost: {
+        label: "Lost",
+        color: "#7E3AF2",
+    },
+};
 
 const DealsPieChart = ({ data, range }) => {
-    const [series, setSeries] = useState([]);
+    const chartData = [
+        { status: "pending", value: data.pending ?? 0, fill: chartConfig.pending.color },
+        { status: "won", value: data.won ?? 0, fill: chartConfig.won.color },
+        { status: "lost", value: data.lost ?? 0, fill: chartConfig.lost.color },
+    ];
 
-    useEffect(() => {
-        setSeries([data.pending ?? 0, data.won ?? 0, data.lost ?? 0]);
-    }, [data]);
-
-    const handleRangeData = (range) => {
-        router.reload({
-            data: {
-                "deals-pie-chart-range": range,
-            },
+    const handleRangeData = (newRange) => {
+        router.get(route('dashboard'), {
+            "deals-pie-chart-range": newRange,
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+            only: ['dealPieChartData', 'dealPieChartRange']
         });
     };
 
     return (
-        <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-            <h1 className="text-xl font-bold">Deal Type Distribution</h1>
-            <Chart
-                type="pie"
-                series={series}
-                options={{
-                    labels: ["Pending", "Won", "Lost"],
-                    legend: { position: "bottom" },
-                    colors: ["#FACA15", "#1C64F2", "#7E3AF2"],
-                }}
-                height={500}
-            />
-            <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-                <div className="flex justify-between items-center pt-5">
-                    <div>
-                        <Select
-                            id="pie-chart-range-deals"
-                            required
-                            onChange={(e) => handleRangeData(+e.target.value)}
-                            defaultValue={range}
-                        >
-                            <option value={7}>Last 7 days</option>
-                            <option value={30}>Last 30 days</option>
-                            <option value={90}>Last 90 days</option>
-                        </Select>
-                    </div>
-                </div>
+        <div className="w-full">
+            <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Deal Type Distribution</h3>
+            <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square max-h-[400px]"
+            >
+                <PieChart>
+                    <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel />}
+                    />
+                    <Pie
+                        data={chartData}
+                        dataKey="value"
+                        nameKey="status"
+                        innerRadius={60}
+                        strokeWidth={5}
+                    >
+                        {chartData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                    </Pie>
+                    <ChartLegend
+                        content={<ChartLegendContent nameKey="status" />}
+                        className="-translate-y-2 flex-wrap gap-2 [&>*]:justify-center"
+                    />
+                </PieChart>
+            </ChartContainer>
+
+            <div className="flex justify-between items-center pt-4 mt-6 border-t border-gray-100 dark:border-gray-700">
+                <Select
+                    defaultValue={range.toString()}
+                    onValueChange={(value) => handleRangeData(parseInt(value))}
+                >
+                    <SelectTrigger className="w-[180px] h-9">
+                        <SelectValue placeholder="Select range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="7">Last 7 days</SelectItem>
+                        <SelectItem value="30">Last 30 days</SelectItem>
+                        <SelectItem value="90">Last 90 days</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
         </div>
     );

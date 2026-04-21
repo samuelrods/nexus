@@ -2,11 +2,14 @@ import Layout from "@/Shared/Layout";
 import ResouceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
-import { Button, Dropdown, Spinner, TextInput, Textarea } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import { Textarea } from "@/Components/ui/textarea";
+import { Label } from "@/Components/ui/label";
+import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import Table from "@/Shared/Table";
 import ComboBox from "@/Shared/ComboBox";
-import { router } from "@inertiajs/react";
+import { Loader2 } from "lucide-react";
 import Select from "react-select";
 
 const LeadForm = ({
@@ -21,21 +24,26 @@ const LeadForm = ({
     return (
         <form
             onSubmit={onSubmit}
-            className="space-y-6 flex flex-col items-center"
+            className="space-y-6 flex flex-col items-center max-w-lg mx-auto"
         >
-            <div className="w-full">
+            <div className="w-full space-y-1">
+                <Label>Company</Label>
                 <ComboBox
                     onChange={(data) => setData("company_id", data.value)}
                     apiUrlPath={"/api/companies-options"}
                 />
+                <InputError message={errors.company_id} />
             </div>
-            <div className="w-full">
+            <div className="w-full space-y-1">
+                <Label>Contact</Label>
                 <ComboBox
                     onChange={(data) => setData("contact_id", data.value)}
                     apiUrlPath={"/api/contacts-options"}
                 />
+                <InputError message={errors.contact_id} />
             </div>
-            <div className="w-full">
+            <div className="w-full space-y-1">
+                <Label>Source</Label>
                 <Select
                     onChange={(data) => setData("source", data.value)}
                     options={[
@@ -44,7 +52,7 @@ const LeadForm = ({
                         { value: "social_media", label: "Social Media" },
                         { value: "other", label: "Other" },
                     ]}
-                    placeholder="Source"
+                    placeholder="Select Source"
                     defaultValue={
                         data.source
                             ? {
@@ -57,11 +65,22 @@ const LeadForm = ({
                     }
                     styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                        control: (base) => ({
+                            ...base,
+                            borderRadius: '0.5rem',
+                            borderColor: 'rgb(229 231 235)',
+                            padding: '2px',
+                            '&:hover': {
+                                borderColor: 'rgb(209 213 219)'
+                            }
+                        })
                     }}
                     menuPortalTarget={document.body}
                 />
+                <InputError message={errors.source} />
             </div>
-            <div className="w-full">
+            <div className="w-full space-y-1">
+                <Label>Status</Label>
                 <Select
                     onChange={(data) => setData("status", data.value)}
                     options={[
@@ -69,7 +88,7 @@ const LeadForm = ({
                         { value: "closed", label: "Closed" },
                         { value: "converted", label: "Converted" },
                     ]}
-                    placeholder="Status"
+                    placeholder="Select Status"
                     defaultValue={
                         data.status
                             ? {
@@ -82,31 +101,41 @@ const LeadForm = ({
                     }
                     styles={{
                         menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                        control: (base) => ({
+                            ...base,
+                            borderRadius: '0.5rem',
+                            borderColor: 'rgb(229 231 235)',
+                            padding: '2px',
+                            '&:hover': {
+                                borderColor: 'rgb(209 213 219)'
+                            }
+                        })
                     }}
                     menuPortalTarget={document.body}
                 />
+                <InputError message={errors.status} />
             </div>
-            <div className="w-full">
+            <div className="w-full space-y-1">
+                <Label htmlFor="description">Description</Label>
                 <Textarea
                     onChange={(e) => setData("description", e.target.value)}
                     id="description"
-                    placeholder="Description"
+                    placeholder="Provide some details about this lead..."
                     required
                     rows={4}
-                    color="blue"
+                    className="bg-white dark:bg-gray-800"
                     value={data.description}
                 />
+                <InputError message={errors.description} />
             </div>
-            <div>
+            <div className="pt-4">
                 <Button
                     type="submit"
                     disabled={processing ?? false}
-                    color="blue"
+                    className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                 >
-                    {processing && <Spinner size="sm" />}
-                    <span className={processing ? "ml-2" : ""}>
-                        {processing ? "Loading" : updating ? "Update Lead" : "Add Lead"}
-                    </span>
+                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing ? "Saving..." : updating ? "Update Lead" : "Add Lead"}
                 </Button>
             </div>
         </form>
@@ -115,7 +144,7 @@ const LeadForm = ({
 
 const Leads = ({ pagination }) => {
     return (
-        <>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
             <TableActions
                 searchRoute={"leads.index"}
                 resourceType={"Leads"}
@@ -149,7 +178,7 @@ const Leads = ({ pagination }) => {
                 ]}
             />
             <TablePagination pagination={pagination.links} />
-        </>
+        </div>
     );
 };
 

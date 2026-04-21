@@ -1,5 +1,8 @@
 import { Link, useForm } from "@inertiajs/react";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
+import InputError from "@/Components/InputError";
 
 const Register = () => {
     const { data, setData, post, processing, errors } = useForm({
@@ -17,19 +20,15 @@ const Register = () => {
         post(route("register"));
     }
 
-    function getColorErrors(field) {
-        return errors[field] ? "failure" : null;
-    }
-
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
                 <form onSubmit={submit} className="flex flex-col gap-4">
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="username" value="Username" />
+                            <Label htmlFor="username">Username</Label>
                         </div>
-                        <TextInput
+                        <Input
                             id="username"
                             value={data.username}
                             onChange={(e) =>
@@ -38,19 +37,19 @@ const Register = () => {
                             type="text"
                             placeholder="cskiles"
                             required
-                            color={getColorErrors("username")}
-                            helperText={errors.username}
                         />
+                        <InputError message={errors.username} className="mt-2" />
                     </div>
                     <div className="flex gap-2">
                         <div className="w-full">
                             <div className="mb-2 block">
                                 <Label
                                     htmlFor="first_name"
-                                    value="First name"
-                                />
+                                >
+                                    First name
+                                </Label>
                             </div>
-                            <TextInput
+                            <Input
                                 id="first_name"
                                 value={data.first_name}
                                 onChange={(e) =>
@@ -59,15 +58,14 @@ const Register = () => {
                                 type="text"
                                 placeholder="Oren"
                                 required
-                                color={getColorErrors("first_name")}
-                                helperText={errors.first_name}
                             />
+                            <InputError message={errors.first_name} className="mt-2" />
                         </div>
                         <div className="w-full">
                             <div className="mb-2 block">
-                                <Label htmlFor="last_name" value="Last name" />
+                                <Label htmlFor="last_name">Last name</Label>
                             </div>
-                            <TextInput
+                            <Input
                                 id="last_name"
                                 value={data.last_name}
                                 onChange={(e) =>
@@ -76,31 +74,29 @@ const Register = () => {
                                 type="text"
                                 placeholder="Emmerich"
                                 required
-                                color={getColorErrors("last_name")}
-                                helperText={errors.last_name}
                             />
+                            <InputError message={errors.last_name} className="mt-2" />
                         </div>
                     </div>
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="email" value="Email" />
+                            <Label htmlFor="email">Email</Label>
                         </div>
-                        <TextInput
+                        <Input
                             id="email"
                             value={data.email}
                             onChange={(e) => setData("email", e.target.value)}
                             type="email"
                             placeholder="name@example.com"
                             required
-                            color={getColorErrors("email")}
-                            helperText={errors.email}
                         />
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="password" value="Password" />
+                            <Label htmlFor="password">Password</Label>
                         </div>
-                        <TextInput
+                        <Input
                             value={data.password}
                             onChange={(e) =>
                                 setData("password", e.target.value)
@@ -109,18 +105,18 @@ const Register = () => {
                             type="password"
                             placeholder="********"
                             required
-                            color={getColorErrors("password")}
-                            helperText={errors.password}
                         />
+                        <InputError message={errors.password} className="mt-2" />
                     </div>
                     <div>
                         <div className="mb-2 block">
                             <Label
                                 htmlFor="password_confirmation"
-                                value="Confirmation Password"
-                            />
+                            >
+                                Confirmation Password
+                            </Label>
                         </div>
-                        <TextInput
+                        <Input
                             id="password_confirmation"
                             value={data.password_confirmation}
                             onChange={(e) =>
@@ -130,18 +126,17 @@ const Register = () => {
                             placeholder="********"
                             required
                         />
+                        <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
                     <div className="flex w-full justify-end items-center gap-3">
                         <Link
                             href="/login"
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Already registered?
                         </Link>
                         <Button
-                            typeof="submit"
                             disabled={processing}
-                            color="blue"
                             type="submit"
                         >
                             Submit

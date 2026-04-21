@@ -1,5 +1,12 @@
 import { useForm } from "@inertiajs/react";
-import { Button, Modal } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/Components/ui/dialog";
 import { useState } from "react";
 
 const AddResourceModal = ({
@@ -29,16 +36,19 @@ const AddResourceModal = ({
     }
 
     return (
-        <>
-            <Button onClick={() => setOpenModal(true)} color="blue">
-                Add {resourceType}
-            </Button>
-            <Modal show={openModal} size="2xl" onClose={onCloseModal} popup>
-                <Modal.Header />
-                <Modal.Body>
-                    <h3 className="text-2xl font-medium text-gray-900 dark:text-white text-center mb-3">
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all">
+                    Add {resourceType}
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-gray-800">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-medium text-gray-900 dark:text-white text-center mb-3">
                         Add {resourceType}
-                    </h3>
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="py-4">
                     <ResourceForm
                         data={data}
                         setData={setData}
@@ -47,9 +57,9 @@ const AddResourceModal = ({
                         processing={processing}
                         formData={formData}
                     />
-                </Modal.Body>
-            </Modal>
-        </>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 

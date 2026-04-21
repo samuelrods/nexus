@@ -1,9 +1,15 @@
-import Layout from "@/Shared/Layout"; import ResouceLayout from "@/Shared/ResourceLayout";
+import Layout from "@/Shared/Layout";
+import ResouceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
-import { Button, Spinner, TextInput, Textarea } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Textarea } from "@/Components/ui/textarea";
+import { Label } from "@/Components/ui/label";
+import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import Table from "@/Shared/Table";
+import { Loader2 } from "lucide-react";
 
 const ContactForm = ({
     data,
@@ -17,104 +23,112 @@ const ContactForm = ({
     return (
         <form
             onSubmit={onSubmit}
-            className="space-y-6 flex flex-col items-center"
+            className="space-y-4 flex flex-col items-center max-w-lg mx-auto"
         >
-            <div className="w-full grid grid-cols-2 gap-2">
-                <TextInput
-                    id="first_name"
-                    placeholder="First Name"
-                    value={data.first_name}
-                    onChange={(e) => setData("first_name", capitalizeFirstLetter(e.target.value))}
-                    required
-                    color={errors.first_name ? "failure" : null}
-                    helperText={errors.first_name ?? null}
-                    autoComplete="off"
-                />
-                <TextInput
-                    id="Last Name"
-                    placeholder="Last Name"
-                    value={data.last_name}
-                    onChange={(e) => setData("last_name", capitalizeFirstLetter(e.target.value))}
-                    required
-                    color={errors.last_name ? "failure" : null}
-                    helperText={errors.last_name ?? null}
-                    autoComplete="off"
-                />
+            <div className="w-full grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                    <Label htmlFor="first_name">First Name</Label>
+                    <Input
+                        id="first_name"
+                        placeholder="First Name"
+                        value={data.first_name}
+                        onChange={(e) => setData("first_name", capitalizeFirstLetter(e.target.value))}
+                        required
+                        autoComplete="off"
+                        className="bg-white dark:bg-gray-800"
+                    />
+                    <InputError message={errors.first_name} />
+                </div>
+                <div className="space-y-1">
+                    <Label htmlFor="last_name">Last Name</Label>
+                    <Input
+                        id="last_name"
+                        placeholder="Last Name"
+                        value={data.last_name}
+                        onChange={(e) => setData("last_name", capitalizeFirstLetter(e.target.value))}
+                        required
+                        autoComplete="off"
+                        className="bg-white dark:bg-gray-800"
+                    />
+                    <InputError message={errors.last_name} />
+                </div>
             </div>
-            <div className="w-full">
-                <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Description"
-                    defaultValue={data.description}
-                    onChange={(e) => setData("description", e.target.value)}
-                    required
-                    rows="10"
-                    color={errors.description ? "failure" : null}
-                    helperText={errors.description ?? null}
-                />
-            </div>
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="email">Email</Label>
+                <Input
                     id="email"
-                    placeholder="Email"
+                    type="email"
+                    placeholder="Email Address"
                     value={data.email}
                     onChange={(e) => setData("email", e.target.value)}
                     required
-                    color={errors.email ? "failure" : null}
-                    helperText={errors.email ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.email} />
             </div>
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="job_title">Job Title</Label>
+                <Input
                     id="job_title"
-                    placeholder="Job Title"
+                    placeholder="e.g. Software Engineer"
                     value={data.job_title}
                     onChange={(e) => setData("job_title", e.target.value)}
                     required
-                    color={errors.job_title ? "failure" : null}
-                    helperText={errors.job_title ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.job_title} />
             </div>
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="organization_name">Organization Name</Label>
+                <Input
                     id="organization_name"
-                    placeholder="Organization Name"
+                    placeholder="Current Company/Org"
                     value={data.organization_name}
                     onChange={(e) =>
                         setData("organization_name", e.target.value)
                     }
                     required
-                    color={errors.organization_name ? "failure" : null}
-                    helperText={errors.organization_name ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.organization_name} />
             </div>
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="phone_number">Phone Number</Label>
+                <Input
                     id="phone_number"
                     placeholder="Phone Number"
                     value={data.phone_number}
                     onChange={(e) => setData("phone_number", e.target.value)}
                     required
-                    color={errors.phone_number ? "failure" : null}
-                    helperText={errors.phone_number ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.phone_number} />
             </div>
-            {/* permissions */}
-            <div>
+            <div className="w-full space-y-1">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                    id="description"
+                    placeholder="Background info, notes, etc."
+                    value={data.description}
+                    onChange={(e) => setData("description", e.target.value)}
+                    required
+                    rows={4}
+                    className="bg-white dark:bg-gray-800"
+                />
+                <InputError message={errors.description} />
+            </div>
+            <div className="pt-4">
                 <Button
                     type="submit"
                     disabled={processing ?? false}
-                    color="blue"
+                    className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                 >
-                    {processing && <Spinner size="sm" />}
-                    <span className={processing ? "ml-2" : ""}>
-                        {processing ? "Loading" : updating ? "Update Contact" : "Add Contact"}
-                    </span>
+                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing ? "Saving..." : updating ? "Update Contact" : "Add Contact"}
                 </Button>
             </div>
         </form>
@@ -123,7 +137,7 @@ const ContactForm = ({
 
 const Contacts = ({ pagination }) => {
     return (
-        <>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
             <TableActions
                 searchRoute={"contacts.index"}
                 resourceType={"Contacts"}
@@ -161,7 +175,7 @@ const Contacts = ({ pagination }) => {
                 ]}
             />
             <TablePagination pagination={pagination.links} />
-        </>
+        </div>
     );
 };
 

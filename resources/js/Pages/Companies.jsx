@@ -2,9 +2,14 @@ import Layout from "@/Shared/Layout";
 import ResouceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
-import { Button, Spinner, TextInput, Textarea } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Textarea } from "@/Components/ui/textarea";
+import { Label } from "@/Components/ui/label";
+import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import Table from "@/Shared/Table";
+import { Loader2 } from "lucide-react";
 
 const CompanyForm = ({
     data,
@@ -18,119 +23,129 @@ const CompanyForm = ({
     return (
         <form
             onSubmit={onSubmit}
-            className="space-y-6 flex flex-col items-center"
+            className="space-y-4 flex flex-col items-center max-w-lg mx-auto"
         >
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="name">Company Name</Label>
+                <Input
                     id="name"
-                    placeholder="Name"
+                    placeholder="Enter company name"
                     value={data.name}
                     onChange={(e) => setData("name", e.target.value)}
                     required
-                    color={errors.memberInfo ? "failure" : null}
-                    helperText={errors.memberInfo ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.name} />
             </div>
-            <div className="w-full">
-                <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Description"
-                    defaultValue={data.description}
-                    onChange={(e) => setData("description", e.target.value)}
-                    required
-                    rows="10"
-                    color={errors.description ? "failure" : null}
-                    helperText={errors.description ?? null}
-                />
-            </div>
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="industry">Industry</Label>
+                <Input
                     id="industry"
-                    placeholder="Industry"
+                    placeholder="e.g. Technology, Finance"
                     value={data.industry}
                     onChange={(e) => setData("industry", e.target.value)}
                     required
-                    color={errors.industry ? "failure" : null}
-                    helperText={errors.industry ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.industry} />
             </div>
-            <div className="w-full">
-                <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="website">Website</Label>
+                <Input
                     id="website"
-                    placeholder="Website"
+                    placeholder="https://example.com"
                     value={data.website}
                     onChange={(e) => setData("website", e.target.value)}
                     required
-                    color={errors.website ? "failure" : null}
-                    helperText={errors.website ?? null}
                     autoComplete="off"
+                    className="bg-white dark:bg-gray-800"
                 />
+                <InputError message={errors.website} />
             </div>
-            <div className="w-full flex flex-col gap-2">
-                <div className="w-full grid grid-cols-2 gap-2">
-                    <TextInput
+            <div className="w-full space-y-1">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                    id="description"
+                    placeholder="Company overview, notes, etc."
+                    value={data.description}
+                    onChange={(e) => setData("description", e.target.value)}
+                    required
+                    rows={4}
+                    className="bg-white dark:bg-gray-800"
+                />
+                <InputError message={errors.description} />
+            </div>
+            
+            <div className="w-full space-y-4 pt-2">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">Address Information</h3>
+                <div className="space-y-1">
+                    <Label htmlFor="street_address">Street Address</Label>
+                    <Input
                         id="street_address"
-                        placeholder="Street Address"
+                        placeholder="123 Main St"
                         value={data.street_address}
                         onChange={(e) =>
                             setData("street_address", e.target.value)
                         }
                         required
-                        color={errors.street_address ? "failure" : null}
-                        helperText={errors.street_address ?? null}
-                        autoComplete="off"
+                        className="bg-white dark:bg-gray-800"
                     />
-                    <TextInput
-                        id="city"
-                        placeholder="City"
-                        value={data.city}
-                        onChange={(e) => setData("city", e.target.value)}
-                        required
-                        color={errors.city ? "failure" : null}
-                        helperText={errors.city ?? null}
-                        autoComplete="off"
-                    />
+                    <InputError message={errors.street_address} />
                 </div>
-                <div className="w-full grid grid-cols-2 gap-2">
-                    <TextInput
-                        id="state"
-                        placeholder="State"
-                        value={data.state}
-                        onChange={(e) => setData("state", e.target.value)}
-                        required
-                        color={errors.state ? "failure" : null}
-                        helperText={errors.state ?? null}
-                        autoComplete="off"
-                    />
-                    <TextInput
-                        id="zip_code"
-                        placeholder="Zip Code"
-                        value={data.zip_code}
-                        onChange={(e) => setData("zip_code", e.target.value)}
-                        required
-                        color={errors.zip_code ? "failure" : null}
-                        helperText={errors.zip_code ?? null}
-                        autoComplete="off"
-                    />
+                <div className="grid grid-cols-3 gap-4">
+                    <div className="col-span-1 space-y-1">
+                        <Label htmlFor="city">City</Label>
+                        <Input
+                            id="city"
+                            placeholder="City"
+                            value={data.city}
+                            onChange={(e) => setData("city", e.target.value)}
+                            required
+                            className="bg-white dark:bg-gray-800"
+                        />
+                        <InputError message={errors.city} />
+                    </div>
+                    <div className="col-span-1 space-y-1">
+                        <Label htmlFor="state">State</Label>
+                        <Input
+                            id="state"
+                            placeholder="State"
+                            value={data.state}
+                            onChange={(e) => setData("state", e.target.value)}
+                            required
+                            className="bg-white dark:bg-gray-800"
+                        />
+                        <InputError message={errors.state} />
+                    </div>
+                    <div className="col-span-1 space-y-1">
+                        <Label htmlFor="zip_code">Zip Code</Label>
+                        <Input
+                            id="zip_code"
+                            placeholder="Zip"
+                            value={data.zip_code}
+                            onChange={(e) => setData("zip_code", e.target.value)}
+                            required
+                            className="bg-white dark:bg-gray-800"
+                        />
+                        <InputError message={errors.zip_code} />
+                    </div>
                 </div>
             </div>
-            <div>
+            
+            <div className="pt-6">
                 <Button
                     type="submit"
                     disabled={processing ?? false}
-                    color="blue"
+                    className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                 >
-                    {processing && <Spinner size="sm" />}
-                    <span className={processing ? "ml-2" : ""}>
-                        {processing
-                            ? "Loading"
-                            : updating
-                              ? "Update Company"
-                              : "Add Company"}
-                    </span>
+                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing
+                        ? "Saving..."
+                        : updating
+                          ? "Update Company"
+                          : "Add Company"}
                 </Button>
             </div>
         </form>
@@ -139,7 +154,7 @@ const CompanyForm = ({
 
 const Companies = ({ pagination }) => {
     return (
-        <>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
             <TableActions
                 searchRoute={"companies.index"}
                 resourceType={"Companies"}
@@ -187,7 +202,7 @@ const Companies = ({ pagination }) => {
                 ]}
             />
             <TablePagination pagination={pagination.links} />
-        </>
+        </div>
     );
 };
 

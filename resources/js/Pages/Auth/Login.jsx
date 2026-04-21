@@ -1,5 +1,9 @@
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import { Checkbox } from "@/Components/ui/checkbox";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
+import InputError from "@/Components/InputError";
 
 const Login = ({ status, canResetPassword }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -15,8 +19,8 @@ const Login = ({ status, canResetPassword }) => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
                 <Head title="Log in" />
 
                 {status && (
@@ -27,9 +31,9 @@ const Login = ({ status, canResetPassword }) => {
 
                 <form onSubmit={submit}>
                     <div>
-                        <Label htmlFor="email" value="Email" />
+                        <Label htmlFor="email">Email</Label>
 
-                        <TextInput
+                        <Input
                             id="email"
                             type="email"
                             name="email"
@@ -38,15 +42,14 @@ const Login = ({ status, canResetPassword }) => {
                             autoComplete="username"
                             autoFocus
                             onChange={(e) => setData("email", e.target.value)}
-                            helperText={errors.email}
-                            color={errors.email ? "failure" : null}
                         />
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor="password" value="Password" />
+                        <Label htmlFor="password">Password</Label>
 
-                        <TextInput
+                        <Input
                             id="password"
                             type="password"
                             name="password"
@@ -56,22 +59,23 @@ const Login = ({ status, canResetPassword }) => {
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
-                            color={errors.email ? "failure" : null}
                         />
+                        <InputError message={errors.password} className="mt-2" />
                     </div>
 
                     <div className="block mt-4">
-                        <label className="flex items-center">
+                        <label className="flex items-center space-x-2">
                             <Checkbox
+                                id="remember"
                                 name="remember"
                                 checked={data.remember}
-                                onChange={(e) =>
-                                    setData("remember", e.target.checked)
+                                onCheckedChange={(checked) =>
+                                    setData("remember", checked)
                                 }
                             />
-                            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                            <Label htmlFor="remember" className="text-sm font-normal text-gray-600 dark:text-gray-400">
                                 Remember me
-                            </span>
+                            </Label>
                         </label>
                     </div>
 
@@ -85,7 +89,7 @@ const Login = ({ status, canResetPassword }) => {
                             </Link>
                         )}
 
-                        <Button color="blue" type="submit" className="ml-4" disabled={processing}>
+                        <Button type="submit" className="ml-4" disabled={processing}>
                             Log in
                         </Button>
                     </div>

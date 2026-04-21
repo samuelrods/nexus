@@ -1,8 +1,19 @@
 import Alert from "@/Shared/Alert";
 import { Head, router, usePage } from "@inertiajs/react";
-import { Button, Card, Label, Modal, TextInput } from "flowbite-react";
+import { Button } from "@/Components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/Components/ui/dialog";
 import { useState } from "react";
-import { HiMailOpen } from "react-icons/hi";
+import { MailOpen, Building2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const OrganizationItem = ({ membership }) => {
     const [openModal, setOpenModal] = useState(false);
@@ -28,59 +39,57 @@ const OrganizationItem = ({ membership }) => {
         router.delete(route("members.destroy", membership.id));
     };
 
+    const isSelected = auth.organization && auth.organization.id === organization.id;
+
     return (
-        <>
-            <Button
-                color="light"
-                className="capitalize min-w-[200px]"
-                onClick={() => setOpenModal(true)}
-            >
-                {organization.name}
-                {auth.organization &&
-                auth.organization.id === organization.id ? (
-                    <span className="bg-blue-200 text-xs font-medium text-blue-800 text-center p-0.5 leading-none rounded-full px-2 dark:bg-blue-900 dark:text-blue-200 absolute -translate-y-1/2 translate-x-1/2 left-auto top-0 right-0">
-                        selected
-                    </span>
-                ) : null}
-            </Button>
-            <Modal
-                show={openModal}
-                size="md"
-                onClose={() => setOpenModal(false)}
-                popup
-            >
-                <Modal.Header />
-                <Modal.Body>
-                    <div className="text-center">
-                        <h3 className="mb-5 text-2xl font-bold capitalize">
-                            {organization.name}
-                        </h3>
-                        <div className="mb-4">
-                            <h2 className="font-bold">Owner by: </h2>
-                            <p>{organization.user.username}</p>
-                        </div>
-                        <div className="flex justify-center gap-4">
-                            <Button
-                                color="blue"
-                                onClick={handleOrganizationSelection}
-                                size="sm"
-                            >
-                                {"Choose"}
-                            </Button>
-                            <Button
-                                color="gray"
-                                size="sm"
-                                onClick={handleOrganizationDeletion}
-                            >
-                                {auth.user.id === organization.user_id
-                                    ? "Delete"
-                                    : "Leave"}
-                            </Button>
-                        </div>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+                <Button
+                    variant="outline"
+                    className={cn(
+                        "capitalize min-w-[200px] relative h-12",
+                        isSelected && "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                    )}
+                >
+                    <Building2 className="mr-2 h-4 w-4" />
+                    {organization.name}
+                    {isSelected && (
+                        <span className="bg-blue-600 text-[10px] font-bold text-white uppercase tracking-wider py-0.5 px-2 rounded-full absolute -top-2 -right-2 shadow-sm">
+                            Selected
+                        </span>
+                    )}
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold capitalize text-center">
+                        {organization.name}
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="text-center py-4">
+                    <div className="mb-6">
+                        <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Owner</h2>
+                        <p className="text-lg text-gray-900 dark:text-gray-100">{organization.user.username}</p>
                     </div>
-                </Modal.Body>
-            </Modal>
-        </>
+                    <div className="flex justify-center gap-4">
+                        <Button
+                            className="bg-blue-600 hover:bg-blue-700"
+                            onClick={handleOrganizationSelection}
+                        >
+                            Choose
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleOrganizationDeletion}
+                        >
+                            {auth.user.id === organization.user_id
+                                ? "Delete"
+                                : "Leave"}
+                        </Button>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 
@@ -96,43 +105,40 @@ const InvitationItem = ({ invitation }) => {
     };
 
     return (
-        <>
-            <Button color="light" onClick={() => setOpenModal(true)}>
-                {invitation.organization.name}
-            </Button>
-            <Modal
-                show={openModal}
-                size="md"
-                onClose={() => setOpenModal(false)}
-                popup
-            >
-                <Modal.Header />
-                <Modal.Body>
-                    <div className="text-center">
-                        <HiMailOpen className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            You have been invited to join this organization
-                        </h3>
-                        <div className="flex justify-center gap-4">
-                            <Button
-                                color="blue"
-                                onClick={() => handleInvitation(true)}
-                                size="sm"
-                            >
-                                {"Join Now"}
-                            </Button>
-                            <Button
-                                color="gray"
-                                size="sm"
-                                onClick={() => handleInvitation(false)}
-                            >
-                                Decline
-                            </Button>
-                        </div>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+                <Button variant="outline" className="h-12 min-w-[200px]">
+                    <MailOpen className="mr-2 h-4 w-4" />
+                    {invitation.organization.name}
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle className="hidden">Invitation</DialogTitle>
+                </DialogHeader>
+                <div className="text-center py-4">
+                    <MailOpen className="mx-auto mb-4 h-14 w-14 text-blue-500 opacity-80" />
+                    <h3 className="mb-6 text-lg font-medium text-gray-900 dark:text-gray-100">
+                        You have been invited to join <span className="font-bold">{invitation.organization.name}</span>
+                    </h3>
+                    <div className="flex justify-center gap-4">
+                        <Button
+                            className="bg-blue-600 hover:bg-blue-700 px-8"
+                            onClick={() => handleInvitation(true)}
+                        >
+                            Join Now
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="px-8"
+                            onClick={() => handleInvitation(false)}
+                        >
+                            Decline
+                        </Button>
                     </div>
-                </Modal.Body>
-            </Modal>
-        </>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 
@@ -155,62 +161,54 @@ const CreateOrganizationModal = () => {
     }
 
     return (
-        <>
-            <Button color="blue" size="sm" onClick={() => setOpenModal(true)}>
-                Create
-            </Button>
-            <Modal show={openModal} size="md" onClose={onCloseModal} popup>
-                <Modal.Header />
-                <Modal.Body>
-                    <form onSubmit={onSubmit}>
-                        <div className="space-y-6">
-                            <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-                                Create Organization
-                            </h3>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="name" value="Name" />
-                                </div>
-                                <TextInput
-                                    id="name"
-                                    placeholder="Enter Organization Name"
-                                    autoComplete="off"
-                                    value={name}
-                                    onChange={(event) =>
-                                        setName(event.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="w-full">
-                                <Button type="submit" color="blue">
-                                    Create
-                                </Button>
-                            </div>
-                        </div>
-                    </form>
-                </Modal.Body>
-            </Modal>
-        </>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger asChild>
+                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    Create
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle className="text-xl font-bold">Create Organization</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={onSubmit} className="space-y-6 pt-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Organization Name</Label>
+                        <Input
+                            id="name"
+                            placeholder="Enter Organization Name"
+                            autoComplete="off"
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                            required
+                        />
+                    </div>
+                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+                        Create
+                    </Button>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 };
 
 const Organizations = ({ memberships, invitations }) => {
     return (
-        <>
+        <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
             <Head title="Organizations" />
-            <div className="flex justify-center items-center min-h-screen">
-                <Card>
-                    <div className="flex flex-col items-center px-10 md:min-w-[500px] min-w-full w-full">
-                        <header className="flex gap-2">
-                            <h1 className="text-3xl font-bold">
-                                Organizations
-                            </h1>
-                            <CreateOrganizationModal />
-                        </header>
+            <div className="flex-1 flex justify-center items-center p-4">
+                <Card className="w-full max-w-xl shadow-xl border-none">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7 px-8">
+                        <CardTitle className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                            Organizations
+                        </CardTitle>
+                        <CreateOrganizationModal />
+                    </CardHeader>
+                    <CardContent className="px-8 pb-10">
                         {memberships.length ? (
-                            <>
-                                <div className="my-5 flex flex-col items-center gap-3">
+                            <div className="space-y-4 flex flex-col items-center">
+                                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest w-full text-center">Your Memberships</h2>
+                                <div className="flex flex-col gap-3 w-full items-center">
                                     {memberships.map((membership) => (
                                         <OrganizationItem
                                             key={membership.organization.id}
@@ -218,12 +216,17 @@ const Organizations = ({ memberships, invitations }) => {
                                         />
                                     ))}
                                 </div>
-                            </>
-                        ) : null}
+                            </div>
+                        ) : (
+                            <div className="text-center py-10 text-gray-500">
+                                <p>You are not a member of any organization yet.</p>
+                            </div>
+                        )}
+
                         {invitations.length ? (
-                            <>
-                                <div className="my-5 flex flex-col items-center gap-3">
-                                    <h2 className="text-2xl">Invitations</h2>
+                            <div className="mt-10 space-y-4 flex flex-col items-center">
+                                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest w-full text-center">Pending Invitations</h2>
+                                <div className="flex flex-col gap-3 w-full items-center">
                                     {invitations.map((invitation) => (
                                         <InvitationItem
                                             key={"inv-" + invitation.id}
@@ -231,13 +234,13 @@ const Organizations = ({ memberships, invitations }) => {
                                         />
                                     ))}
                                 </div>
-                            </>
+                            </div>
                         ) : null}
-                    </div>
+                    </CardContent>
                 </Card>
             </div>
             <Alert />
-        </>
+        </div>
     );
 };
 
