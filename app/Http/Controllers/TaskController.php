@@ -10,16 +10,13 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Task::class, 'task');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Task::class);
+
         return view('tasks.index', [
             'items' => Task::search($request->input('query') ?? '')->paginate(10),
             'resourceName' => 'tasks',
@@ -41,11 +38,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $validated = $request->validated();
+        $this->authorize('create', Task::class);
 
-        $task = Task::create($validated);
+        $task = Task::create($request->validated());
 
-        return redirect()->route('tasks.show', $task);
+        return redirect()->route('tasks.show', $task)->with(['message' => 'Task created successfully!', 'type' => 'success']);
     }
 
     /**
@@ -53,6 +50,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $this->authorize('view', $task);
+
         return view('tasks.show', [
             'task' => $task
         ]);
@@ -63,6 +62,8 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        $this->authorize('update', $task);
+
         return view('tasks.edit', [
             'task' => $task,
             'projects' => Project::orderBy('title')->select('title', 'id')->get(),
@@ -74,13 +75,11 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $validated = $request->validated();
+        $this->authorize('update', $task);
 
-        if (! empty($validated)) {
-            $task->update($validated);
-        }
+        $task->update($request->validated());
 
-        return redirect()->route('tasks.show', $task);
+        return redirect()->route('tasks.show', $task)->with(['message' => 'Task updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -88,8 +87,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
+
         $task->delete();
 
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with(['message' => 'Task deleted successfully!', 'type' => 'success']);
     }
 }

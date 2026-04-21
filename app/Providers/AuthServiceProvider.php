@@ -4,12 +4,15 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Models\Activity;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
 use App\Models\Lead;
 use App\Models\Organization;
 use App\Models\OrganizationMember;
+use App\Models\Role;
+use App\Policies\ActivityPolicy;
 use App\Policies\CompanyPolicy;
 use App\Policies\ContactPolicy;
 use App\Policies\DealPolicy;
@@ -18,7 +21,6 @@ use App\Policies\OrganizationMemberPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\RolePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Spatie\Permission\Models\Role;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         Company::class => CompanyPolicy::class,
         Lead::class => LeadPolicy::class,
         Deal::class => DealPolicy::class,
+        Activity::class => ActivityPolicy::class,
     ];
 
     /**

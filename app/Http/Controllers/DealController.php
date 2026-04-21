@@ -12,16 +12,13 @@ use Inertia\Inertia;
 
 class DealController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Deal::class, 'deal');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Deal::class);
+
         $organizationId = session('organization_id');
 
         if ($request->filled('query')) {
@@ -48,6 +45,8 @@ class DealController extends Controller
      */
     public function store(StoreDealRequest $request)
     {
+        $this->authorize('create', Deal::class);
+
         Deal::create([
             ...$request->validated(),
             'organization_id' => session('organization_id'),
@@ -62,6 +61,8 @@ class DealController extends Controller
      */
     public function update(UpdateDealRequest $request, Deal $deal)
     {
+        $this->authorize('update', $deal);
+
         $deal->update($request->validated());
 
         return back()->with(['message' => 'Deal updated successfully!', 'type' => 'success']);
@@ -72,6 +73,8 @@ class DealController extends Controller
      */
     public function destroy(Deal $deal)
     {
+        $this->authorize('delete', $deal);
+
         $deal->delete();
 
         return back()->with(['message' => 'Deal deleted successfully!', 'type' => 'success']);

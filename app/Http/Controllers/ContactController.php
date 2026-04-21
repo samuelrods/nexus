@@ -2,32 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\ContactDataResource;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
-use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ContactController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Contact::class, 'contact');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $organization = Organization::find(session('organization_id'));
+        $this->authorize('viewAny', Contact::class);
 
-        if ($request->input('query')) {
+        $organizationId = session('organization_id');
+
+        if ($request->filled('query')) {
             $searchResults = Contact::search($request->input('query'))
-                ->orderBy('first_name')
-                ->orderBy('id')
-                ->whereIn('id', $organization->contacts->pluck('id')->toArray())
+                ->where('organization_id', $organizationId)
                 ->paginate(10);
 
             return Inertia::render('Contacts', [
@@ -35,11 +31,10 @@ class ContactController extends Controller
             ]);
         }
 
-        $contactsPagination = $organization
-            ->contacts()
+        $contactsPagination = Contact::where('organization_id', $organizationId)
             ->orderBy('first_name')
             ->orderBy('id')
-            ->cursorPaginate(10);
+            ->paginate(10);
 
         return Inertia::render('Contacts', [
             'pagination' => ContactResource::collection($contactsPagination),
@@ -49,48 +44,29 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        $validated = $request->validate([
-            'first_name' => ['required', 'max:255'],
-            'last_name' => ['required', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'phone_number' => ['required', 'max:255'],
-            'organization_name' => ['required', 'max:255'],
-            'job_title' => ['required', 'max:255'],
-            'description' => ['required', 'max:255'],
+        $this->authorize('create', Contact::class);
+
+        Contact::create([
+            ...$request->validated(),
+            'organization_id' => session('organization_id'),
+            'user_id' => auth()->id(),
         ]);
 
-        $organization = Organization::find(session('organization_id'));
-
-        $contact = $organization->contacts()->create([
-            ...$validated,
-            'user_id' => auth()->user()->id,
-        ]);
-
-        return redirect()->back()->with(['message' => 'Contact created.', 'type' => 'success']);
+        return back()->with(['message' => 'Contact created successfully!', 'type' => 'success']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
         $this->authorize('update', $contact);
 
-        $validated = $request->validate([
-            'first_name' => ['sometimes', 'required', 'max:255'],
-            'last_name' => ['sometimes', 'required', 'max:255'],
-            'email' => ['sometimes', 'required', 'email', 'max:255'],
-            'phone_number' => ['sometimes', 'required', 'max:255'],
-            'organization_name' => ['sometimes', 'required', 'max:255'],
-            'job_title' => ['sometimes', 'required', 'max:255'],
-            'description' => ['sometimes', 'required', 'max:255'],
-        ]);
+        $contact->update($request->validated());
 
-        $contact->update($validated);
-
-        return redirect()->back()->with(['message' => 'Contact updated.', 'type' => 'success']);
+        return back()->with(['message' => 'Contact updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -98,32 +74,36 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        $this->authorize('delete', $contact);
+
         // check if contact has leads
         if ($contact->leads()->exists()) {
-            return redirect()->back()->with(['message' => 'Contact has leads and cannot be deleted.', 'type' => 'failure']);
+            return back()->with(['message' => 'Contact has leads and cannot be deleted.', 'type' => 'failure']);
         }
 
         $contact->delete();
 
-        return redirect()->back()->with(['message' => 'Contact deleted.', 'type' => 'success']);
+        return back()->with(['message' => 'Contact deleted successfully!', 'type' => 'success']);
     }
 
     public function getContactsOptions(Request $request)
     {
+        $organizationId = session('organization_id');
 
-        $organization = Organization::find(session('organization_id'));
-
-        if ($request->input('query')) {
+        if ($request->filled('query')) {
             $contacts = Contact::search($request->input('query'))
-                ->orderBy('first_name')
-                ->orderBy('id')
+                ->where('organization_id', $organizationId)
                 ->take(10)
                 ->get();
 
             return ContactDataResource::collection($contacts);
         }
 
-        $contacts = $organization->contacts()->orderBy('first_name')->orderBy('id')->take(10)->get();
+        $contacts = Contact::where('organization_id', $organizationId)
+            ->orderBy('first_name')
+            ->orderBy('id')
+            ->take(10)
+            ->get();
 
         return ContactDataResource::collection($contacts);
     }

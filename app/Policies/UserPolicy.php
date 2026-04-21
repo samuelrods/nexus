@@ -85,7 +85,7 @@ class UserPolicy
      */
     public function before(User $user, string $ability): bool|null
     {
-        if ($user->hasRole(RolesEnum::SUPER->value)) {
+        if ($user->hasRole(RolesEnum::SUPER->value) || $user->hasRole('owner')) {
             return true;
         }
 

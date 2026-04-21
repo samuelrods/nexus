@@ -2,33 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyDataResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Address;
 use App\Models\Company;
-use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CompanyController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Company::class, 'company');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $organization = Organization::find(session('organization_id'));
+        $this->authorize('viewAny', Company::class);
 
-        if ($request->input('query')) {
+        $organizationId = session('organization_id');
+
+        if ($request->filled('query')) {
             $searchResults = Company::search($request->input('query'))
-                ->orderBy('name')
-                ->orderBy('id')
-                ->whereIn('id', $organization->companies->pluck('id')->toArray())
+                ->where('organization_id', $organizationId)
                 ->paginate(10);
 
             return Inertia::render('Companies', [
@@ -36,97 +32,67 @@ class CompanyController extends Controller
             ]);
         }
 
-        $contactsPagination = $organization
-            ->companies()
+        $companiesPagination = Company::where('organization_id', $organizationId)
             ->orderBy('name')
             ->orderBy('id')
-            ->cursorPaginate(10);
+            ->paginate(10);
 
         return Inertia::render('Companies', [
-            'pagination' => CompanyResource::collection($contactsPagination),
+            'pagination' => CompanyResource::collection($companiesPagination),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCompanyRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'website' => 'required|string',
-            'industry' => 'required|string',
-            'description' => 'required|string',
-            'street_address' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'zip_code' => 'required|string',
-        ]);
+        $this->authorize('create', Company::class);
 
-        $organization = Organization::find(session('organization_id'));
+        $validated = $request->validated();
+        $organizationId = session('organization_id');
 
         $address = Address::create([
             'street_address' => $validated['street_address'],
             'city' => $validated['city'],
             'state' => $validated['state'],
             'zip_code' => $validated['zip_code'],
-            'organization_id' => $organization->id,
+            'organization_id' => $organizationId,
         ]);
 
-        $company = $organization->companies()->create([
+        Company::create([
             'name' => $validated['name'],
             'website' => $validated['website'],
             'industry' => $validated['industry'],
             'description' => $validated['description'],
             'address_id' => $address->id,
-            'organization_id' => $organization->id,
+            'organization_id' => $organizationId,
         ]);
 
-        return back()->with(['message' => 'Company created successfully.', 'type' => 'success']);
+        return back()->with(['message' => 'Company created successfully!', 'type' => 'success']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string',
-            'website' => 'sometimes|string',
-            'industry' => 'sometimes|string',
-            'address_id' => 'sometimes|integer',
-            'description' => 'sometimes|string',
-            'street_address' => 'sometimes|string',
-            'city' => 'sometimes|string',
-            'state' => 'sometimes|string',
-            'zip_code' => 'sometimes|string',
-        ]);
+        $this->authorize('update', $company);
 
-        // create array of defined address fields
-        $addressFields = array_filter($validated, function ($key) {
-            return in_array($key, ['street_address', 'city', 'state', 'zip_code']);
-        }, ARRAY_FILTER_USE_KEY);
+        $validated = $request->validated();
 
-        // create array of defined company fields
-        $companyFields = array_filter($validated, function ($key) {
-            return in_array($key, ['name', 'website', 'industry', 'description']);
-        }, ARRAY_FILTER_USE_KEY);
+        $addressFields = array_intersect_key($validated, array_flip(['street_address', 'city', 'state', 'zip_code']));
+        $companyFields = array_intersect_key($validated, array_flip(['name', 'website', 'industry', 'description']));
 
-        // if address fields are set, update address
         if (!empty($addressFields)) {
-            $address = Address::find($company->address_id);
-
-            $address->update($addressFields);
-
-            $company->update($validated);
+            Address::find($company->address_id)->update($addressFields);
         }
 
-        // if company fields are set, update company
         if (!empty($companyFields)) {
             $company->update($companyFields);
         }
 
-        return back()->with(['message' => 'Company updated successfully.', 'type' => 'success']);
+        return back()->with(['message' => 'Company updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -134,26 +100,31 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        $this->authorize('delete', $company);
+
         $company->delete();
 
-        return back()->with(['message' => 'Company deleted successfully.', 'type' => 'success']);
+        return back()->with(['message' => 'Company deleted successfully!', 'type' => 'success']);
     }
 
     public function getCompaniesOptions(Request $request)
     {
-        $organization = Organization::find(session('organization_id'));
+        $organizationId = session('organization_id');
 
-        if ($request->input('query')) {
+        if ($request->filled('query')) {
             $companies = Company::search($request->input('query'))
-                ->orderBy('name')
-                ->orderBy('id')
+                ->where('organization_id', $organizationId)
                 ->take(10)
                 ->get();
 
             return CompanyDataResource::collection($companies);
         }
 
-        $companies = $organization->companies()->orderBy('name')->orderBy('id')->take(10)->get();
+        $companies = Company::where('organization_id', $organizationId)
+            ->orderBy('name')
+            ->orderBy('id')
+            ->take(10)
+            ->get();
 
         return CompanyDataResource::collection($companies);
     }

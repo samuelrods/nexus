@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AcceptInvitationRequest;
+use App\Http\Requests\StoreInvitationRequest;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,11 +13,9 @@ class InvitationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreInvitationRequest $request)
     {
-        $validated = $request->validate([
-            'memberInfo' => ['required', 'string', 'max:255'],
-        ]);
+        $validated = $request->validated();
 
         $user = User::where('username', $validated['memberInfo'])
             ->orWhere('email', $validated['memberInfo'])
@@ -53,7 +52,7 @@ class InvitationController extends Controller
             'organization_id' => $organizationId,
         ]);
 
-        return back()->with('message', 'Invitation sent successfully.');
+        return back()->with(['message' => 'Invitation sent successfully!', 'type' => 'success']);
     }
 
     /**
@@ -70,11 +69,11 @@ class InvitationController extends Controller
                 'user_id' => $invitation->user_id
             ]);
 
-            return back()->with(['message' => 'Invitation accepted successfully.', 'type' => 'success']);
+            return back()->with(['message' => 'Invitation accepted successfully!', 'type' => 'success']);
         }
 
         $invitation->update(['status' => 'declined']);
 
-        return back()->with(['message' => 'Invitation successfully denied.', 'type' => 'failure']);
+        return back()->with(['message' => 'Invitation declined successfully!', 'type' => 'success']);
     }
 }

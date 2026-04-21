@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLeadRequest;
+use App\Http\Requests\UpdateLeadRequest;
 use App\Http\Resources\LeadDataResource;
 use App\Http\Resources\LeadResource;
 use App\Models\Lead;
-use App\Models\Organization;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class LeadController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Lead::class, 'lead');
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $organization = Organization::find(session('organization_id'));
+        $this->authorize('viewAny', Lead::class);
 
-        if ($request->input('query')) {
+        $organizationId = session('organization_id');
+
+        if ($request->filled('query')) {
             $searchResults = Lead::search($request->input('query'))
-                ->orderBy('id')
-                ->whereIn('id', $organization->leads->pluck('id')->toArray())
+                ->where('organization_id', $organizationId)
                 ->paginate(10);
 
             return Inertia::render('Leads', [
@@ -34,10 +31,9 @@ class LeadController extends Controller
             ]);
         }
 
-        $leadsPagination = $organization
-            ->leads()
+        $leadsPagination = Lead::where('organization_id', $organizationId)
             ->orderBy('id')
-            ->cursorPaginate(10);
+            ->paginate(10);
 
         return Inertia::render('Leads', [
             'pagination' => LeadResource::collection($leadsPagination),
@@ -47,45 +43,28 @@ class LeadController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLeadRequest $request)
     {
-        $validated = $request->validate([
-            'company_id' => 'required|exists:companies,id',
-            'contact_id' => 'required|exists:contacts,id',
-            'status' => ['required', Rule::in(['open', 'closed', 'converted'])],
-            'source' => ['required', Rule::in(['website', 'referral', 'social_media', 'other'])],
-            'description' => 'required|string',
-        ]);
+        $this->authorize('create', Lead::class);
 
-        $lead = Lead::create([
-            'company_id' => $validated['company_id'],
-            'contact_id' => $validated['contact_id'],
-            'status' => $validated['status'],
-            'source' => $validated['source'],
-            'description' => $validated['description'],
-            'created_at' => now(),
+        Lead::create([
+            ...$request->validated(),
             'organization_id' => session('organization_id'),
         ]);
 
-        return back()->with(['message' => 'Lead created successfully', 'type' => 'success']);
+        return back()->with(['message' => 'Lead created successfully!', 'type' => 'success']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Lead $lead)
+    public function update(UpdateLeadRequest $request, Lead $lead)
     {
-        $validated = $request->validate([
-            'company_id' => 'sometimes|exists:companies,id',
-            'contact_id' => 'sometimes|exists:contacts,id',
-            'status' => ['sometimes', Rule::in(['open', 'closed', 'converted'])],
-            'source' => ['sometimes', Rule::in(['website', 'referral', 'social_media', 'other'])],
-            'description' => 'sometimes|string',
-        ]);
+        $this->authorize('update', $lead);
 
-        $lead->update($validated);
+        $lead->update($request->validated());
 
-        return back()->with(['message' => 'Lead updated successfully', 'type' => 'success']);
+        return back()->with(['message' => 'Lead updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -93,26 +72,30 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
+        $this->authorize('delete', $lead);
+
         $lead->delete();
 
-        return back()->with(['message' => 'Lead deleted successfully', 'type' => 'success']);
+        return back()->with(['message' => 'Lead deleted successfully!', 'type' => 'success']);
     }
 
     public function getLeadsOptions(Request $request)
     {
+        $organizationId = session('organization_id');
 
-        $organization = Organization::find(session('organization_id'));
-
-        if ($request->input('query')) {
+        if ($request->filled('query')) {
             $leads = Lead::search($request->input('query'))
-                ->orderBy('id')
+                ->where('organization_id', $organizationId)
                 ->take(10)
                 ->get();
 
             return LeadDataResource::collection($leads);
         }
 
-        $leads = $organization->leads()->orderBy('id')->take(10)->get();
+        $leads = Lead::where('organization_id', $organizationId)
+            ->orderBy('id')
+            ->take(10)
+            ->get();
 
         return LeadDataResource::collection($leads);
     }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Models\Address;
 use App\Models\Client;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -40,31 +40,24 @@ class ClientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
-        $request->validate([
-            'company' => ['required', 'string', 'max:255'],
-            'vat' => ['required', 'integer', 'between:1000,99999'],
-            'street_address' => ['required', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
-            'state' => ['required', 'string', 'max:255'],
-            'zip_code' => ['required', 'string', 'regex:/^\d{5}(-\d{4})?$/'],
-        ]);
+        $validated = $request->validated();
 
         $address = Address::create([
-            'street_address' => $request->street_address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip_code' => $request->zip_code,
+            'street_address' => $validated['street_address'],
+            'city' => $validated['city'],
+            'state' => $validated['state'],
+            'zip_code' => $validated['zip_code'],
         ]);
 
         Client::create([
-            'company' => $request->company,
-            'vat' => $request->vat,
+            'company' => $validated['company'],
+            'vat' => $validated['vat'],
             'address_id' => $address->id,
         ]);
 
-        return redirect('/clients');
+        return redirect('/clients')->with(['message' => 'Client created successfully!', 'type' => 'success']);
     }
 
     /**
@@ -90,31 +83,22 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Client $client)
+    public function update(UpdateClientRequest $request, Client $client)
     {
-        $validated = $request->validate([
-            'company' => ['exclude_if:company,' . $client->company, 'required', 'string', 'max:255'],
-            'vat' => ['exclude_if:vat,' . $client->vat, 'required', 'integer', 'between:1000,99999'],
-            'street_address' => ['exclude_if:street_address,' . $client->address->street_address, 'required', 'string', 'max:255'],
-            'city' => ['exclude_if:city,' . $client->address->city, 'required', 'string', 'max:255'],
-            'state' => ['exclude_if:state,' . $client->address->state, 'required', 'string', 'max:255'],
-            'zip_code' => ['exclude_if:zip_code,' . $client->address->zip_code, 'required', 'string', 'regex:/^\d{5}(-\d{4})?$/'],
-        ]);
+        $validated = $request->validated();
 
-        foreach (['street_address', 'city', 'state', 'zip_code'] as $addressProp) {
-            if (isset($validated[$addressProp])) {
-                $client->address->update([$addressProp => $validated[$addressProp]]);
-            }
+        $addressFields = array_intersect_key($validated, array_flip(['street_address', 'city', 'state', 'zip_code']));
+        $clientFields = array_intersect_key($validated, array_flip(['company', 'vat']));
+
+        if (!empty($addressFields)) {
+            $client->address->update($addressFields);
         }
 
-        foreach (['company', 'vat'] as $addressProp) {
-            if (isset($validated[$addressProp])) {
-                $client->update([$addressProp => $validated[$addressProp]]);
-            }
+        if (!empty($clientFields)) {
+            $client->update($clientFields);
         }
 
-
-        return redirect('/clients');
+        return redirect('/clients')->with(['message' => 'Client updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -124,12 +108,12 @@ class ClientController extends Controller
     {
         // Check for constraints before deleting the client
         if ($client->projects()->exists()) {
-            return redirect('/clients')->with('error', 'Unable to delete the client as there are associated projects. Please delete the projects linked to this client before proceeding with the client deletion.');
+            return redirect('/clients')->with(['message' => 'Unable to delete the client as there are associated projects.', 'type' => 'failure']);
         }
 
         $client->address->delete();
         $client->delete();
 
-        return redirect('/clients');
+        return redirect('/clients')->with(['message' => 'Client deleted successfully!', 'type' => 'success']);
     }
 }

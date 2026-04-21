@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreActivityRequest;
+use App\Http\Requests\UpdateActivityRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
-use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,12 +16,13 @@ class ActivityController extends Controller
      */
     public function index(Request $request)
     {
-        $organization = Organization::find(session('organization_id'));
+        $this->authorize('viewAny', Activity::class);
 
-        if ($request->input('query')) {
+        $organizationId = session('organization_id');
+
+        if ($request->filled('query')) {
             $searchResults = Activity::search($request->input('query'))
-                ->orderBy('id')
-                ->whereIn('id', $organization->activities->pluck('id')->toArray())
+                ->where('organization_id', $organizationId)
                 ->paginate(10);
 
             return Inertia::render('Activities', [
@@ -28,10 +30,9 @@ class ActivityController extends Controller
             ]);
         }
 
-        $activitiesPagination = $organization
-            ->activities()
+        $activitiesPagination = Activity::where('organization_id', $organizationId)
             ->orderBy('id')
-            ->cursorPaginate(10);
+            ->paginate(10);
 
         return Inertia::render('Activities', [
             'pagination' => ActivityResource::collection($activitiesPagination),
@@ -41,52 +42,29 @@ class ActivityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreActivityRequest $request)
     {
-        $validated = $request->validate([
-            'contact_id' => 'required|integer|exists:contacts,id',
-            'lead_id' => 'required|integer|exists:leads,id',
-            'type' => ['required', 'string', 'in:call,email,meeting,other'],
-            'date' => 'required|date',
-            'time' => 'required|date_format:H:i:s',
-            'description' => 'required|string',
-        ]);
+        $this->authorize('create', Activity::class);
 
-        $activity = Activity::create([
-            'user_id' => auth()->id(),
-            'contact_id' => $validated['contact_id'],
-            'lead_id' => $validated['lead_id'],
-            'type' => $validated['type'],
-            'date' => $validated['date'],
-            'time' => $validated['time'],
-            'description' => $validated['description'],
+        Activity::create([
+            ...$request->validated(),
             'organization_id' => session('organization_id'),
+            'user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('activities.index')
-            ->with('message', 'Activity created successfully!')
-            ->with('type', 'success');
+        return back()->with(['message' => 'Activity created successfully!', 'type' => 'success']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Activity $activity)
+    public function update(UpdateActivityRequest $request, Activity $activity)
     {
-        $validated = $request->validate([
-            'contact_id' => 'sometimes|required|integer|exists:contacts,id',
-            'lead_id' => 'sometimes|required|integer|exists:leads,id',
-            'type' => ['sometimes', 'required', 'string', 'in:call,email,meeting,other'],
-            'date' => 'sometimes|required|date',
-            'time' => 'sometimes|required|date_format:H:i:s',
-            'description' => 'sometimes|required|string',
-        ]);
+        $this->authorize('update', $activity);
 
-        $activity->update($validated);
+        $activity->update($request->validated());
 
-        return redirect()->route('activities.index')
-            ->with('message', 'Activity updated successfully!')
-            ->with('type', 'success');
+        return back()->with(['message' => 'Activity updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -94,10 +72,10 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
+        $this->authorize('delete', $activity);
+
         $activity->delete();
 
-        return redirect()->route('activities.index')
-            ->with('message', 'Activity deleted successfully!')
-            ->with('type', 'success');
+        return back()->with(['message' => 'Activity deleted successfully!', 'type' => 'success']);
     }
 }

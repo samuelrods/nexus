@@ -3,9 +3,9 @@
 namespace App\Policies;
 
 use App\Enums\RolePermissions;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use Spatie\Permission\Contracts\Role;
 
 class RolePolicy
 {
@@ -63,5 +63,17 @@ class RolePolicy
     public function forceDelete(User $user, Role $role): bool
     {
         return false;
+    }
+
+    /**
+     * Perform pre-authorization checks on the model.
+    */
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->hasRole('owner')) {
+            return true;
+        }
+
+        return null;
     }
 }

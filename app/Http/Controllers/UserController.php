@@ -2,33 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\RolesEnum;
-use App\Enums\UserPermissionsEnum;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
-use Symfony\Component\VarDumper\Caster\RedisCaster;
 
 class UserController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(User::class, 'user');
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         return view('users.index', [
             'items' => User::search($request->input('query') ?? '')->paginate(10),
             'resourceName' => 'users',
@@ -46,22 +35,19 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => [Rule::enum(RolesEnum::class), 'required'],
-        ]);
+        $this->authorize('create', User::class);
+
+        $validated = $request->validated();
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ])->assignRole($request->role);
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ])->assignRole($validated['role']);
 
-        return redirect('/users');
+        return redirect('/users')->with(['message' => 'User created successfully!', 'type' => 'success']);
     }
 
     /**
@@ -69,6 +55,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         return view('users.show', [
             'user' => $user
         ]);
@@ -79,6 +67,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
+
         return view('users.edit', [
             'user' => $user
         ]);
@@ -87,23 +77,23 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => [Rule::excludeIf($request->input('name') === $user->name), 'required', 'string', 'max:255'],
-            'email' => [Rule::excludeIf($request->input('email') === $user->email), 'required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => [Rule::excludeIf(! $request->filled('password')), 'confirmed', Rules\Password::defaults()],
-            'role' => [Rule::enum(RolesEnum::class), [Rule::excludeIf($request->input('role') === $user->roles->first()->name)], 'required'],
-        ]);
+        $this->authorize('update', $user);
 
-        if (! empty($validated)) {
-            $user->update($validated);
-            if ($validated['role']) {
-                $user->syncRoles($validated['role']);
-            }
+        $validated = $request->validated();
+
+        if (isset($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
         }
 
-        return redirect('/users');
+        $user->update($validated);
+
+        if (isset($validated['role'])) {
+            $user->syncRoles($validated['role']);
+        }
+
+        return redirect('/users')->with(['message' => 'User updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -111,14 +101,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
+
         // Check for constraints before deleting the user
         if ($user->projects()->exists()) {
-            return redirect('/users')->with('error', 'Unable to delete the user as there are associated projects. Please delete the projects linked to this user before proceeding with the user deletion.');
+            return redirect('/users')->with(['message' => 'Unable to delete the user as there are associated projects.', 'type' => 'failure']);
         }
 
         $user->delete();
 
-        return redirect('/users');
+        return redirect('/users')->with(['message' => 'User deleted successfully!', 'type' => 'success']);
     }
 
     /**

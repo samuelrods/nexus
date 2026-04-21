@@ -12,18 +12,12 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
     /**
-     * Create the controller instance
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Project::class, 'project');
-    }
-
-    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Project::class);
+
         return view('projects.index', [
             'items' => Project::search($request->input('query') ?? '')->paginate(10),
             'resourceName' => 'projects',
@@ -46,11 +40,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $validated = $request->validated();
+        $this->authorize('create', Project::class);
 
-        $project = Project::create($validated);
+        $project = Project::create($request->validated());
 
-        return redirect()->route('projects.show', $project);
+        return redirect()->route('projects.show', $project)->with(['message' => 'Project created successfully!', 'type' => 'success']);
     }
 
     /**
@@ -80,13 +74,11 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $validated = $request->validated();
+        $this->authorize('update', $project);
 
-        if (! empty($validated)) {
-            $project->update($validated);
-        }
+        $project->update($request->validated());
 
-        return redirect()->route('projects.show', $project);
+        return redirect()->route('projects.show', $project)->with(['message' => 'Project updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -94,8 +86,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
+
         $project->delete();
 
-        return redirect()->route('projects.index');
+        return redirect()->route('projects.index')->with(['message' => 'Project deleted successfully!', 'type' => 'success']);
     }
 }

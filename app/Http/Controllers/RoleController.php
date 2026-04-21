@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ActivityPermissions;
-use App\Enums\AddressPermissionsEnum;
 use App\Enums\CompanyPermissions;
 use App\Enums\ContactPermissions;
 use App\Enums\DealPermissions;
 use App\Enums\LeadPermissions;
 use App\Enums\MemberPermissions;
 use App\Enums\RolePermissions;
+use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
-use App\Models\Address;
 use App\Models\Organization;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class RoleController extends Controller
@@ -25,9 +24,11 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $organization = Organization::find(session('organization_id'));
+        $this->authorize('viewAny', Role::class);
+
+        $organizationId = session('organization_id');
 
         // Cache the permissions for 24 hours
         $permissions = Cache::remember('permissions', 60 * 60 * 24, function () {
@@ -58,22 +59,25 @@ class RoleController extends Controller
             return $permissions;
         });
 
-        // If the user is searching for a role, return the search results.
-        if (request()->input('query')) {
-            $searchResults = Role::search(request()->input('query'))
-                ->whereIn('id', $organization->roles->pluck('id')->toArray())
+        if ($request->filled('query')) {
+            $searchResults = Role::search($request->input('query'))
+                ->where('organization_id', $organizationId)
                 ->paginate(10);
 
             return Inertia::render('Roles', [
-                'pagination' => $searchResults,
+                'pagination' => RoleResource::collection($searchResults),
                 'permissions' => $permissions,
             ]);
         }
 
-        $roles = $organization->roles()->with('permissions')->orderBy('name')->orderBy('id')->cursorPaginate(10);
+        $rolesPagination = Role::where('organization_id', $organizationId)
+            ->with('permissions')
+            ->orderBy('name')
+            ->orderBy('id')
+            ->paginate(10);
 
         return Inertia::render('Roles', [
-            'pagination' => $roles,
+            'pagination' => RoleResource::collection($rolesPagination),
             'permissions' => $permissions,
         ]);
     }
@@ -81,46 +85,41 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:roles'],
-            'permissions' => ['required', 'array'],
-            'permissions.*' => Rule::in(Permission::get()->pluck('id'))
-        ]);
+        $this->authorize('create', Role::class);
 
-        $permissions = Permission::whereIn('id', $validated['permissions'])->get();
+        $validated = $request->validated();
 
-        Role::create([
+        $role = Role::create([
             'name' => ucfirst($validated['name']),
             'guard_name' => 'web',
-        ])->syncPermissions($permissions);
+            'organization_id' => session('organization_id'),
+        ]);
 
-        return redirect()->back()->with(['message' => 'Role created successfully.', 'type' => 'success']);
+        $role->syncPermissions(Permission::whereIn('id', $validated['permissions'])->get());
+
+        return back()->with(['message' => 'Role created successfully!', 'type' => 'success']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        $validated = $request->validate([
-            'name' => [Rule::excludeIf($request->input('name') === $role->name), 'required', 'string', 'max:255', 'unique:roles'],
-            'permissions' => ['required', 'array'],
-            'permissions.*' => Rule::in(Permission::get()->pluck('id'))
-        ]);
+        $this->authorize('update', $role);
 
-        $permissions = Permission::whereIn('id', $validated['permissions'])->get();
+        $validated = $request->validated();
 
-        if (array_key_exists('name', $validated)) {
+        if (isset($validated['name'])) {
             $role->update([
                 'name' => ucfirst($validated['name']),
             ]);
         }
 
-        $role->syncPermissions($permissions);
+        $role->syncPermissions(Permission::whereIn('id', $validated['permissions'])->get());
 
-        return to_route('roles.index')->with(['message' => 'Role updated successfully.', 'type' => 'success']);
+        return back()->with(['message' => 'Role updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -128,8 +127,10 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete', $role);
+
         $role->delete();
 
-        return back()->with(['message' => 'Role deleted successfully.', 'type' => 'success']);
+        return back()->with(['message' => 'Role deleted successfully!', 'type' => 'success']);
     }
 }
