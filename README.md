@@ -78,7 +78,7 @@ _Demo available upon request_ (or add deployed link here when ready) -->
 
 ## **Installation**
 
-You can set up NexusCRM using either Docker (recommended) or traditional PHP/MySQL installation.
+You can set up Nexus using either Docker (recommended) or traditional PHP/MySQL installation.
 
 ### **Option 1: Docker Setup (Recommended)**
 
@@ -290,7 +290,7 @@ php artisan test
 
 ## **Project Structure**
 ```
-NexusCRM/
+Nexus/
 ├── app/              # Application logic (Models, Controllers, Services)
 ├── config/           # Configuration files
 ├── database/         # Migrations, seeds, and factories

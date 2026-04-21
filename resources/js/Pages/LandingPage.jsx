@@ -28,7 +28,7 @@ function NavbarLP() {
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link href="/" className="flex items-center space-x-3">
                     <span className="self-center text-2xl font-bold whitespace-nowrap dark:text-white text-blue-600">
-                        Nexus CRM
+                        Nexus
                     </span>
                 </Link>
                 
@@ -256,7 +256,7 @@ function FooterSection() {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex items-center space-x-3">
                         <span className="text-xl font-bold dark:text-white text-blue-600">
-                            Nexus CRM
+                            Nexus
                         </span>
                     </div>
                     <p className="text-gray-500 text-sm">

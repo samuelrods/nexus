@@ -33,7 +33,7 @@ const Navbar = ({ toggleSidebar }) => {
                     </Button>
                     <Link href="/dashboard" className="flex items-center">
                         <span className="self-center whitespace-nowrap text-xl font-bold dark:text-white text-blue-600">
-                            Nexus CRM
+                            Nexus
                         </span>
                     </Link>
                 </div>
