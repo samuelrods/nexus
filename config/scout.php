@@ -133,9 +133,34 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
+            'contacts' => [
+                'filterableAttributes' => ['id', 'organization_id'],
+                'sortableAttributes' => ['first_name', 'last_name', 'id'],
+            ],
+            'companies' => [
+                'filterableAttributes' => ['id', 'organization_id'],
+                'sortableAttributes' => ['name', 'id'],
+            ],
+            'leads' => [
+                'filterableAttributes' => ['id', 'organization_id'],
+                'sortableAttributes' => ['id'],
+            ],
+            'deals' => [
+                'filterableAttributes' => ['id', 'organization_id'],
+                'sortableAttributes' => ['id'],
+            ],
+            'activities' => [
+                'filterableAttributes' => ['id', 'organization_id'],
+                'sortableAttributes' => ['id'],
+            ],
+            'users' => [
+                'filterableAttributes' => ['id'],
+                'sortableAttributes' => ['first_name', 'last_name', 'id'],
+            ],
+            'roles' => [
+                'filterableAttributes' => ['id', 'organization_id'],
+                'sortableAttributes' => ['name', 'id'],
+            ],
         ],
     ],
 

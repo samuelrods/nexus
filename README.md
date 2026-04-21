@@ -31,6 +31,7 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 **Backend:**
 - Laravel 10.x (PHP 8.1+)
 - MySQL with complex relational schema
+- Meilisearch for ultra-fast full-text search
 - RESTful API architecture
 - Laravel Permissions (Spatie) for RBAC
 
@@ -100,7 +101,7 @@ cd nexus
 cp .env.example .env
 ```
 
-3. Update `.env` with Docker database configuration:
+3. Update `.env` with Docker database and search configuration:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=db
@@ -108,9 +109,13 @@ DB_PORT=3306
 DB_DATABASE=nexus_crm
 DB_USERNAME=nexus
 DB_PASSWORD=secret
+
+SCOUT_DRIVER=meilisearch
+MEILISEARCH_HOST=http://meilisearch:7700
+MEILISEARCH_KEY=masterKey
 ```
 
-Set to database for local dev to avoid API errors
+Set to database for local dev to avoid API errors (if not using Meilisearch)
 ```env
 SCOUT_DRIVER=database
 ```
@@ -136,12 +141,22 @@ docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 ```
 
-8. Build Frontend Assets:
+8. Sync Search Indexes:
+```sh
+docker compose exec app php artisan scout:import "App\Models\Contact"
+docker compose exec app php artisan scout:import "App\Models\User"
+docker compose exec app php artisan scout:import "App\Models\Lead"
+docker compose exec app php artisan scout:import "App\Models\Deal"
+docker compose exec app php artisan scout:import "App\Models\Company"
+docker compose exec app php artisan scout:import "App\Models\Activity"
+```
+
+9. Build Frontend Assets:
 ```sh
 docker compose exec app npm run build
 ```
 
-9. Access the application at `http://localhost:8000` and login with:
+10. Access the application at `http://localhost:8000` and login with:
     - **Email**: `admin@example.com`
     - **Password**: `password`
 
@@ -311,6 +326,8 @@ Nexus/
 ### Backend (PHP/Laravel)
 - **Laravel Framework**: Core web application framework
 - **laravel-permission**: Role and permission management
+- **laravel/scout**: Full-text search integration
+- **Meilisearch**: Open-source search engine
 - **PHPUnit**: Testing framework
 
 ### Frontend (JavaScript/React)
