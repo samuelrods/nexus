@@ -117,28 +117,28 @@ SCOUT_DRIVER=database
 
 4. Build and start Docker containers:
 ```sh
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 5. Install Dependencies (Inside Container):
 ```sh
-docker-compose exec app composer install
-docker-compose exec app npm install
+docker compose exec app composer install
+docker compose exec app npm install
 ```
 
 6. Generate application key:
 ```sh
-docker-compose exec app php artisan key:generate
+docker compose exec app php artisan key:generate
 ```
 
 7. Run migrations and seed the database:
 ```sh
-docker-compose exec app php artisan migrate --seed
+docker compose exec app php artisan migrate --seed
 ```
 
 8. Build Frontend Assets:
 ```sh
-docker-compose exec app npm run build
+docker compose exec app npm run build
 ```
 
 9. Access the application at `http://localhost:8000`
@@ -146,16 +146,16 @@ docker-compose exec app npm run build
 **Useful Docker Commands:**
 ```sh
 # View logs
-docker-compose logs -f app
+docker compose logs -f app
 
 # Stop containers
-docker-compose down
+docker compose down
 
 # Restart containers
-docker-compose restart
+docker compose restart
 
 # Run artisan commands
-docker-compose exec app php artisan [command]
+docker compose exec app php artisan [command]
 ```
 
 ---
