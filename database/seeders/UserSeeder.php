@@ -24,12 +24,16 @@ class UserSeeder extends Seeder
         $numOfMembers = env('NUM_OF_MEMBERS', 5);
         $numOfRecByMember = env('NUM_OF_REC_BY_MEMBER', 5);
 
-        $adminName = env('ADMIN_NAME', 'Admin');
+        $adminFirstName = env('ADMIN_FIRST_NAME', 'Admin');
+        $adminLastName = env('ADMIN_LAST_NAME', 'User');
+        $adminUsername = env('ADMIN_USERNAME', 'admin');
         $adminEmail = env('ADMIN_EMAIL', 'admin@example.com');
         $adminPassword = env('ADMIN_PASSWORD', 'password');
 
         $owner = User::factory()->create([
-            'name' => $adminName,
+            'first_name' => $adminFirstName,
+            'last_name' => $adminLastName,
+            'username' => $adminUsername,
             'email' => $adminEmail,
             'password' => bcrypt($adminPassword),
         ]);
