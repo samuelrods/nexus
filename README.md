@@ -12,7 +12,8 @@ A Customer Relationship Management (CRM) application built with Laravel, React, 
 - **Lead Management**: Capture and track leads from multiple sources (website, referral, etc.)
 - **Deal Pipeline**: Manage deals with values, currencies, and status tracking (pending/won/lost)
 - **Activity Tracking**: Log all interactions (calls, emails, meetings) with contacts and leads
-- **Analytics Dashboard**: Dynamic visualizations of deal and activity distributions via Recharts-based shadcn components
+- **Modern Navigation**: Grouped sidebar tabs (CRM, Sales, Settings) for a cleaner workspace and breadcrumbs for easy navigation
+- **Executive Dashboards**: Real-time stats cards and dynamic visualizations of deal and activity distributions via Recharts-based shadcn components
 
 ### Advanced Features
 - **Multi-tenant Architecture**: Support for multiple organizations within a single application
@@ -152,12 +153,20 @@ docker compose exec app php artisan scout:import "App\Models\Company"
 docker compose exec app php artisan scout:import "App\Models\Activity"
 ```
 
-9. Build Frontend Assets:
+9. **Frontend Development (Hot Module Replacement)**:
+For a smooth development experience with instant updates, start the Vite dev server:
+```sh
+docker compose exec app npm run dev
+```
+*Note: This command should stay running in its own terminal window while you work.*
+
+10. **Build for Production (Optional)**:
+If you need to generate static assets:
 ```sh
 docker compose exec app npm run build
 ```
 
-10. Access the application at `http://localhost:8000` and login with:
+11. Access the application at `http://localhost:8000` and login with:
     - **Email**: `admin@example.com`
     - **Password**: `password`
 
