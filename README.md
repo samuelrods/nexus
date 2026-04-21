@@ -91,8 +91,8 @@ You can set up Nexus using either Docker (recommended) or traditional PHP/MySQL 
 
 1. Clone the repository:
 ```sh
-git clone https://github.com/samuelrods/NexusCRM.git
-cd NexusCRM
+git clone https://github.com/samuelrods/nexus.git
+cd nexus
 ```
 
 2. Copy the environment file:
@@ -174,12 +174,12 @@ docker compose exec app php artisan [command]
 
 1. Clone the project repository:
 ```sh
-git clone https://github.com/samuelrods/NexusCRM.git
+git clone https://github.com/samuelrods/nexus.git
 ```
 
 2. Enter the project directory:
 ```sh
-cd NexusCRM
+cd nexus
 ```
 
 3. Install the Composer dependencies:
@@ -371,4 +371,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 Samuel Rodrigues - [Your LinkedIn] - [Your Email]
 
-Project Link: [https://github.com/samuelrods/NexusCRM](https://github.com/samuelrods/NexusCRM) -->
+Project Link: [https://github.com/samuelrods/nexus](https://github.com/samuelrods/nexus) -->
