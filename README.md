@@ -136,12 +136,13 @@ docker compose exec app npm install
 docker compose exec app php artisan key:generate
 ```
 
-7. Run migrations and seed the database:
+7. Run migrations and seed the database (Seeding is optional and only needed once):
 ```sh
-docker compose exec app php artisan migrate --seed
+docker compose exec app php artisan db:seed
 ```
+*Note: Basic migrations and Scout index settings sync automatically on container startup.*
 
-8. Sync Search Indexes:
+8. Import existing data into Search Indexes (One-time setup):
 ```sh
 docker compose exec app php artisan scout:import "App\Models\Contact"
 docker compose exec app php artisan scout:import "App\Models\User"
