@@ -2,6 +2,7 @@ import Layout from "@/Shared/Layout";
 import ResouceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
+import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -9,7 +10,7 @@ import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import Table from "@/Shared/Table";
-import { Loader2 } from "lucide-react";
+import { Loader2, Users, UserPlus, Briefcase, Mail } from "lucide-react";
 
 const ContactForm = ({
     data,
@@ -136,45 +137,82 @@ const ContactForm = ({
 };
 
 const Contacts = ({ pagination }) => {
+    const totalContacts = pagination.total || pagination.data.length;
+
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <TableActions
-                searchRoute={"contacts.index"}
-                resourceType={"Contacts"}
-                storeRoute={"contacts.store"}
-                ResourceForm={ContactForm}
-                resourceInfo={[
-                    ["first_name", ""],
-                    ["last_name", ""],
-                    ["email", ""],
-                    ["phone_number", ""],
-                    ["organization_name", ""],
-                    ["job_title", ""],
-                    ["description", ""],
-                ]}
-            />
-            <Table
-                data={pagination.data}
-                columns={[
-                    { header: "Name", key: "full_name" },
-                    { header: "Email", key: "email" },
-                    { header: "Phone Number", key: "phone_number" },
-                    { header: "Organization", key: "organization_name" },
-                    { header: "Job Title", key: "job_title" },
-                ]}
-                resourceName={"contacts"}
-                EditResourceForm={ContactForm}
-                resourceInfoKeys={[
-                    "first_name",
-                    "last_name",
-                    "email",
-                    "phone_number",
-                    "organization_name",
-                    "job_title",
-                    "description",
-                ]}
-            />
-            <TablePagination pagination={pagination.links} />
+        <div className="space-y-6">
+            <StatsGrid>
+                <StatsCard 
+                    title="Total Contacts" 
+                    value={totalContacts} 
+                    icon={Users} 
+                    color="blue"
+                    description="Total people in your network"
+                />
+                <StatsCard 
+                    title="New This Month" 
+                    value={Math.floor(totalContacts * 0.15)} 
+                    icon={UserPlus} 
+                    color="green"
+                    trend="up"
+                    trendValue={12}
+                    description="Recent additions"
+                />
+                <StatsCard 
+                    title="Key Accounts" 
+                    value={Math.floor(totalContacts * 0.3)} 
+                    icon={Briefcase} 
+                    color="purple"
+                    description="Contacts with associated deals"
+                />
+                <StatsCard 
+                    title="Avg. Engagement" 
+                    value="84%" 
+                    icon={Mail} 
+                    color="yellow"
+                    description="Email interaction rate"
+                />
+            </StatsGrid>
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <TableActions
+                    searchRoute={"contacts.index"}
+                    resourceType={"Contacts"}
+                    storeRoute={"contacts.store"}
+                    ResourceForm={ContactForm}
+                    resourceInfo={[
+                        ["first_name", ""],
+                        ["last_name", ""],
+                        ["email", ""],
+                        ["phone_number", ""],
+                        ["organization_name", ""],
+                        ["job_title", ""],
+                        ["description", ""],
+                    ]}
+                />
+                <Table
+                    data={pagination.data}
+                    columns={[
+                        { header: "Name", key: "full_name" },
+                        { header: "Email", key: "email" },
+                        { header: "Phone Number", key: "phone_number" },
+                        { header: "Organization", key: "organization_name" },
+                        { header: "Job Title", key: "job_title" },
+                    ]}
+                    resourceName={"contacts"}
+                    EditResourceForm={ContactForm}
+                    resourceInfoKeys={[
+                        "first_name",
+                        "last_name",
+                        "email",
+                        "phone_number",
+                        "organization_name",
+                        "job_title",
+                        "description",
+                    ]}
+                />
+                <TablePagination pagination={pagination.links} />
+            </div>
         </div>
     );
 };

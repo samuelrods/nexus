@@ -34,6 +34,8 @@ class Company extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => (int) $this->id,
+            'organization_id' => (int) $this->organization_id,
             'name' => $this->name,
         ];
     }

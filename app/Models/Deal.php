@@ -55,7 +55,9 @@ class Deal extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => (int) $this->id,
             'name' => $this->name,
+            'organization_id' => (int) $this->organization_id,
         ];
     }
 }

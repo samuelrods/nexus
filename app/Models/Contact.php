@@ -51,6 +51,8 @@ class Contact extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => (int) $this->id,
+            'organization_id' => (int) $this->organization_id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'full_name' => $this->full_name,

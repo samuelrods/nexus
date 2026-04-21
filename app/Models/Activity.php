@@ -47,6 +47,8 @@ class Activity extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => (int) $this->id,
+            'organization_id' => (int) $this->organization_id,
             'contact_name' => $this->contact->fullName,
         ];
     }

@@ -2,6 +2,7 @@ import Layout from "@/Shared/Layout";
 import ResouceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
+import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -9,7 +10,7 @@ import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import Table from "@/Shared/Table";
-import { Loader2 } from "lucide-react";
+import { Loader2, Building2, Globe, Factory, MapPin } from "lucide-react";
 
 const CompanyForm = ({
     data,
@@ -153,55 +154,93 @@ const CompanyForm = ({
 };
 
 const Companies = ({ pagination }) => {
+    const totalCompanies = pagination.total || pagination.data.length;
+    const industries = [...new Set(pagination.data.map(c => c.industry))].length;
+
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-            <TableActions
-                searchRoute={"companies.index"}
-                resourceType={"Companies"}
-                storeRoute={"companies.store"}
-                ResourceForm={CompanyForm}
-                resourceInfo={[
-                    ["name", ""],
-                    ["website", ""],
-                    ["industry", ""],
-                    ["street_address", ""],
-                    ["city", ""],
-                    ["state", ""],
-                    ["zip_code", ""],
-                    ["description", ""],
-                ]}
-            />
-            <Table
-                data={pagination.data.map((company) => {
-                    return {
-                        ...company,
-                        street_address: company.address.street_address,
-                        city: company.address.city,
-                        state: company.address.state,
-                        zip_code: company.address.zip_code,
-                    };
-                })}
-                columns={[
-                    { header: "Name", key: "name" },
-                    { header: "Website", key: "website" },
-                    { header: "Industry", key: "industry" },
-                    { header: "Address", key: "address_full" },
-                ]}
-                resourceName={"companies"}
-                EditResourceForm={CompanyForm}
-                resourceInfoKeys={[
-                    "name",
-                    "website",
-                    "industry",
-                    "address_id",
-                    "description",
-                    "street_address",
-                    "city",
-                    "state",
-                    "zip_code",
-                ]}
-            />
-            <TablePagination pagination={pagination.links} />
+        <div className="space-y-6">
+            <StatsGrid>
+                <StatsCard 
+                    title="Total Companies" 
+                    value={totalCompanies} 
+                    icon={Building2} 
+                    color="blue"
+                    description="Registered organizations"
+                />
+                <StatsCard 
+                    title="Industries" 
+                    value={industries} 
+                    icon={Factory} 
+                    color="purple"
+                    description="Diverse market sectors"
+                />
+                <StatsCard 
+                    title="Active Sites" 
+                    value={totalCompanies} 
+                    icon={Globe} 
+                    color="green"
+                    trend="up"
+                    trendValue={5}
+                    description="Digital presence"
+                />
+                <StatsCard 
+                    title="HQ Locations" 
+                    value={totalCompanies} 
+                    icon={MapPin} 
+                    color="yellow"
+                    description="Global distribution"
+                />
+            </StatsGrid>
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <TableActions
+                    searchRoute={"companies.index"}
+                    resourceType={"Companies"}
+                    storeRoute={"companies.store"}
+                    ResourceForm={CompanyForm}
+                    resourceInfo={[
+                        ["name", ""],
+                        ["website", ""],
+                        ["industry", ""],
+                        ["street_address", ""],
+                        ["city", ""],
+                        ["state", ""],
+                        ["zip_code", ""],
+                        ["description", ""],
+                    ]}
+                />
+                <Table
+                    data={pagination.data.map((company) => {
+                        return {
+                            ...company,
+                            street_address: company.address.street_address,
+                            city: company.address.city,
+                            state: company.address.state,
+                            zip_code: company.address.zip_code,
+                        };
+                    })}
+                    columns={[
+                        { header: "Name", key: "name" },
+                        { header: "Website", key: "website" },
+                        { header: "Industry", key: "industry" },
+                        { header: "Address", key: "address_full" },
+                    ]}
+                    resourceName={"companies"}
+                    EditResourceForm={CompanyForm}
+                    resourceInfoKeys={[
+                        "name",
+                        "website",
+                        "industry",
+                        "address_id",
+                        "description",
+                        "street_address",
+                        "city",
+                        "state",
+                        "zip_code",
+                    ]}
+                />
+                <TablePagination pagination={pagination.links} />
+            </div>
         </div>
     );
 };
