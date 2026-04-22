@@ -14,9 +14,25 @@ class Organization extends Model
 {
     use HasFactory, Searchable;
 
-    protected $fillable = ['name', 'user_id', 'currency', 'created_at'];
+    protected $fillable = ['name', 'user_id', 'currency', 'slug', 'created_at'];
 
     public $timestamps = true;
+
+    protected static function booted()
+    {
+        static::creating(function ($organization) {
+            if (!$organization->slug) {
+                $organization->slug = \Illuminate\Support\Str::slug($organization->name);
+                
+                // Ensure uniqueness
+                $originalSlug = $organization->slug;
+                $count = 1;
+                while (static::where('slug', $organization->slug)->exists()) {
+                    $organization->slug = $originalSlug . '-' . $count++;
+                }
+            }
+        });
+    }
 
     public function user(): BelongsTo
     {
