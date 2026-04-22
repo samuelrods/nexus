@@ -66,6 +66,10 @@ class InvitationController extends Controller
                 'user_id' => $invitation->user_id
             ]);
 
+            // Assign default 'member' role
+            setPermissionsTeamId($invitation->organization_id);
+            $invitation->user->assignRole('member');
+
             return back()->with(['message' => 'Invitation accepted successfully!', 'type' => 'success']);
         }
 
