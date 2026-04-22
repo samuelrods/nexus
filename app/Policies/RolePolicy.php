@@ -38,7 +38,11 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
-        return $user->can(RolePermissions::UPDATE->value) && $user->organizations->contains($role->organization_id);
+        if ($role->name === 'owner') {
+            return false;
+        }
+
+        return $user->hasRole('owner') || ($user->can(RolePermissions::UPDATE->value) && $user->organizations->contains($role->organization_id));
     }
 
     /**
@@ -46,7 +50,11 @@ class RolePolicy
      */
     public function delete(User $user, Role $role): bool
     {
-        return $user->can(RolePermissions::DELETE->value) && $user->organizations->contains($role->organization_id);
+        if ($role->name === 'owner') {
+            return false;
+        }
+
+        return $user->hasRole('owner') || ($user->can(RolePermissions::DELETE->value) && $user->organizations->contains($role->organization_id));
     }
 
     /**
@@ -71,6 +79,9 @@ class RolePolicy
     public function before(User $user, string $ability): bool|null
     {
         if ($user->hasRole('owner')) {
+            if (in_array($ability, ['update', 'delete'])) {
+                return null;
+            }
             return true;
         }
 

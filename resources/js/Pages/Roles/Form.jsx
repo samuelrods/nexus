@@ -1,9 +1,10 @@
 import { Button } from "@/Components/ui/button";
+import { cn } from "@/lib/utils";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Checkbox } from "@/Components/ui/checkbox";
 import InputError from "@/Components/InputError";
-import { Loader2, ShieldCheck, ShieldAlert, CheckSquare, Square } from "lucide-react";
+import { Loader2, ShieldCheck, ShieldAlert, CheckSquare, Square, AlertCircle } from "lucide-react";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
 
@@ -117,8 +118,17 @@ const RoleForm = ({
                             onChange={(e) => setData("name", e.target.value)}
                             required
                             autoComplete="off"
-                            className="bg-card"
+                            className={cn(
+                                "bg-card",
+                                data.name?.toLowerCase() === 'owner' && "border-amber-500 focus-visible:ring-amber-500"
+                            )}
                         />
+                        {data.name?.toLowerCase() === 'owner' && (
+                            <p className="mt-2 text-sm text-amber-600 dark:text-amber-400 font-medium flex items-center gap-1">
+                                <AlertCircle className="w-4 h-4" />
+                                The name "Owner" is reserved for the system.
+                            </p>
+                        )}
                         <InputError message={errors.name} className="mt-2" />
                     </div>
                 </CardContent>

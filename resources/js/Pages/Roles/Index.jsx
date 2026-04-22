@@ -52,12 +52,20 @@ const Roles = ({ pagination, permissions }) => {
                         { 
                             header: "Name", 
                             key: "name",
-                            render: (value) => (
-                                <Badge variant="outline" className="capitalize px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
-                                    <Shield className="w-3 h-3 mr-1" />
-                                    {value}
-                                </Badge>
-                            )
+                            render: (value) => {
+                                const isOwner = value.toLowerCase() === 'owner';
+                                return (
+                                    <div className="flex items-center gap-2">
+                                        <Badge variant="outline" className={`capitalize px-3 py-1 ${isOwner ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' : 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'}`}>
+                                            <Shield className="w-3 h-3 mr-1" />
+                                            {value}
+                                        </Badge>
+                                        {isOwner && (
+                                            <Badge variant="secondary" className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0 bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 border-none">System</Badge>
+                                        )}
+                                    </div>
+                                );
+                            }
                         },
                         { 
                             header: "Members", 

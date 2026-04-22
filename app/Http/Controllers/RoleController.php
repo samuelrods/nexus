@@ -119,6 +119,10 @@ class RoleController extends Controller
     {
         $this->authorize('update', $role);
 
+        if ($role->name === 'owner') {
+            return back()->with(['message' => 'The owner role cannot be modified.', 'type' => 'failure']);
+        }
+
         $validated = $request->validated();
 
         if (isset($validated['name'])) {
@@ -138,6 +142,10 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $this->authorize('delete', $role);
+
+        if ($role->name === 'owner') {
+            return back()->with(['message' => 'The owner role cannot be deleted.', 'type' => 'failure']);
+        }
 
         $role->delete();
 

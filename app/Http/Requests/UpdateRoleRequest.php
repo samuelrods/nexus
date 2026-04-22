@@ -24,7 +24,18 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [Rule::excludeIf($this->name === $this->route('role')->name), 'required', 'string', 'max:255', 'unique:roles'],
+            'name' => [
+                Rule::excludeIf($this->name === $this->route('role')->name),
+                'required',
+                'string',
+                'max:255',
+                'unique:roles',
+                function ($attribute, $value, $fail) {
+                    if (strtolower($value) === 'owner' && $this->route('role')->name !== 'owner') {
+                        $fail('The role name "owner" is reserved for the system.');
+                    }
+                },
+            ],
             'permissions' => ['required', 'array'],
             'permissions.*' => Rule::in(Permission::get()->pluck('id'))
         ];

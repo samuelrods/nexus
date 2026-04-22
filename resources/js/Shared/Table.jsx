@@ -290,7 +290,9 @@ const Table = ({
                             >
                                 {columns.map((column) => (
                                     <TableCell key={column.key + "body"} className="px-6 py-4 whitespace-nowrap">
-                                        {column.key === "status" || column.key === "type" || column.key === "role_name" ? (
+                                        {column.render ? (
+                                            column.render(item[column.key], item)
+                                        ) : column.key === "status" || column.key === "type" || column.key === "role_name" ? (
                                             <StatusBadge status={item[column.key]} />
                                         ) : column.key === "full_name" || column.key === "name" ? (
                                             <div className="flex items-center gap-3">

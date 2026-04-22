@@ -3,9 +3,10 @@ import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { 
-    Shield, 
-    Pencil, 
-    Trash2, 
+    Shield,
+    ShieldAlert,
+    Pencil,
+    Trash2,
     ArrowLeft,
     Calendar,
     AlertTriangle,
@@ -106,52 +107,79 @@ const Show = ({ role }) => {
                 </div>
                 
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" asChild className="bg-background shadow-sm">
-                        <Link href={route("roles.edit", role.data.id)}>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit Configuration
-                        </Link>
-                    </Button>
-                    
-                    <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
-                        <DialogTrigger asChild>
-                            <Button variant="destructive" className="shadow-sm">
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Delete Role
+                    {role.data.name.toLowerCase() !== "owner" ? (
+                        <>
+                            <Button variant="outline" asChild className="bg-background shadow-sm">
+                                <Link href={route("roles.edit", role.data.id)}>
+                                    <Pencil className="mr-2 h-4 w-4" />
+                                    Edit Configuration
+                                </Link>
                             </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle className="flex flex-col items-center gap-2">
-                                    <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400 mb-2">
-                                        <AlertTriangle className="h-8 w-8" />
-                                    </div>
-                                    Confirm Deletion
-                                </DialogTitle>
-                                <DialogDescription className="text-center">
-                                    Are you sure you want to delete the <span className="font-bold text-foreground">{role.data.name}</span> role?
-                                    This action will remove this role from all assigned members and cannot be undone.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter className="flex sm:justify-center gap-2 mt-4">
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setOpenDeleteModal(false)}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    variant="destructive"
-                                    disabled={isDeleting}
-                                    onClick={handleDelete}
-                                >
-                                    {isDeleting ? "Deleting..." : "Confirm Delete"}
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+
+                            <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
+                                <DialogTrigger asChild>
+                                    <Button variant="destructive" className="shadow-sm">
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Delete Role
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle className="flex flex-col items-center gap-2">
+                                            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400 mb-2">
+                                                <AlertTriangle className="h-8 w-8" />
+                                            </div>
+                                            Confirm Deletion
+                                        </DialogTitle>
+                                        <DialogDescription className="text-center">
+                                            Are you sure you want to delete the <span className="font-bold text-foreground">{role.data.name}</span> role?
+                                            This action will remove this role from all assigned members and cannot be undone.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter className="flex sm:justify-center gap-2 mt-4">
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => setOpenDeleteModal(false)}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            variant="destructive"
+                                            disabled={isDeleting}
+                                            onClick={handleDelete}
+                                        >
+                                            {isDeleting ? "Deleting..." : "Confirm Delete"}
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        </>
+                    ) : (
+                        <Badge variant="outline" className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border-purple-200 dark:border-purple-800 px-4 py-2 flex gap-2 font-bold uppercase tracking-widest text-xs">
+                            <ShieldAlert className="h-4 w-4" />
+                            Protected System Role
+                        </Badge>
+                    )}
                 </div>
             </div>
+            
+            {role.data.name.toLowerCase() === 'owner' && (
+                <Card className="bg-purple-50 dark:bg-purple-900/10 border-purple-200 dark:border-purple-800/50 shadow-sm overflow-hidden border-l-4 border-l-purple-600">
+                    <CardContent className="p-6 flex items-start gap-4">
+                        <div className="bg-purple-600 p-2.5 rounded-xl text-white shadow-lg shadow-purple-500/20">
+                            <ShieldAlert className="h-6 w-6" />
+                        </div>
+                        <div className="flex-grow">
+                            <h3 className="text-lg font-bold text-purple-900 dark:text-purple-300">System Protected Role</h3>
+                            <p className="text-purple-700 dark:text-purple-400 mt-1 leading-relaxed">
+                                The <span className="font-bold">Owner</span> role is a core system role that automatically bypasses all permission checks. 
+                                To maintain system integrity, this role cannot be modified or deleted. 
+                                Members with this role have full access to all resources and administrative functions within the organization.
+                            </p>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left Column: Permissions */}
@@ -194,10 +222,16 @@ const Show = ({ role }) => {
                         <Card className="border-dashed border-2 bg-muted/10">
                             <CardContent className="py-12 flex flex-col items-center justify-center text-center">
                                 <Shield className="h-12 w-12 text-muted-foreground/30 mb-4" />
-                                <p className="text-muted-foreground italic font-medium">No permissions assigned to this role.</p>
-                                <Button variant="link" asChild className="mt-2">
-                                    <Link href={route("roles.edit", role.data.id)}>Assign Permissions</Link>
-                                </Button>
+                                <p className="text-muted-foreground italic font-medium">
+                                    {role.data.name.toLowerCase() === 'owner' 
+                                        ? "This system role has full access by default without explicit permissions." 
+                                        : "No permissions assigned to this role."}
+                                </p>
+                                {role.data.name.toLowerCase() !== 'owner' && (
+                                    <Button variant="link" asChild className="mt-2">
+                                        <Link href={route("roles.edit", role.data.id)}>Assign Permissions</Link>
+                                    </Button>
+                                )}
                             </CardContent>
                         </Card>
                     )}
