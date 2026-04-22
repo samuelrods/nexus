@@ -4,6 +4,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogTrigger,
 } from "@/Components/ui/dialog";
 import { Button } from "@/Components/ui/button";
@@ -154,6 +155,9 @@ const RelationshipSelector = ({
                     <DialogTitle className="text-xl font-semibold">
                         Select {singularize(resourceName)}
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        Search and select a {singularize(resourceName)} for this relationship.
+                    </DialogDescription>
                 </DialogHeader>
                 
                 <div className="flex border-b border-border">

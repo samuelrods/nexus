@@ -5,6 +5,7 @@ import {
     DialogContent, 
     DialogHeader, 
     DialogTitle, 
+    DialogDescription,
     DialogTrigger, 
     DialogFooter 
 } from "@/Components/ui/dialog";
@@ -12,7 +13,6 @@ import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { Plus } from "lucide-react";
-import { CardDescription } from "@/Components/ui/card";
 
 const CreateOrganizationModal = ({ trigger }) => {
     const [open, setOpen] = useState(false);
@@ -44,9 +44,9 @@ const CreateOrganizationModal = ({ trigger }) => {
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">New Organization</DialogTitle>
-                    <CardDescription>
+                    <DialogDescription>
                         Create a new workspace for your team and deals.
-                    </CardDescription>
+                    </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={onSubmit} className="space-y-6 pt-4">
                     <div className="space-y-2">
