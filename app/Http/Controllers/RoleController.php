@@ -145,7 +145,7 @@ class RoleController extends Controller
 
     private function getPermissions()
     {
-        return Cache::remember('permissions', 60 * 60 * 24, function () {
+        return Cache::remember('permissions_v2', 60 * 60 * 24, function () {
             $permissionTypes = [
                 'roles' => RolePermissions::class,
                 'members' => MemberPermissions::class,
@@ -162,7 +162,7 @@ class RoleController extends Controller
 
             foreach ($permissionTypes as $type => $class) {
                 // Filter the permissions in memory
-                $permissions[$type] = $allPermissions->whereIn('name', $class::toArray())->map(function ($permission) use ($class) {
+                $permissions[$type] = $allPermissions->whereIn('name', $class::toArray())->values()->map(function ($permission) use ($class) {
                     return [
                         'value' => $permission->id,
                         'label' => $class::from($permission->name)->label(),
