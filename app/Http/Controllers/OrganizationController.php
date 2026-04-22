@@ -64,21 +64,19 @@ class OrganizationController extends Controller
 
         // assign the owner role to the owner
         $organization->user->syncRoles([$organization->roles->first()->name]);
-        // $member->user->syncRoles($role->name);
-
 
         session(['organization_id' => $organization->id]);
         setPermissionsTeamId($organization->id);
 
-        return to_route('dashboard')->with(['message' => 'Organization created successfully!', 'type' => 'success']);
+        return to_route('dashboard', ['organization' => $organization->slug])->with(['message' => 'Organization created successfully!', 'type' => 'success']);
     }
 
     /**
      * Display organization settings.
      */
-    public function settings()
+    public function settings(Organization $organization)
     {
-        $organization = Organization::withCount(['members', 'deals'])->findOrFail(session('organization_id'));
+        $organization->loadCount(['members', 'deals']);
 
         return Inertia::render('Organizations/Settings', [
             'organization' => $organization

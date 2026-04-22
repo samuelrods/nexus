@@ -95,6 +95,9 @@ const SidebarGroup = ({ title, icon: Icon, children, collapsed, activePaths = []
 
 const Sidebar = ({ sidebarOpen }) => {
     const [collapsed, setCollapsed] = useState(!sidebarOpen);
+    const { auth } = usePage().props;
+    const organization = auth.organization;
+    const prefix = organization ? `/${organization.slug}` : '';
 
     useEffect(() => {
         setCollapsed(!sidebarOpen);
@@ -110,7 +113,7 @@ const Sidebar = ({ sidebarOpen }) => {
         >
             <div className="h-full px-3 py-4 overflow-y-auto bg-card">
                 <ul className="space-y-2 font-medium">
-                    <SidebarItem href="/dashboard" icon={LayoutDashboard} collapsed={collapsed}>
+                    <SidebarItem href={`${prefix}/dashboard`} icon={LayoutDashboard} collapsed={collapsed}>
                         Dashboard
                     </SidebarItem>
 
@@ -118,12 +121,12 @@ const Sidebar = ({ sidebarOpen }) => {
                         title="CRM" 
                         icon={Briefcase} 
                         collapsed={collapsed} 
-                        activePaths={['/contacts', '/companies']}
+                        activePaths={[`${prefix}/contacts`, `${prefix}/companies`]}
                     >
-                        <SidebarItem href="/contacts" icon={Contact} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/contacts`} icon={Contact} collapsed={collapsed} isSubItem>
                             Contacts
                         </SidebarItem>
-                        <SidebarItem href="/companies" icon={Building2} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/companies`} icon={Building2} collapsed={collapsed} isSubItem>
                             Companies
                         </SidebarItem>
                     </SidebarGroup>
@@ -132,15 +135,15 @@ const Sidebar = ({ sidebarOpen }) => {
                         title="Sales" 
                         icon={TrendingUp} 
                         collapsed={collapsed} 
-                        activePaths={['/leads', '/deals', '/activities']}
+                        activePaths={[`${prefix}/leads`, `${prefix}/deals`, `${prefix}/activities`]}
                     >
-                        <SidebarItem href="/leads" icon={Target} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/leads`} icon={Target} collapsed={collapsed} isSubItem>
                             Leads
                         </SidebarItem>
-                        <SidebarItem href="/deals" icon={Handshake} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/deals`} icon={Handshake} collapsed={collapsed} isSubItem>
                             Deals
                         </SidebarItem>
-                        <SidebarItem href="/activities" icon={CalendarDays} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/activities`} icon={CalendarDays} collapsed={collapsed} isSubItem>
                             Activities
                         </SidebarItem>
                     </SidebarGroup>
@@ -149,15 +152,15 @@ const Sidebar = ({ sidebarOpen }) => {
                         title="Settings" 
                         icon={Settings} 
                         collapsed={collapsed} 
-                        activePaths={['/roles', '/members', '/organizations/settings']}
+                        activePaths={[`${prefix}/roles`, `${prefix}/members`, `${prefix}/organizations/settings`]}
                     >
-                        <SidebarItem href="/organizations/settings" icon={Building2} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/organizations/settings`} icon={Building2} collapsed={collapsed} isSubItem>
                             Organization
                         </SidebarItem>
-                        <SidebarItem href="/members" icon={Users} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/members`} icon={Users} collapsed={collapsed} isSubItem>
                             Members
                         </SidebarItem>
-                        <SidebarItem href="/roles" icon={ShieldCheck} collapsed={collapsed} isSubItem>
+                        <SidebarItem href={`${prefix}/roles`} icon={ShieldCheck} collapsed={collapsed} isSubItem>
                             Roles
                         </SidebarItem>
                     </SidebarGroup>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePage } from "@inertiajs/react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Alert from "./Alert";
@@ -6,6 +7,14 @@ import { cn } from "@/lib/utils";
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const { auth } = usePage().props;
+
+    // Update Ziggy defaults during render to keep it in sync with auth.organization
+    if (auth.organization && typeof window !== 'undefined' && window.Ziggy) {
+        window.Ziggy.defaults = {
+            organization: auth.organization.slug
+        };
+    }
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);

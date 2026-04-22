@@ -2,11 +2,18 @@ import { Head, Link, usePage } from "@inertiajs/react";
 import { ChevronRight, Home } from "lucide-react";
 
 const ResourceLayout = ({ children, title, description, hideHeader = false }) => {
-    const { url } = usePage();
-    // Split by '/', then take the first part of any part that contains '?' to remove query strings
-    const pathParts = url.split('/')
+    const { url, props } = usePage();
+    const organization = props.auth.organization;
+    
+    // Split by '/', then filter and map
+    let pathParts = url.split('/')
         .filter(part => part)
         .map(part => part.split('?')[0]);
+
+    // If the first part is the organization slug, remove it from breadcrumbs
+    if (organization && pathParts[0] === organization.slug) {
+        pathParts = pathParts.slice(1);
+    }
     
     return (
         <>
@@ -15,7 +22,7 @@ const ResourceLayout = ({ children, title, description, hideHeader = false }) =>
                 <nav className="flex mb-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-3">
                         <li className="inline-flex items-center">
-                            <Link href="/dashboard" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-white">
+                            <Link href={organization ? `/${organization.slug}/dashboard` : "/dashboard"} className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-white">
                                 <Home className="w-4 h-4 mr-2" />
                                 Dashboard
                             </Link>

@@ -11,6 +11,13 @@ createInertiaApp({
     return pages[`./Pages/${name}.jsx`]
   },
   setup({ el, App, props }) {
+    // Set global Ziggy defaults for organization slug if present
+    if (props.initialPage.props.auth?.organization && window.Ziggy) {
+      window.Ziggy.defaults = {
+        organization: props.initialPage.props.auth.organization.slug
+      };
+    }
+
     createRoot(el).render(
       <ThemeProvider defaultTheme="system" storageKey="nexus-ui-theme">
         <App {...props} />

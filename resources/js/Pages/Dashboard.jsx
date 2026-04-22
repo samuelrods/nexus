@@ -40,7 +40,7 @@ const Dashboard = ({
     const { auth } = usePage().props;
 
     const handleRangeChange = (newRange) => {
-        router.get(route('dashboard'), {
+        router.get(route('dashboard', { organization: auth.organization.slug }), {
             range: newRange,
         }, {
             preserveState: true,
@@ -177,7 +177,7 @@ const Dashboard = ({
                 <Card className="shadow-sm bg-card">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <CardTitle className="text-lg font-semibold">Upcoming Activities</CardTitle>
-                        <Link href={route('activities.index')} className="text-blue-500 hover:text-blue-600">
+                        <Link href={route('activities.index', { organization: auth.organization.slug })} className="text-blue-500 hover:text-blue-600">
                             <ArrowUpRight className="w-5 h-5" />
                         </Link>
                     </CardHeader>
@@ -208,7 +208,7 @@ const Dashboard = ({
                 <Card className="shadow-sm bg-card">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <CardTitle className="text-lg font-semibold">Recent Leads</CardTitle>
-                        <Link href={route('leads.index')} className="text-blue-500 hover:text-blue-600">
+                        <Link href={route('leads.index', { organization: auth.organization.slug })} className="text-blue-500 hover:text-blue-600">
                             <ArrowUpRight className="w-5 h-5" />
                         </Link>
                     </CardHeader>
@@ -226,7 +226,7 @@ const Dashboard = ({
                                                 <p className="text-xs text-muted-foreground capitalize">{lead.status}</p>
                                             </div>
                                         </div>
-                                        <Link href={route('leads.show', lead.id)} className="text-muted-foreground hover:text-foreground">
+                                        <Link href={route('leads.show', { organization: auth.organization.slug, lead: lead.id })} className="text-muted-foreground hover:text-foreground">
                                             <ChevronDown className="w-4 h-4 rotate-270" />
                                         </Link>
                                     </div>
@@ -242,7 +242,7 @@ const Dashboard = ({
                 <Card className="shadow-sm bg-card">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <CardTitle className="text-lg font-semibold">Top Pending Deals</CardTitle>
-                        <Link href={route('deals.index')} className="text-blue-500 hover:text-blue-600">
+                        <Link href={route('deals.index', { organization: auth.organization.slug })} className="text-blue-500 hover:text-blue-600">
                             <ArrowUpRight className="w-5 h-5" />
                         </Link>
                     </CardHeader>
@@ -261,7 +261,7 @@ const Dashboard = ({
                                             <p className="font-bold text-sm text-green-600 dark:text-green-400">
                                                 {formatCurrency(deal.value, auth.organization?.currency)}
                                             </p>
-                                            <Link href={route('deals.show', deal.id)} className="text-[10px] text-blue-500 hover:underline">
+                                            <Link href={route('deals.show', { organization: auth.organization.slug, deal: deal.id })} className="text-[10px] text-blue-500 hover:underline">
                                                 View Details
                                             </Link>
                                         </div>

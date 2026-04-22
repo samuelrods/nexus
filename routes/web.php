@@ -30,33 +30,39 @@ Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
 
-Route::middleware(['auth', 'check_organitation'])->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+Route::middleware(['auth', 'check_organization'])->group(function () {
+    Route::get('/dashboard', function () {
+        return redirect()->route('dashboard');
+    });
 
-    Route::get('/organizations/settings', [OrganizationController::class, 'settings'])->name('organizations.settings');
-    Route::apiResource('organizations', OrganizationController::class)->withoutMiddleware('check_organitation');
+    Route::prefix('{organization:slug}')->group(function () {
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::resource('members', MemberController::class);
+        Route::get('/organizations/settings', [OrganizationController::class, 'settings'])->name('organizations.settings');
+
+        Route::resource('members', MemberController::class);
+        Route::resource('roles', RoleController::class);
+        Route::resource('contacts', ContactController::class);
+        Route::resource('companies', CompanyController::class);
+        Route::resource('leads', LeadController::class);
+        Route::resource('deals', DealController::class);
+        Route::resource('activities', ActivityController::class);
+
+        Route::get('/api/companies-options', [CompanyController::class, 'getCompaniesOptions'])->name('companies.options');
+        Route::get('/api/contacts-options', [ContactController::class, 'getContactsOptions'])->name('contacts.options');
+        Route::get('/api/leads-options', [LeadController::class, 'getLeadsOptions'])->name('leads.options');
+    });
+
+    Route::apiResource('organizations', OrganizationController::class)->withoutMiddleware('check_organization');
 
     Route::controller(InvitationController::class)->group(function () {
         Route::post('/invitations', 'store')->name('invitations.store');
         Route::put('/invitations/{invitation}', 'update')->name('invitations.update');
-    })->withoutMiddleware('check_organitation');
-
-    Route::resource('roles', RoleController::class);
-    Route::resource('contacts', ContactController::class);
-    Route::resource('companies', CompanyController::class);
-    Route::resource('leads', LeadController::class);
-    Route::resource('deals', DealController::class);
-    Route::resource('activities', ActivityController::class);
-
-    Route::get('/api/companies-options', [CompanyController::class, 'getCompaniesOptions'])->name('api.companies.options');
-    Route::get('/api/contacts-options', [ContactController::class, 'getContactsOptions'])->name('api.contacts.options');
-    Route::get('/api/leads-options', [LeadController::class, 'getLeadsOptions'])->name('api.leads.options');
+    })->withoutMiddleware('check_organization');
 
     Route::put('/users/organization', [UserController::class, 'setOrganization'])
         ->name('users.organization')
-        ->withoutMiddleware('check_organitation');
+        ->withoutMiddleware('check_organization');
 });
 
 require __DIR__ . '/auth.php';

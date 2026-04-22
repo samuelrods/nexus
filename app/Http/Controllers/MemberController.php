@@ -18,12 +18,11 @@ class MemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, Organization $organization)
     {
         $this->authorize('viewAny', OrganizationMember::class);
 
-        $organizationId = session('organization_id');
-        $organization = Organization::findOrFail($organizationId);
+        $organizationId = $organization->id;
 
         $roles = Role::where('organization_id', $organizationId)
             ->orderBy('name')
@@ -57,7 +56,7 @@ class MemberController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Organization $organization)
     {
         $this->authorize('create', OrganizationMember::class);
 
@@ -67,7 +66,7 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Organization $organization)
     {
         $this->authorize('create', OrganizationMember::class);
 
@@ -79,7 +78,7 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OrganizationMember $member)
+    public function show(Organization $organization, OrganizationMember $member)
     {
         $this->authorize('view', $member);
 
@@ -91,11 +90,11 @@ class MemberController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OrganizationMember $member)
+    public function edit(Organization $organization, OrganizationMember $member)
     {
         $this->authorize('update', $member);
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
         $roles = Role::where('organization_id', $organizationId)
             ->orderBy('name')
             ->get();
@@ -109,7 +108,7 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMemberRequest $request, OrganizationMember $member)
+    public function update(UpdateMemberRequest $request, Organization $organization, OrganizationMember $member)
     {
         $this->authorize('update', $member);
 
@@ -125,7 +124,7 @@ class MemberController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OrganizationMember $member)
+    public function destroy(Organization $organization, OrganizationMember $member)
     {
         $this->authorize('delete', $member);
 

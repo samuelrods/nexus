@@ -34,7 +34,7 @@ const Navbar = ({ toggleSidebar }) => {
                     >
                         <Menu className="h-6 w-6" />
                     </Button>
-                    <Link href="/dashboard" className="flex items-center">
+                    <Link href={auth.organization ? route("dashboard", { organization: auth.organization.slug }) : route("organizations.index")} className="flex items-center">
                         <span className="self-center whitespace-nowrap text-xl font-bold text-blue-600 dark:text-blue-400">
                             Nexus
                         </span>
@@ -48,9 +48,9 @@ const Navbar = ({ toggleSidebar }) => {
                             <Button variant="outline" size="sm" className="hidden sm:flex gap-2">
                                 <Building className="h-4 w-4" />
                                 <span>
-                                    {auth.organization.name.length > 15
+                                    {auth.organization?.name.length > 15
                                         ? auth.organization.name.substring(0, 15) + "..."
-                                        : auth.organization.name}
+                                        : auth.organization?.name || "Select Organization"}
                                 </span>
                             </Button>
                         </DropdownMenuTrigger>
@@ -58,7 +58,7 @@ const Navbar = ({ toggleSidebar }) => {
                             <DropdownMenuLabel>Switch Organization</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <div className="max-h-[300px] overflow-y-auto">
-                                {auth.user.memberships.map((membership) => (
+                                {auth.user?.memberships?.map((membership) => (
                                     <DropdownMenuItem
                                         key={"navbar-" + membership.organization.id}
                                         onClick={() => handleOrganizationSelection(membership.organization.id)}
@@ -67,7 +67,7 @@ const Navbar = ({ toggleSidebar }) => {
                                         <div className="flex items-center gap-2 w-full">
                                             <div className={cn(
                                                 "w-2 h-2 rounded-full",
-                                                auth.organization.id === membership.organization.id ? "bg-blue-600" : "bg-transparent"
+                                                auth.organization?.id === membership.organization.id ? "bg-blue-600" : "bg-transparent"
                                             )} />
                                             <span className="truncate">{membership.organization.name}</span>
                                         </div>
@@ -102,13 +102,13 @@ const Navbar = ({ toggleSidebar }) => {
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel>
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-semibold text-foreground">{auth.user.full_name}</span>
-                                    <span className="text-xs text-muted-foreground truncate">{auth.user.email}</span>
+                                    <span className="text-sm font-semibold text-foreground">{auth.user?.full_name}</span>
+                                    <span className="text-xs text-muted-foreground truncate">{auth.user?.email}</span>
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link href="/dashboard" className="cursor-pointer flex items-center">
+                                <Link href={auth.organization ? route("dashboard", { organization: auth.organization.slug }) : route("organizations.index")} className="cursor-pointer flex items-center">
                                     <LayoutDashboard className="h-4 w-4 mr-2" />
                                     Dashboard
                                 </Link>

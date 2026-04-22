@@ -61,7 +61,7 @@ const ActivityForm = ({
                             }));
                         }}
                         resourceName="contacts"
-                        apiUrlPath="/api/contacts-options"
+                        apiUrlPath={route("contacts.options")}
                         ResourceForm={ContactForm}
                         resourceInfo={[
                             ["first_name", ""],
@@ -89,7 +89,7 @@ const ActivityForm = ({
                             }));
                         }}
                         resourceName="leads"
-                        apiUrlPath="/api/leads-options"
+                        apiUrlPath={route("leads.options")}
                         ResourceForm={LeadForm}
                         resourceInfo={[
                             ["source", ""],

@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 const OrganizationCard = ({ membership }) => {
     const { auth } = usePage().props;
     const organization = membership.organization;
-    const isOwner = auth.user.id === organization.user_id;
+    const isOwner = auth.user?.id === organization.user_id;
     const isSelected = auth.organization && auth.organization.id === organization.id;
 
     const handleSelect = () => {

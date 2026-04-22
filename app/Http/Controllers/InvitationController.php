@@ -10,10 +10,7 @@ use Illuminate\Http\Request;
 
 class InvitationController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreInvitationRequest $request)
+    public function store(StoreInvitationRequest $request, \App\Models\Organization $organization)
     {
         $validated = $request->validated();
 
@@ -28,7 +25,7 @@ class InvitationController extends Controller
             ]);
         }
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         // If the user is already a member of the organization, return an error.
         if ($user->memberships()->where('organization_id', $organizationId)->exists()) {

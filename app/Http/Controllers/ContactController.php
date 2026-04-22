@@ -15,11 +15,11 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, \App\Models\Organization $organization)
     {
         $this->authorize('viewAny', Contact::class);
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $stats = [
             'total_contacts' => Contact::where('organization_id', $organizationId)->count(),
@@ -68,7 +68,7 @@ class ContactController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(\App\Models\Organization $organization)
     {
         $this->authorize('create', Contact::class);
 
@@ -78,13 +78,13 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreContactRequest $request)
+    public function store(StoreContactRequest $request, \App\Models\Organization $organization)
     {
         $this->authorize('create', Contact::class);
 
         $contact = Contact::create([
             ...$request->validated(),
-            'organization_id' => session('organization_id'),
+            'organization_id' => $organization->id,
             'user_id' => auth()->id(),
         ]);
 
@@ -98,7 +98,7 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Contact $contact)
+    public function show(\App\Models\Organization $organization, Contact $contact)
     {
         $this->authorize('view', $contact);
 
@@ -110,7 +110,7 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Contact $contact)
+    public function edit(\App\Models\Organization $organization, Contact $contact)
     {
         $this->authorize('update', $contact);
 
@@ -122,7 +122,7 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, \App\Models\Organization $organization, Contact $contact)
     {
         $this->authorize('update', $contact);
 
@@ -134,7 +134,7 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Contact $contact)
+    public function destroy(\App\Models\Organization $organization, Contact $contact)
     {
         $this->authorize('delete', $contact);
 
@@ -148,9 +148,9 @@ class ContactController extends Controller
         return redirect()->route('contacts.index')->with(['message' => 'Contact deleted successfully!', 'type' => 'success']);
     }
 
-    public function getContactsOptions(Request $request)
+    public function getContactsOptions(Request $request, \App\Models\Organization $organization)
     {
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $query = Contact::where('organization_id', $organizationId);
 

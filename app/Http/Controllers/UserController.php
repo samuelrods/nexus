@@ -124,10 +124,11 @@ class UserController extends Controller
 
         $organizationId = $request->input('organization_id');
 
-        if (auth()->user()->memberships->contains('organization_id', $organizationId)) {
+        $organization = auth()->user()->organizations()->find($organizationId);
+        if ($organization) {
             session(['organization_id' => $organizationId]);
             setPermissionsTeamId($organizationId);
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard', ['organization' => $organization->slug]);
         }
 
         return abort(403, 'You are not authorized to access this organization.');

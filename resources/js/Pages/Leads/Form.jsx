@@ -40,7 +40,7 @@ const LeadForm = ({
                         }));
                     }}
                     resourceName="companies"
-                    apiUrlPath="/api/companies-options"
+                    apiUrlPath={route("companies.options")}
                     ResourceForm={CompanyForm}
                     resourceInfo={[
                         ["name", ""],
@@ -69,7 +69,7 @@ const LeadForm = ({
                         }));
                     }}
                     resourceName="contacts"
-                    apiUrlPath="/api/contacts-options"
+                    apiUrlPath={route("contacts.options")}
                     ResourceForm={ContactForm}
                     resourceInfo={[
                         ["first_name", ""],

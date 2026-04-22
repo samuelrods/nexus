@@ -6,6 +6,7 @@ use App\Http\Requests\StoreDealRequest;
 use App\Http\Requests\UpdateDealRequest;
 use App\Http\Resources\DealResource;
 use App\Models\Deal;
+use App\Models\Organization;
 use App\Models\Company;
 use App\Models\Contact;
 use Illuminate\Http\Request;
@@ -16,11 +17,11 @@ class DealController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, Organization $organization)
     {
         $this->authorize('viewAny', Deal::class);
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $stats = [
             'total_deals' => Deal::where('organization_id', $organizationId)->count(),
@@ -71,7 +72,7 @@ class DealController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Organization $organization)
     {
         $this->authorize('create', Deal::class);
 
@@ -81,13 +82,13 @@ class DealController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDealRequest $request)
+    public function store(StoreDealRequest $request, Organization $organization)
     {
         $this->authorize('create', Deal::class);
 
         $deal = Deal::create([
             ...$request->validated(),
-            'organization_id' => session('organization_id'),
+            'organization_id' => $organization->id,
             'user_id' => auth()->id(),
         ]);
 
@@ -101,7 +102,7 @@ class DealController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Deal $deal)
+    public function show(Organization $organization, Deal $deal)
     {
         $this->authorize('view', $deal);
 
@@ -113,7 +114,7 @@ class DealController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Deal $deal)
+    public function edit(Organization $organization, Deal $deal)
     {
         $this->authorize('update', $deal);
 
@@ -125,7 +126,7 @@ class DealController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDealRequest $request, Deal $deal)
+    public function update(UpdateDealRequest $request, Organization $organization, Deal $deal)
     {
         $this->authorize('update', $deal);
 
@@ -137,7 +138,7 @@ class DealController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Deal $deal)
+    public function destroy(Organization $organization, Deal $deal)
     {
         $this->authorize('delete', $deal);
 

@@ -16,11 +16,11 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, \App\Models\Organization $organization)
     {
         $this->authorize('viewAny', Company::class);
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $stats = [
             'total_companies' => Company::where('organization_id', $organizationId)->count(),
@@ -78,7 +78,7 @@ class CompanyController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(\App\Models\Organization $organization)
     {
         $this->authorize('create', Company::class);
 
@@ -88,12 +88,12 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCompanyRequest $request)
+    public function store(StoreCompanyRequest $request, \App\Models\Organization $organization)
     {
         $this->authorize('create', Company::class);
 
         $validated = $request->validated();
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $address = Address::create([
             'street_address' => $validated['street_address'],
@@ -122,7 +122,7 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Company $company)
+    public function show(\App\Models\Organization $organization, Company $company)
     {
         $this->authorize('view', $company);
 
@@ -134,7 +134,7 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company)
+    public function edit(\App\Models\Organization $organization, Company $company)
     {
         $this->authorize('update', $company);
 
@@ -146,7 +146,7 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCompanyRequest $request, Company $company)
+    public function update(UpdateCompanyRequest $request, \App\Models\Organization $organization, Company $company)
     {
         $this->authorize('update', $company);
 
@@ -169,7 +169,7 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy(\App\Models\Organization $organization, Company $company)
     {
         $this->authorize('delete', $company);
 
@@ -178,9 +178,9 @@ class CompanyController extends Controller
         return redirect()->route('companies.index')->with(['message' => 'Company deleted successfully!', 'type' => 'success']);
     }
 
-    public function getCompaniesOptions(Request $request)
+    public function getCompaniesOptions(Request $request, \App\Models\Organization $organization)
     {
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $query = Company::where('organization_id', $organizationId);
 

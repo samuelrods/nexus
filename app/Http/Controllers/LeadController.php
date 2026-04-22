@@ -17,11 +17,11 @@ class LeadController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, \App\Models\Organization $organization)
     {
         $this->authorize('viewAny', Lead::class);
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $sortBy = $request->input('sort_by', 'id');
         $sortDir = $request->input('sort_dir', 'desc');
@@ -66,7 +66,7 @@ class LeadController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(\App\Models\Organization $organization)
     {
         $this->authorize('create', Lead::class);
 
@@ -76,13 +76,13 @@ class LeadController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLeadRequest $request)
+    public function store(StoreLeadRequest $request, \App\Models\Organization $organization)
     {
         $this->authorize('create', Lead::class);
 
         $lead = Lead::create([
             ...$request->validated(),
-            'organization_id' => session('organization_id'),
+            'organization_id' => $organization->id,
         ]);
 
         if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
@@ -95,7 +95,7 @@ class LeadController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Lead $lead)
+    public function show(\App\Models\Organization $organization, Lead $lead)
     {
         $this->authorize('view', $lead);
 
@@ -107,7 +107,7 @@ class LeadController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lead $lead)
+    public function edit(\App\Models\Organization $organization, Lead $lead)
     {
         $this->authorize('update', $lead);
 
@@ -119,7 +119,7 @@ class LeadController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLeadRequest $request, Lead $lead)
+    public function update(UpdateLeadRequest $request, \App\Models\Organization $organization, Lead $lead)
     {
         $this->authorize('update', $lead);
 
@@ -131,7 +131,7 @@ class LeadController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lead $lead)
+    public function destroy(\App\Models\Organization $organization, Lead $lead)
     {
         $this->authorize('delete', $lead);
 
@@ -140,9 +140,9 @@ class LeadController extends Controller
         return redirect()->route('leads.index')->with(['message' => 'Lead deleted successfully!', 'type' => 'success']);
     }
 
-    public function getLeadsOptions(Request $request)
+    public function getLeadsOptions(Request $request, \App\Models\Organization $organization)
     {
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $query = Lead::where('organization_id', $organizationId);
 

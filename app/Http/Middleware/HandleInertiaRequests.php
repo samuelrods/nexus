@@ -41,8 +41,24 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'alert' => ['message' => $request->session()->get('message'), 'type' => $request->session()->get('type')],
             ],
-            'auth.user' => fn () => $request->user()?->load('memberships.organization')->only('id', 'username', 'full_name', 'memberships', 'email'),
-            'auth.organization' => Organization::find(session('organization_id')),
+            'auth' => [
+                'user' => function () use ($request) {
+                    if (!$user = $request->user()) {
+                        return null;
+                    }
+                    
+                    return [
+                        'id' => $user->id,
+                        'username' => $user->username,
+                        'full_name' => $user->full_name,
+                        'email' => $user->email,
+                        'memberships' => $user->memberships()->with('organization')->get(),
+                    ];
+                },
+                'organization' => fn () => session('organization_id') 
+                    ? Organization::find(session('organization_id')) 
+                    : null,
+            ],
         ]);
     }
 }

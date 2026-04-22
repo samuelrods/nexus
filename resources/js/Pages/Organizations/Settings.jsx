@@ -19,7 +19,7 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 
 const Settings = ({ organization }) => {
     const { auth } = usePage().props;
-    const isOwner = auth.user.id === organization.user_id;
+    const isOwner = auth.user?.id === organization.user_id;
 
     const { data, setData, put, processing, errors } = useForm({
         name: organization.name || "",
@@ -28,12 +28,12 @@ const Settings = ({ organization }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("organizations.update", organization.id));
+        put(route("organizations.update", { organization: organization.slug }));
     };
 
     const handleDelete = () => {
         if (confirm("CRITICAL: Are you sure you want to delete this organization? All data including deals, contacts, and members will be PERMANENTLY deleted. This action cannot be undone.")) {
-            router.delete(route("organizations.destroy", organization.id), {
+            router.delete(route("organizations.destroy", { organization: organization.slug }), {
                 onSuccess: () => router.visit(route("organizations.index"))
             });
         }

@@ -23,11 +23,11 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, \App\Models\Organization $organization)
     {
         $this->authorize('viewAny', Role::class);
 
-        $organizationId = session('organization_id');
+        $organizationId = $organization->id;
 
         $permissions = $this->getPermissions();
 
@@ -58,7 +58,7 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(\App\Models\Organization $organization)
     {
         $this->authorize('create', Role::class);
 
@@ -70,7 +70,7 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(StoreRoleRequest $request, \App\Models\Organization $organization)
     {
         $this->authorize('create', Role::class);
 
@@ -79,7 +79,7 @@ class RoleController extends Controller
         $role = Role::create([
             'name' => ucfirst($validated['name']),
             'guard_name' => 'web',
-            'organization_id' => session('organization_id'),
+            'organization_id' => $organization->id,
         ]);
 
         $role->syncPermissions(Permission::whereIn('id', $validated['permissions'])->get());
@@ -90,7 +90,7 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(\App\Models\Organization $organization, Role $role)
     {
         $this->authorize('view', $role);
 
@@ -102,7 +102,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit(\App\Models\Organization $organization, Role $role)
     {
         $this->authorize('update', $role);
 
@@ -115,7 +115,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(UpdateRoleRequest $request, \App\Models\Organization $organization, Role $role)
     {
         $this->authorize('update', $role);
 
@@ -139,7 +139,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(\App\Models\Organization $organization, Role $role)
     {
         $this->authorize('delete', $role);
 
