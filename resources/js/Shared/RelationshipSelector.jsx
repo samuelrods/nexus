@@ -11,6 +11,7 @@ import { Search, Plus, Loader2, Check, X } from "lucide-react";
 import { Input } from "@/Components/ui/input";
 import axios from "axios";
 import { cn } from "@/lib/utils";
+import singularize from "@/Shared/utils/singularize";
 
 const RelationshipSelector = ({
     value,
@@ -149,7 +150,7 @@ const RelationshipSelector = ({
             <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-card border-border">
                 <DialogHeader className="p-4 border-b border-border">
                     <DialogTitle className="text-xl font-semibold">
-                        Select {resourceName.slice(0, -1)}
+                        Select {singularize(resourceName)}
                     </DialogTitle>
                 </DialogHeader>
                 

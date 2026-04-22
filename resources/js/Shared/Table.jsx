@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Button } from "@/Components/ui/button";
+import singularize from "@/Shared/utils/singularize";
 import {
     Dialog,
     DialogContent,
@@ -294,7 +295,7 @@ const Table = ({
                                 <div className="flex flex-col items-center justify-center">
                                     <Inbox className="h-12 w-12 text-muted-foreground mb-4" />
                                     <h3 className="text-lg font-medium text-foreground">No data found</h3>
-                                    <p className="text-muted-foreground">Try adjusting your search or add a new {resourceName.slice(0, -1)}.</p>
+                                    <p className="text-muted-foreground">Try adjusting your search or add a new {singularize(resourceName)}.</p>
                                 </div>
                             </TableCell>
                         </TableRow>

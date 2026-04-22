@@ -4,6 +4,7 @@ import { Button } from "@/Components/ui/button";
 import { Search, Plus } from "lucide-react";
 import { useState } from "react";
 import AddResourceModal from "@/Shared/AddResourceModal";
+import singularize from "@/Shared/utils/singularize";
 
 const TableActions = ({
     searchRoute,
@@ -44,7 +45,7 @@ const TableActions = ({
             <div className="flex items-center gap-2 w-full sm:w-auto">
                 {ResourceForm ? (
                     <AddResourceModal
-                        resourceType={resourceType.slice(0, -1)}
+                        resourceType={singularize(resourceType)}
                         resourceInfo={resourceInfo}
                         storeRoute={storeRoute}
                         ResourceForm={ResourceForm}
@@ -54,7 +55,7 @@ const TableActions = ({
                     <Button asChild className="bg-blue-600 hover:bg-blue-700">
                         <Link href={route(createRoute)}>
                             <Plus className="w-4 h-4 mr-2" />
-                            Add {resourceType.slice(0, -1)}
+                            Add {singularize(resourceType)}
                         </Link>
                     </Button>
                 ) : null}
