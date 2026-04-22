@@ -99,6 +99,24 @@ const Sidebar = ({ sidebarOpen }) => {
     const organization = auth.organization;
     const prefix = organization ? `/${organization.slug}` : '';
 
+    const userPermissions = auth.user?.permissions || [];
+    const userRoles = auth.user?.roles || [];
+    const hasPermission = (permission) => userRoles.includes('owner') || userPermissions.includes(permission);
+
+    const canViewContacts = hasPermission('read-contacts');
+    const canViewCompanies = hasPermission('read-companies');
+    const showCrmGroup = canViewContacts || canViewCompanies;
+
+    const canViewLeads = hasPermission('read-leads');
+    const canViewDeals = hasPermission('read-deals');
+    const canViewActivities = hasPermission('read-activities');
+    const showSalesGroup = canViewLeads || canViewDeals || canViewActivities;
+
+    const canViewOrganizations = hasPermission('read-organizations') || hasPermission('update-organizations');
+    const canViewMembers = hasPermission('read-members');
+    const canViewRoles = hasPermission('read-roles');
+    const showSettingsGroup = canViewOrganizations || canViewMembers || canViewRoles;
+
     useEffect(() => {
         setCollapsed(!sidebarOpen);
     }, [sidebarOpen]);
@@ -117,53 +135,75 @@ const Sidebar = ({ sidebarOpen }) => {
                         Dashboard
                     </SidebarItem>
 
-                    <SidebarGroup 
-                        title="CRM" 
-                        icon={Briefcase} 
-                        collapsed={collapsed} 
-                        activePaths={[`${prefix}/contacts`, `${prefix}/companies`]}
-                    >
-                        <SidebarItem href={`${prefix}/contacts`} icon={Contact} collapsed={collapsed} isSubItem>
-                            Contacts
-                        </SidebarItem>
-                        <SidebarItem href={`${prefix}/companies`} icon={Building2} collapsed={collapsed} isSubItem>
-                            Companies
-                        </SidebarItem>
-                    </SidebarGroup>
+                    {showCrmGroup && (
+                        <SidebarGroup 
+                            title="CRM" 
+                            icon={Briefcase} 
+                            collapsed={collapsed} 
+                            activePaths={[`${prefix}/contacts`, `${prefix}/companies`]}
+                        >
+                            {canViewContacts && (
+                                <SidebarItem href={`${prefix}/contacts`} icon={Contact} collapsed={collapsed} isSubItem>
+                                    Contacts
+                                </SidebarItem>
+                            )}
+                            {canViewCompanies && (
+                                <SidebarItem href={`${prefix}/companies`} icon={Building2} collapsed={collapsed} isSubItem>
+                                    Companies
+                                </SidebarItem>
+                            )}
+                        </SidebarGroup>
+                    )}
 
-                    <SidebarGroup 
-                        title="Sales" 
-                        icon={TrendingUp} 
-                        collapsed={collapsed} 
-                        activePaths={[`${prefix}/leads`, `${prefix}/deals`, `${prefix}/activities`]}
-                    >
-                        <SidebarItem href={`${prefix}/leads`} icon={Target} collapsed={collapsed} isSubItem>
-                            Leads
-                        </SidebarItem>
-                        <SidebarItem href={`${prefix}/deals`} icon={Handshake} collapsed={collapsed} isSubItem>
-                            Deals
-                        </SidebarItem>
-                        <SidebarItem href={`${prefix}/activities`} icon={CalendarDays} collapsed={collapsed} isSubItem>
-                            Activities
-                        </SidebarItem>
-                    </SidebarGroup>
+                    {showSalesGroup && (
+                        <SidebarGroup 
+                            title="Sales" 
+                            icon={TrendingUp} 
+                            collapsed={collapsed} 
+                            activePaths={[`${prefix}/leads`, `${prefix}/deals`, `${prefix}/activities`]}
+                        >
+                            {canViewLeads && (
+                                <SidebarItem href={`${prefix}/leads`} icon={Target} collapsed={collapsed} isSubItem>
+                                    Leads
+                                </SidebarItem>
+                            )}
+                            {canViewDeals && (
+                                <SidebarItem href={`${prefix}/deals`} icon={Handshake} collapsed={collapsed} isSubItem>
+                                    Deals
+                                </SidebarItem>
+                            )}
+                            {canViewActivities && (
+                                <SidebarItem href={`${prefix}/activities`} icon={CalendarDays} collapsed={collapsed} isSubItem>
+                                    Activities
+                                </SidebarItem>
+                            )}
+                        </SidebarGroup>
+                    )}
 
-                    <SidebarGroup 
-                        title="Settings" 
-                        icon={Settings} 
-                        collapsed={collapsed} 
-                        activePaths={[`${prefix}/roles`, `${prefix}/members`, `${prefix}/organizations/settings`]}
-                    >
-                        <SidebarItem href={`${prefix}/organizations/settings`} icon={Building2} collapsed={collapsed} isSubItem>
-                            Organization
-                        </SidebarItem>
-                        <SidebarItem href={`${prefix}/members`} icon={Users} collapsed={collapsed} isSubItem>
-                            Members
-                        </SidebarItem>
-                        <SidebarItem href={`${prefix}/roles`} icon={ShieldCheck} collapsed={collapsed} isSubItem>
-                            Roles
-                        </SidebarItem>
-                    </SidebarGroup>
+                    {showSettingsGroup && (
+                        <SidebarGroup 
+                            title="Settings" 
+                            icon={Settings} 
+                            collapsed={collapsed} 
+                            activePaths={[`${prefix}/roles`, `${prefix}/members`, `${prefix}/organizations/settings`]}
+                        >
+                            {canViewOrganizations && (
+                                <SidebarItem href={`${prefix}/organizations/settings`} icon={Building2} collapsed={collapsed} isSubItem>
+                                    Organization
+                                </SidebarItem>
+                            )}
+                            {canViewMembers && (
+                                <SidebarItem href={`${prefix}/members`} icon={Users} collapsed={collapsed} isSubItem>
+                                    Members
+                                </SidebarItem>
+                            )}
+                            {canViewRoles && (
+                                <SidebarItem href={`${prefix}/roles`} icon={ShieldCheck} collapsed={collapsed} isSubItem>
+                                    Roles
+                                </SidebarItem>
+                            )}
+                        </SidebarGroup>
+                    )}
 
                 </ul>
             </div>
