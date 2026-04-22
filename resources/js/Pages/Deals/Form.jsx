@@ -60,32 +60,18 @@ const DealForm = ({
                 />
                 <InputError message={errors.name} />
             </div>
-            <div className="flex gap-4 w-full">
-                <div className="w-1/2 space-y-1">
-                    <Label htmlFor="value">Value</Label>
-                    <Input
-                        id="value"
-                        placeholder="0.00"
-                        type="number"
-                        step={0.01}
-                        value={data.value || ""}
-                        onChange={(e) => setData("value", e.target.value)}
-                        required
-                    />
-                    <InputError message={errors.value} />
-                </div>
-                <div className="w-1/2 space-y-1">
-                    <Label htmlFor="currency">Currency</Label>
-                    <Input
-                        id="currency"
-                        placeholder="USD"
-                        type="text"
-                        value={data.currency ? data.currency.toUpperCase() : ""}
-                        onChange={(e) => setData("currency", e.target.value)}
-                        required
-                    />
-                    <InputError message={errors.currency} />
-                </div>
+            <div className="w-full space-y-1">
+                <Label htmlFor="value">Value</Label>
+                <Input
+                    id="value"
+                    placeholder="0.00"
+                    type="number"
+                    step={0.01}
+                    value={data.value || ""}
+                    onChange={(e) => setData("value", e.target.value)}
+                    required
+                />
+                <InputError message={errors.value} />
             </div>
             <div className="w-full space-y-1">
                 <Label>Close Date</Label>

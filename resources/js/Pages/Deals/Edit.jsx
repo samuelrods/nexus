@@ -7,7 +7,6 @@ const Edit = ({ deal }) => {
     const { data, setData, put, processing, errors } = useForm({
         name: deal.data.name,
         value: deal.data.value,
-        currency: deal.data.currency,
         close_date: deal.data.close_date,
         status: deal.data.status,
         description: deal.data.description,

@@ -23,6 +23,7 @@ import {
     Briefcase,
     ArrowUpRight
 } from "lucide-react";
+import { formatCurrency } from "@/lib/currency";
 
 const Dashboard = ({
     dealAreaChartData,
@@ -87,7 +88,7 @@ const Dashboard = ({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <StatsCard 
                     title="Revenue" 
-                    value={`$${dealAreaChartData.total.toLocaleString()}`} 
+                    value={formatCurrency(dealAreaChartData.total, auth.organization?.currency)} 
                     icon={DollarSign} 
                     color="green"
                     trend={dealAreaChartData.percentage >= 0 ? 'up' : 'down'}
@@ -258,7 +259,7 @@ const Dashboard = ({
                                         </div>
                                         <div className="text-right">
                                             <p className="font-bold text-sm text-green-600 dark:text-green-400">
-                                                ${deal.value?.toLocaleString() || '0'}
+                                                {formatCurrency(deal.value, auth.organization?.currency)}
                                             </p>
                                             <Link href={route('deals.show', deal.id)} className="text-[10px] text-blue-500 hover:underline">
                                                 View Details

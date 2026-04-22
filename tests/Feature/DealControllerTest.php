@@ -139,7 +139,6 @@ class DealControllerTest extends TestCase
             'company_id' => $company->id,
             'name' => 'Test Deal',
             'value' => 100,
-            'currency' => 'USD',
             'close_date' => now()->format('Y-m-d'),
             'status' => 'won',
             'description' => 'Test description',

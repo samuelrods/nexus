@@ -149,8 +149,11 @@ const Sidebar = ({ sidebarOpen }) => {
                         title="Settings" 
                         icon={Settings} 
                         collapsed={collapsed} 
-                        activePaths={['/roles', '/members']}
+                        activePaths={['/roles', '/members', '/organizations/settings']}
                     >
+                        <SidebarItem href="/organizations/settings" icon={Building2} collapsed={collapsed} isSubItem>
+                            Organization
+                        </SidebarItem>
                         <SidebarItem href="/members" icon={Users} collapsed={collapsed} isSubItem>
                             Members
                         </SidebarItem>

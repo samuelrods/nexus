@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import {
     Select,
     SelectContent,
@@ -29,7 +29,8 @@ const DealsChart = ({ data }) => {
             <div className="flex justify-between items-start mb-4">
                 <div>
                     <h5 className="leading-none text-3xl font-bold text-foreground pb-1">
-                        ${(data.total / 1000).toFixed(1)}k
+                        {usePage().props.auth.organization?.currency === 'USD' ? '$' : `${usePage().props.auth.organization?.currency} `}
+                        {(data.total / 1000).toFixed(1)}k
                     </h5>
                     <p className="text-sm font-medium text-muted-foreground">
                         Deals total

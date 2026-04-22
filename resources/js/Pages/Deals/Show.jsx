@@ -23,6 +23,7 @@ import {
 } from "@/Components/ui/dialog";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { formatCurrency } from "@/lib/currency";
 
 const StatusBadge = ({ status }) => {
     const statusStyles = {
@@ -121,7 +122,7 @@ const Show = ({ deal }) => {
                                         <StatusBadge status={deal.data.status} />
                                         <span className="text-gray-400">|</span>
                                         <span className="text-2xl font-semibold text-green-600 dark:text-green-400">
-                                            {deal.data.currency} {parseFloat(deal.data.value).toLocaleString()}
+                                            {formatCurrency(deal.data.value, deal.data.currency)}
                                         </span>
                                     </div>
                                 </div>
@@ -199,7 +200,7 @@ const Show = ({ deal }) => {
                             <div>
                                 <dt className="text-sm font-medium text-muted-foreground">Deal Value</dt>
                                 <dd className="text-2xl font-bold text-foreground mt-1">
-                                    {deal.data.currency} {parseFloat(deal.data.value).toLocaleString()}
+                                    {formatCurrency(deal.data.value, deal.data.currency)}
                                 </dd>
                             </div>
                             <div>

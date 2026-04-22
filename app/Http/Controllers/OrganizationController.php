@@ -61,6 +61,33 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Display organization settings.
+     */
+    public function settings()
+    {
+        $organization = Organization::findOrFail(session('organization_id'));
+
+        return Inertia::render('Organizations/Settings', [
+            'organization' => $organization
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Organization $organization)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'currency' => ['required', 'string', 'size:3'],
+        ]);
+
+        $organization->update($request->only('name', 'currency'));
+
+        return back()->with(['message' => 'Settings updated successfully!', 'type' => 'success']);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Organization $organization)

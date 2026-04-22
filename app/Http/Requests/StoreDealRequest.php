@@ -27,7 +27,6 @@ class StoreDealRequest extends FormRequest
             'company_id' => 'required|integer|exists:companies,id',
             'name' => 'required|string',
             'value' => 'required|numeric',
-            'currency' => 'required|string',
             'close_date' => 'required|date',
             'status' => 'required|string',
             'description' => 'required|string',

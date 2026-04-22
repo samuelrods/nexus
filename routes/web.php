@@ -33,6 +33,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'check_organitation'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
+    Route::get('/organizations/settings', [OrganizationController::class, 'settings'])->name('organizations.settings');
     Route::apiResource('organizations', OrganizationController::class)->withoutMiddleware('check_organitation');
 
     Route::resource('members', MemberController::class);

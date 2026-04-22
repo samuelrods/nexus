@@ -7,7 +7,6 @@ const Create = () => {
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         value: "",
-        currency: "USD",
         close_date: null,
         status: "pending",
         description: "",

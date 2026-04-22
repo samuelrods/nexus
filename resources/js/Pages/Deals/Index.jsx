@@ -5,6 +5,8 @@ import TablePagination from "@/Shared/TablePagination";
 import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
+import { formatCurrency } from "@/lib/currency";
+import { usePage } from "@inertiajs/react";
 
 const Deals = ({ pagination, stats, filters }) => {
     const statusOptions = [
@@ -25,7 +27,7 @@ const Deals = ({ pagination, stats, filters }) => {
                 />
                 <StatsCard 
                     title="Total Value" 
-                    value={`$${stats.total_value.toLocaleString()}`} 
+                    value={formatCurrency(stats.total_value, usePage().props.auth.organization?.currency)} 
                     icon={DollarSign} 
                     color="green"
                     trend="up"
@@ -62,8 +64,12 @@ const Deals = ({ pagination, stats, filters }) => {
                     data={pagination.data}
                     columns={[
                         { header: "Name", key: "name", sortKey: "name" },
-                        { header: "Value", key: "value", sortKey: "value" },
-                        { header: "Currency", key: "currency" },
+                        { 
+                            header: "Value", 
+                            key: "value", 
+                            sortKey: "value",
+                            render: (val, row) => formatCurrency(val, row.currency)
+                        },
                         { header: "Close date", key: "close_date", sortKey: "close_date" },
                         { header: "Status", key: "status", sortKey: "status" },
                         { header: "Company", key: "company_name", sortKey: "company_name" },

@@ -27,7 +27,6 @@ class UpdateDealRequest extends FormRequest
             'company_id' => 'sometimes|integer|exists:companies,id',
             'name' => 'sometimes|string',
             'value' => 'sometimes|numeric',
-            'currency' => 'sometimes|string',
             'close_date' => 'sometimes|date',
             'status' => 'sometimes|string',
             'description' => 'sometimes|string',

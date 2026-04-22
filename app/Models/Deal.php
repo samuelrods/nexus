@@ -18,7 +18,6 @@ class Deal extends Model
         'user_id',
         'name',
         'value',
-        'currency',
         'close_date',
         'status',
         'description',

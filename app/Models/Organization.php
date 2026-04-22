@@ -14,7 +14,7 @@ class Organization extends Model
 {
     use HasFactory, Searchable;
 
-    protected $fillable = ['name', 'user_id', 'created_at'];
+    protected $fillable = ['name', 'user_id', 'currency', 'created_at'];
 
     public $timestamps = true;
 
