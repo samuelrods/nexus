@@ -8,8 +8,10 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Button } from "@/Components/ui/button";
-import { Menu, UserCircle, LogOut, LayoutDashboard, Building } from "lucide-react";
+import { Menu, UserCircle, LogOut, LayoutDashboard, Building, Plus } from "lucide-react";
 import { ModeToggle } from "@/Components/ModeToggle";
+import CreateOrganizationModal from "@/Components/CreateOrganizationModal";
+import { cn } from "@/lib/utils";
 
 const Navbar = ({ toggleSidebar }) => {
     const { auth } = usePage().props;
@@ -55,15 +57,36 @@ const Navbar = ({ toggleSidebar }) => {
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel>Switch Organization</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            {auth.user.memberships.map((membership) => (
-                                <DropdownMenuItem
-                                    key={"navbar-" + membership.organization.id}
-                                    onClick={() => handleOrganizationSelection(membership.organization.id)}
-                                    className="cursor-pointer"
-                                >
-                                    {membership.organization.name}
+                            <div className="max-h-[300px] overflow-y-auto">
+                                {auth.user.memberships.map((membership) => (
+                                    <DropdownMenuItem
+                                        key={"navbar-" + membership.organization.id}
+                                        onClick={() => handleOrganizationSelection(membership.organization.id)}
+                                        className="cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-2 w-full">
+                                            <div className={cn(
+                                                "w-2 h-2 rounded-full",
+                                                auth.organization.id === membership.organization.id ? "bg-blue-600" : "bg-transparent"
+                                            )} />
+                                            <span className="truncate">{membership.organization.name}</span>
+                                        </div>
+                                    </DropdownMenuItem>
+                                ))}
+                            </div>
+                            <DropdownMenuSeparator />
+                            <CreateOrganizationModal trigger={
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="cursor-pointer text-blue-600 focus:text-blue-600 focus:bg-blue-50 dark:focus:bg-blue-900/20">
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    <span>Create Organization</span>
                                 </DropdownMenuItem>
-                            ))}
+                            } />
+                            <DropdownMenuItem asChild>
+                                <Link href="/organizations" className="cursor-pointer">
+                                    <Menu className="h-4 w-4 mr-2" />
+                                    <span>Manage Organizations</span>
+                                </Link>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
 
