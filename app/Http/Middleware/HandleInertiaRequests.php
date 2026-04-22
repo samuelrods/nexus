@@ -53,6 +53,8 @@ class HandleInertiaRequests extends Middleware
                         'full_name' => $user->full_name,
                         'email' => $user->email,
                         'memberships' => $user->memberships()->with('organization')->get(),
+                        'permissions' => $user->getAllPermissions()->pluck('name'),
+                        'roles' => $user->getRoleNames(),
                     ];
                 },
                 'organization' => fn () => session('organization_id') 
