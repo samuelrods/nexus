@@ -134,11 +134,13 @@ const RelationshipSelector = ({
                         aria-expanded={open}
                         className="w-full justify-between bg-card border-border h-10"
                     >
-                        {selectedItemLabel || placeholder}
-                        <div className="flex items-center">
+                        <span className="truncate text-left pr-2">
+                            {selectedItemLabel || placeholder}
+                        </span>
+                        <div className="flex items-center shrink-0">
                             {selectedItemLabel && (
                                 <X 
-                                    className="mr-2 h-4 w-4 opacity-50 hover:opacity-100" 
+                                    className="mr-2 h-4 w-4 opacity-50 hover:opacity-100 shrink-0" 
                                     onClick={clearSelection}
                                 />
                             )}
