@@ -43,7 +43,8 @@ class RoleController extends Controller
         }
 
         $rolesPagination = Role::where('organization_id', $organizationId)
-            ->with('permissions')
+            ->with(['permissions'])
+            ->withCount('users')
             ->orderBy('name')
             ->orderBy('id')
             ->paginate(10);
@@ -94,7 +95,7 @@ class RoleController extends Controller
         $this->authorize('view', $role);
 
         return Inertia::render('Roles/Show', [
-            'role' => new RoleResource($role->load('permissions')),
+            'role' => new RoleResource($role->load(['permissions', 'users'])->loadCount('users')),
         ]);
     }
 

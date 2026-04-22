@@ -23,6 +23,8 @@ class RoleResource extends JsonResource
                     'name' => $permission->name,
                 ];
             }),
+            'users_count' => $this->users_count ?? $this->users()->count(),
+            'users' => MemberResource::collection($this->whenLoaded('users')),
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans(),
         ];
