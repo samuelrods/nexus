@@ -15,7 +15,7 @@ const ResouceLayout = ({ children, title }) => {
                 <nav className="flex mb-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-3">
                         <li className="inline-flex items-center">
-                            <Link href="/dashboard" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                            <Link href="/dashboard" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-white">
                                 <Home className="w-4 h-4 mr-2" />
                                 Dashboard
                             </Link>
@@ -23,8 +23,8 @@ const ResouceLayout = ({ children, title }) => {
                         {pathParts.map((part, index) => (
                             <li key={index}>
                                 <div className="flex items-center">
-                                    <ChevronRight className="w-4 h-4 text-gray-400" />
-                                    <span className="ml-1 text-sm font-medium text-gray-700 capitalize md:ml-2 dark:text-gray-400">
+                                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                                    <span className="ml-1 text-sm font-medium text-muted-foreground capitalize md:ml-2">
                                         {part.replace(/-/g, ' ')}
                                     </span>
                                 </div>
@@ -34,10 +34,10 @@ const ResouceLayout = ({ children, title }) => {
                 </nav>
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
                             {title}
                         </h1>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-2 text-sm text-muted-foreground">
                             Manage your {title.toLowerCase()} and view their details.
                         </p>
                     </div>

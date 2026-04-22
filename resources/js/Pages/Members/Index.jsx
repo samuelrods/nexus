@@ -6,7 +6,7 @@ import TablePagination from "@/Shared/TablePagination";
 
 const Index = ({ pagination }) => {
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+        <div className="bg-card p-6 rounded-lg shadow">
             <TableActions
                 searchRoute={"members.index"}
                 resourceType={"Members"}

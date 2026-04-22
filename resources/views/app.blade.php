@@ -8,7 +8,7 @@
     @routes
     @vite('resources/js/app.jsx')
   </head>
-  <body class="min-h-screen bg-gray-50">
+  <body class="min-h-screen font-sans antialiased bg-background text-foreground">
     @inertia
   </body>
 </html>

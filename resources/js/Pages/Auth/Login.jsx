@@ -19,8 +19,8 @@ const Login = ({ status, canResetPassword }) => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-background">
+            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-card shadow-md overflow-hidden sm:rounded-lg">
                 <Head title="Log in" />
 
                 {status && (
@@ -73,7 +73,7 @@ const Login = ({ status, canResetPassword }) => {
                                     setData("remember", checked)
                                 }
                             />
-                            <Label htmlFor="remember" className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                            <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
                                 Remember me
                             </Label>
                         </label>
@@ -83,7 +83,7 @@ const Login = ({ status, canResetPassword }) => {
                         {canResetPassword && (
                             <Link
                                 href={route("password.request")}
-                                className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                                className="underline text-sm text-muted-foreground hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                             >
                                 Forgot your password?
                             </Link>

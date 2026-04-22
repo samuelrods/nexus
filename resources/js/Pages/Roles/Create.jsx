@@ -15,10 +15,10 @@ const Create = ({ permissions }) => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
             <div className="mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Role</h2>
-                <p className="text-gray-500 dark:text-gray-400">Define a new role and its associated permissions.</p>
+                <h2 className="text-2xl font-bold text-foreground">Create New Role</h2>
+                <p className="text-muted-foreground">Define a new role and its associated permissions.</p>
             </div>
             
             <RoleForm

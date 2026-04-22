@@ -30,12 +30,12 @@ const TableActions = ({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
             <div className="relative w-full max-w-sm">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <Search className="w-4 h-4 text-muted-foreground" />
                 </div>
                 <Input
                     type="text"
                     placeholder={"Search " + resourceType.toLowerCase() + "..."}
-                    className="pl-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 block w-full dark:text-white"
+                    className="pl-10 bg-card border-border focus:ring-blue-500 focus:border-blue-500 block w-full text-foreground"
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                     onKeyDown={handleSearch}

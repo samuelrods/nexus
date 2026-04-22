@@ -1,13 +1,18 @@
 import { Button } from "@/Components/ui/button";
 import { Textarea } from "@/Components/ui/textarea";
 import { Label } from "@/Components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
 import InputError from "@/Components/InputError";
-import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import RelationshipSelector from "@/Shared/RelationshipSelector";
 import CompanyForm from "@/Pages/Companies/Form";
 import ContactForm from "@/Pages/Contacts/Form";
 import { Loader2 } from "lucide-react";
-import Select from "react-select";
 
 const LeadForm = ({
     data,
@@ -81,68 +86,36 @@ const LeadForm = ({
             <div className="w-full space-y-1">
                 <Label>Source</Label>
                 <Select
-                    onChange={(data) => setData("source", data.value)}
-                    options={[
-                        { value: "website", label: "Website" },
-                        { value: "referral", label: "Referral" },
-                        { value: "social_media", label: "Social Media" },
-                        { value: "other", label: "Other" },
-                    ]}
-                    placeholder="Select Source"
-                    value={
-                        data.source
-                            ? {
-                                  value: data.source,
-                                  label: capitalizeFirstLetter(
-                                      data.source ?? "",
-                                  ),
-                              }
-                            : null
-                    }
-                    styles={{
-                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                        control: (base) => ({
-                            ...base,
-                            borderRadius: '0.5rem',
-                            borderColor: 'rgb(229 231 235)',
-                            padding: '2px',
-                        })
-                    }}
-                    menuPortalTarget={document.body}
-                />
+                    onValueChange={(val) => setData("source", val)}
+                    value={data.source || ""}
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Source" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="website">Website</SelectItem>
+                        <SelectItem value="referral">Referral</SelectItem>
+                        <SelectItem value="social_media">Social Media</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                </Select>
                 <InputError message={errors.source} />
             </div>
             <div className="w-full space-y-1">
                 <Label>Status</Label>
                 <Select
-                    onChange={(data) => setData("status", data.value)}
-                    options={[
-                        { value: "open", label: "Open" },
-                        { value: "closed", label: "Closed" },
-                        { value: "converted", label: "Converted" },
-                    ]}
-                    placeholder="Select Status"
-                    value={
-                        data.status
-                            ? {
-                                  value: data.status,
-                                  label: capitalizeFirstLetter(
-                                      data.status ?? "",
-                                  ),
-                              }
-                            : null
-                    }
-                    styles={{
-                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                        control: (base) => ({
-                            ...base,
-                            borderRadius: '0.5rem',
-                            borderColor: 'rgb(229 231 235)',
-                            padding: '2px',
-                        })
-                    }}
-                    menuPortalTarget={document.body}
-                />
+                    onValueChange={(val) => setData("status", val)}
+                    value={data.status || ""}
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="open">Open</SelectItem>
+                        <SelectItem value="closed">Closed</SelectItem>
+                        <SelectItem value="converted">Converted</SelectItem>
+                    </SelectContent>
+                </Select>
                 <InputError message={errors.status} />
             </div>
             <div className="w-full space-y-1">
@@ -153,7 +126,6 @@ const LeadForm = ({
                     placeholder="Provide some details about this lead..."
                     required
                     rows={4}
-                    className="bg-white dark:bg-gray-800"
                     value={data.description || ""}
                 />
                 <InputError message={errors.description} />

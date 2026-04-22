@@ -131,7 +131,7 @@ const RelationshipSelector = ({
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="w-full justify-between bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 h-10"
+                        className="w-full justify-between bg-card border-border h-10"
                     >
                         {selectedItemLabel || placeholder}
                         <div className="flex items-center">
@@ -146,21 +146,21 @@ const RelationshipSelector = ({
                     </Button>
                 </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                <DialogHeader className="p-4 border-b dark:border-gray-800">
+            <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-card border-border">
+                <DialogHeader className="p-4 border-b border-border">
                     <DialogTitle className="text-xl font-semibold">
                         Select {resourceName.slice(0, -1)}
                     </DialogTitle>
                 </DialogHeader>
                 
-                <div className="flex border-b dark:border-gray-800">
+                <div className="flex border-b border-border">
                     <button
                         type="button"
                         className={cn(
                             "flex-1 py-3 text-sm font-medium transition-colors",
                             tab === "search" 
                                 ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/20" 
-                                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                : "text-muted-foreground hover:text-foreground"
                         )}
                         onClick={() => setTab("search")}
                     >
@@ -172,7 +172,7 @@ const RelationshipSelector = ({
                             "flex-1 py-3 text-sm font-medium transition-colors",
                             tab === "create" 
                                 ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/20" 
-                                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                : "text-muted-foreground hover:text-foreground"
                         )}
                         onClick={() => setTab("create")}
                     >
@@ -208,7 +208,7 @@ const RelationshipSelector = ({
                                             onClick={(e) => handleSelect(option, e)}
                                         >
                                             <div className="flex flex-col">
-                                                <span className="font-medium text-gray-900 dark:text-white">{option.label}</span>
+                                                <span className="font-medium text-foreground">{option.label}</span>
                                                 {option.description && (
                                                     <span className="text-xs text-gray-500">{option.description}</span>
                                                 )}

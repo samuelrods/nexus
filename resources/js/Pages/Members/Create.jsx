@@ -18,11 +18,11 @@ const Create = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="max-w-2xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
             <div className="flex items-center justify-between mb-8 border-b pb-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Invite Member</h2>
-                    <p className="text-gray-500 dark:text-gray-400">Send an invitation to a user to join your organization.</p>
+                    <h2 className="text-2xl font-bold text-foreground">Invite Member</h2>
+                    <p className="text-muted-foreground">Send an invitation to a user to join your organization.</p>
                 </div>
                 <Button variant="ghost" asChild>
                     <Link href={route("members.index")}>
@@ -42,10 +42,10 @@ const Create = () => {
                         onChange={(e) => setData("memberInfo", e.target.value)}
                         required
                         autoComplete="off"
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card"
                     />
                     <InputError message={errors.memberInfo} />
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                         The user must already have an account in Nexus to be invited.
                     </p>
                 </div>

@@ -23,7 +23,7 @@ const Alert = () => {
         <div className="fixed top-0 left-0 flex justify-center w-full pointer-events-none p-5 z-[100]">
             <AlertUI
                 variant={variant}
-                className="pointer-events-auto max-w-md bg-white dark:bg-gray-800 shadow-lg border-2"
+                className="pointer-events-auto max-w-md bg-card shadow-lg border-2"
             >
                 <div className="flex justify-between items-start w-full">
                     <div className="flex-1">

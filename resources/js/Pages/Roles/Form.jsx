@@ -74,7 +74,7 @@ const RoleForm = ({
                     onChange={(e) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.name} className="mt-2" />
             </div>

@@ -27,7 +27,7 @@ const ContactForm = ({
                         value={data.first_name || ""}
                         onChange={(e) => setData("first_name", e.target.value)}
                         required
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card"
                     />
                     <InputError message={errors.first_name} />
                 </div>
@@ -39,7 +39,7 @@ const ContactForm = ({
                         value={data.last_name || ""}
                         onChange={(e) => setData("last_name", e.target.value)}
                         required
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card"
                     />
                     <InputError message={errors.last_name} />
                 </div>
@@ -54,7 +54,7 @@ const ContactForm = ({
                     value={data.email || ""}
                     onChange={(e) => setData("email", e.target.value)}
                     required
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.email} />
             </div>
@@ -67,7 +67,7 @@ const ContactForm = ({
                     value={data.phone_number || ""}
                     onChange={(e) => setData("phone_number", e.target.value)}
                     required
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.phone_number} />
             </div>
@@ -80,7 +80,7 @@ const ContactForm = ({
                     value={data.organization_name || ""}
                     onChange={(e) => setData("organization_name", e.target.value)}
                     required
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.organization_name} />
             </div>
@@ -93,7 +93,7 @@ const ContactForm = ({
                     value={data.job_title || ""}
                     onChange={(e) => setData("job_title", e.target.value)}
                     required
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.job_title} />
             </div>
@@ -107,7 +107,7 @@ const ContactForm = ({
                     onChange={(e) => setData("description", e.target.value)}
                     required
                     rows={4}
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.description} />
             </div>

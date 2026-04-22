@@ -42,7 +42,7 @@ const Contacts = ({ pagination, stats }) => {
                 />
             </StatsGrid>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
                 <TableActions
                     searchRoute={"contacts.index"}
                     resourceType={"Contacts"}

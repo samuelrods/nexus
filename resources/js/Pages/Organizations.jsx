@@ -69,7 +69,7 @@ const OrganizationItem = ({ membership }) => {
                 <div className="text-center py-4">
                     <div className="mb-6">
                         <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Owner</h2>
-                        <p className="text-lg text-gray-900 dark:text-gray-100">{organization.user.username}</p>
+                        <p className="text-lg text-foreground">{organization.user.username}</p>
                     </div>
                     <div className="flex justify-center gap-4">
                         <Button
@@ -118,7 +118,7 @@ const InvitationItem = ({ invitation }) => {
                 </DialogHeader>
                 <div className="text-center py-4">
                     <MailOpen className="mx-auto mb-4 h-14 w-14 text-blue-500 opacity-80" />
-                    <h3 className="mb-6 text-lg font-medium text-gray-900 dark:text-gray-100">
+                    <h3 className="mb-6 text-lg font-medium text-foreground">
                         You have been invited to join <span className="font-bold">{invitation.organization.name}</span>
                     </h3>
                     <div className="flex justify-center gap-4">
@@ -194,12 +194,12 @@ const CreateOrganizationModal = () => {
 
 const Organizations = ({ memberships, invitations }) => {
     return (
-        <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen flex flex-col bg-background">
             <Head title="Organizations" />
             <div className="flex-1 flex justify-center items-center p-4">
                 <Card className="w-full max-w-xl shadow-xl border-none">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7 px-8">
-                        <CardTitle className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                        <CardTitle className="text-3xl font-extrabold text-foreground">
                             Organizations
                         </CardTitle>
                         <CreateOrganizationModal />

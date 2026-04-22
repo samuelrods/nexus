@@ -28,19 +28,19 @@ const DealsChart = ({ data }) => {
         <div className="w-full">
             <div className="flex justify-between items-start mb-4">
                 <div>
-                    <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-1">
+                    <h5 className="leading-none text-3xl font-bold text-foreground pb-1">
                         ${(data.total / 1000).toFixed(1)}k
                     </h5>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <p className="text-sm font-medium text-muted-foreground">
                         Deals total
                     </p>
                 </div>
                 <div
                     className={cn(
                         "flex items-center px-2.5 py-1 text-sm font-bold text-center rounded-full",
-                        data.percentage > 0 ? "text-green-600 bg-green-50 dark:bg-green-900/20" : 
-                        data.percentage < 0 ? "text-red-600 bg-red-50 dark:bg-red-900/20" : 
-                        "text-gray-500 bg-gray-50"
+                        data.percentage > 0 ? "text-green-600 bg-green-500/10" : 
+                        data.percentage < 0 ? "text-red-600 bg-red-500/10" : 
+                        "text-muted-foreground bg-muted"
                     )}
                 >
                     {data.percentage.toFixed(1)}%

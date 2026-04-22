@@ -7,9 +7,15 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/Components/ui/popover";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
 import { Calendar } from "@/Components/ui/calendar";
 import InputError from "@/Components/InputError";
-import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import RelationshipSelector from "@/Shared/RelationshipSelector";
 import CompanyForm from "@/Pages/Companies/Form";
 import ContactForm from "@/Pages/Contacts/Form";
@@ -17,7 +23,6 @@ import LeadForm from "@/Pages/Leads/Form";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Select from "react-select";
 
 const DealForm = ({
     data,
@@ -52,7 +57,6 @@ const DealForm = ({
                     onChange={(e) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
-                    className="bg-white dark:bg-gray-800"
                 />
                 <InputError message={errors.name} />
             </div>
@@ -67,7 +71,6 @@ const DealForm = ({
                         value={data.value || ""}
                         onChange={(e) => setData("value", e.target.value)}
                         required
-                        className="bg-white dark:bg-gray-800"
                     />
                     <InputError message={errors.value} />
                 </div>
@@ -80,7 +83,6 @@ const DealForm = ({
                         value={data.currency ? data.currency.toUpperCase() : ""}
                         onChange={(e) => setData("currency", e.target.value)}
                         required
-                        className="bg-white dark:bg-gray-800"
                     />
                     <InputError message={errors.currency} />
                 </div>
@@ -92,7 +94,7 @@ const DealForm = ({
                         <Button
                             variant={"outline"}
                             className={cn(
-                                "w-full justify-start text-left font-normal bg-white dark:bg-gray-800",
+                                "w-full justify-start text-left font-normal bg-card",
                                 !closeDate && "text-muted-foreground"
                             )}
                         >
@@ -114,32 +116,18 @@ const DealForm = ({
             <div className="w-full space-y-1">
                 <Label>Status</Label>
                 <Select
-                    onChange={(data) => setData("status", data.value)}
-                    options={[
-                        { value: "pending", label: "Pending" },
-                        { value: "won", label: "Won" },
-                        { value: "lost", label: "Lost" },
-                    ]}
-                    placeholder="Select Status"
-                    value={
-                        data.status
-                            ? {
-                                  value: data.status,
-                                  label: capitalizeFirstLetter(data.status),
-                              }
-                            : null
-                    }
-                    styles={{
-                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                        control: (base) => ({
-                            ...base,
-                            borderRadius: '0.5rem',
-                            borderColor: 'rgb(229 231 235)',
-                            padding: '2px',
-                        })
-                    }}
-                    menuPortalTarget={document.body}
-                />
+                    onValueChange={(val) => setData("status", val)}
+                    value={data.status || ""}
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="won">Won</SelectItem>
+                        <SelectItem value="lost">Lost</SelectItem>
+                    </SelectContent>
+                </Select>
                 <InputError message={errors.status} />
             </div>
             
@@ -236,7 +224,6 @@ const DealForm = ({
                     placeholder="Deal description..."
                     required
                     rows={3}
-                    className="bg-white dark:bg-gray-800"
                     value={data.description || ""}
                 />
                 <InputError message={errors.description} />

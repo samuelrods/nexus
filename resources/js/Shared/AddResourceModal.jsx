@@ -42,9 +42,9 @@ const AddResourceModal = ({
                     Add {resourceType}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-gray-800">
+            <DialogContent className="sm:max-w-[600px] bg-card">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-medium text-gray-900 dark:text-white text-center mb-3">
+                    <DialogTitle className="text-2xl font-medium text-foreground text-center mb-3">
                         Add {resourceType}
                     </DialogTitle>
                 </DialogHeader>

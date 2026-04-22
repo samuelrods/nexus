@@ -94,9 +94,9 @@ function EditButton({
                     <span className="sr-only">Edit</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-gray-800">
+            <DialogContent className="sm:max-w-[600px] bg-card">
                 <DialogHeader>
-                    <DialogTitle className="text-gray-900 dark:text-white">Edit Resource</DialogTitle>
+                    <DialogTitle className="text-foreground">Edit Resource</DialogTitle>
                 </DialogHeader>
                 <div className="py-4">
                     <EditResourceForm
@@ -139,15 +139,15 @@ function DeleteButton({ resourceRoute }) {
                     <span className="sr-only">Delete</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-800">
+            <DialogContent className="sm:max-w-[425px] bg-card">
                 <DialogHeader>
-                    <DialogTitle className="flex flex-col items-center text-gray-900 dark:text-white">
+                    <DialogTitle className="flex flex-col items-center text-foreground">
                         <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
                         Confirm Deletion
                     </DialogTitle>
                 </DialogHeader>
                 <div className="text-center py-4">
-                    <p className="text-gray-500 dark:text-gray-400">
+                    <p className="text-muted-foreground">
                         Are you sure you want to delete this resource? This action cannot be undone.
                     </p>
                 </div>
@@ -221,10 +221,10 @@ const Table = ({
     const canClickRow = hasShowRoute(resourceName);
 
     return (
-        <div className="relative overflow-hidden shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700">
-            <TableUI className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <TableHeader className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <TableRow className="border-b dark:border-gray-700">
+        <div className="relative overflow-hidden shadow-md sm:rounded-lg border border-border">
+            <TableUI className="w-full text-sm text-left text-muted-foreground">
+                <TableHeader className="text-xs text-muted-foreground uppercase bg-muted">
+                    <TableRow className="border-b border-border">
                         {columns.map((column) => (
                             <TableHead key={column.key} className="px-6 py-3 font-semibold">
                                 {column.header}
@@ -241,7 +241,7 @@ const Table = ({
                             <TableRow
                                 key={resourceName + "-" + item.id}
                                 className={cn(
-                                    "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors",
+                                    "bg-card border-b border-border hover:bg-muted/50 transition-colors",
                                     canClickRow && "cursor-pointer"
                                 )}
                                 onClick={() => canClickRow && handleRowClick(item)}
@@ -251,7 +251,7 @@ const Table = ({
                                         {column.key === "status" ? (
                                             <StatusBadge status={item[column.key]} />
                                         ) : (
-                                            <span className="text-gray-900 dark:text-white font-medium">
+                                            <span className="text-foreground font-medium">
                                                 {item[column.key] ?? "—"}
                                             </span>
                                         )}
@@ -283,7 +283,7 @@ const Table = ({
                                             />
                                         </div>
                                     ) : canClickRow ? (
-                                        <ChevronRight className="h-4 w-4 inline text-gray-400" />
+                                        <ChevronRight className="h-4 w-4 inline text-muted-foreground" />
                                     ) : null}
                                 </TableCell>
                             </TableRow>
@@ -292,9 +292,9 @@ const Table = ({
                         <TableRow>
                             <TableCell colSpan={columns.length + 1} className="py-20 text-center">
                                 <div className="flex flex-col items-center justify-center">
-                                    <Inbox className="h-12 w-12 text-gray-400 mb-4" />
-                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">No data found</h3>
-                                    <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or add a new {resourceName.slice(0, -1)}.</p>
+                                    <Inbox className="h-12 w-12 text-muted-foreground mb-4" />
+                                    <h3 className="text-lg font-medium text-foreground">No data found</h3>
+                                    <p className="text-muted-foreground">Try adjusting your search or add a new {resourceName.slice(0, -1)}.</p>
                                 </div>
                             </TableCell>
                         </TableRow>

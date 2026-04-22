@@ -13,7 +13,7 @@ import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 
 const Roles = ({ pagination, permissions }) => {
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+        <div className="bg-card p-6 rounded-lg shadow">
             <TableActions
                 searchRoute={"roles.index"}
                 resourceType={"Roles"}

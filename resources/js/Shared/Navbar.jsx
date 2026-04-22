@@ -9,6 +9,7 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import { Button } from "@/Components/ui/button";
 import { Menu, UserCircle, LogOut, LayoutDashboard, Building } from "lucide-react";
+import { ModeToggle } from "@/Components/ModeToggle";
 
 const Navbar = ({ toggleSidebar }) => {
     const { auth } = usePage().props;
@@ -20,19 +21,19 @@ const Navbar = ({ toggleSidebar }) => {
     };
 
     return (
-        <header className="fixed top-0 left-0 w-full z-40 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-16 flex items-center px-4">
+        <header className="fixed top-0 left-0 w-full z-40 bg-card border-b border-border h-16 flex items-center px-4">
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-4">
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={toggleSidebar}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="hover:bg-accent hover:text-accent-foreground"
                     >
                         <Menu className="h-6 w-6" />
                     </Button>
                     <Link href="/dashboard" className="flex items-center">
-                        <span className="self-center whitespace-nowrap text-xl font-bold dark:text-white text-blue-600">
+                        <span className="self-center whitespace-nowrap text-xl font-bold text-blue-600 dark:text-blue-400">
                             Nexus
                         </span>
                     </Link>
@@ -66,18 +67,20 @@ const Navbar = ({ toggleSidebar }) => {
                         </DropdownMenuContent>
                     </DropdownMenu>
 
+                    <ModeToggle />
+
                     {/* User Profile Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="rounded-full">
-                                <UserCircle className="h-8 w-8 text-gray-500" />
+                                <UserCircle className="h-8 w-8 text-muted-foreground" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel>
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-semibold">{auth.user.full_name}</span>
-                                    <span className="text-xs text-gray-500 truncate">{auth.user.email}</span>
+                                    <span className="text-sm font-semibold text-foreground">{auth.user.full_name}</span>
+                                    <span className="text-xs text-muted-foreground truncate">{auth.user.email}</span>
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />

@@ -27,7 +27,7 @@ const CompanyForm = ({
                     onChange={(e) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.name} />
             </div>
@@ -40,7 +40,7 @@ const CompanyForm = ({
                     onChange={(e) => setData("industry", e.target.value)}
                     required
                     autoComplete="off"
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.industry} />
             </div>
@@ -53,7 +53,7 @@ const CompanyForm = ({
                     onChange={(e) => setData("website", e.target.value)}
                     required
                     autoComplete="off"
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.website} />
             </div>
@@ -66,7 +66,7 @@ const CompanyForm = ({
                     onChange={(e) => setData("description", e.target.value)}
                     required
                     rows={4}
-                    className="bg-white dark:bg-gray-800"
+                    className="bg-card"
                 />
                 <InputError message={errors.description} />
             </div>
@@ -83,7 +83,7 @@ const CompanyForm = ({
                             setData("street_address", e.target.value)
                         }
                         required
-                        className="bg-white dark:bg-gray-800"
+                        className="bg-card"
                     />
                     <InputError message={errors.street_address} />
                 </div>
@@ -96,7 +96,7 @@ const CompanyForm = ({
                             value={data.city || ""}
                             onChange={(e) => setData("city", e.target.value)}
                             required
-                            className="bg-white dark:bg-gray-800"
+                            className="bg-card"
                         />
                         <InputError message={errors.city} />
                     </div>
@@ -108,7 +108,7 @@ const CompanyForm = ({
                             value={data.state || ""}
                             onChange={(e) => setData("state", e.target.value)}
                             required
-                            className="bg-white dark:bg-gray-800"
+                            className="bg-card"
                         />
                         <InputError message={errors.state} />
                     </div>
@@ -120,7 +120,7 @@ const CompanyForm = ({
                             value={data.zip_code || ""}
                             onChange={(e) => setData("zip_code", e.target.value)}
                             required
-                            className="bg-white dark:bg-gray-800"
+                            className="bg-card"
                         />
                         <InputError message={errors.zip_code} />
                     </div>

@@ -45,7 +45,7 @@ const Show = ({ role }) => {
         <div className="space-y-6 max-w-5xl mx-auto">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("roles.index")} className="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <Link href={route("roles.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Roles
                     </Link>
@@ -73,7 +73,7 @@ const Show = ({ role }) => {
                                 </DialogTitle>
                             </DialogHeader>
                             <div className="text-center py-4">
-                                <p className="text-gray-500 dark:text-gray-400">
+                                <p className="text-muted-foreground">
                                     Are you sure you want to delete role <strong>{role.data.name}</strong>? This action cannot be undone.
                                 </p>
                             </div>
@@ -97,14 +97,14 @@ const Show = ({ role }) => {
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-card p-8 rounded-lg shadow-sm border border-border">
                 <div className="flex items-center gap-4 mb-8 border-b pb-6">
                     <div className="bg-orange-100 dark:bg-orange-900 p-3 rounded-lg text-orange-600 dark:text-orange-300">
                         <Shield className="h-8 w-8" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white capitalize">{role.data.name}</h1>
-                        <p className="text-gray-500 dark:text-gray-400 flex items-center mt-1">
+                        <h1 className="text-3xl font-bold text-foreground capitalize">{role.data.name}</h1>
+                        <p className="text-muted-foreground flex items-center mt-1">
                             <Calendar className="h-4 w-4 mr-1" />
                             Created on {new Date(role.data.created_at).toLocaleDateString()}
                         </p>
@@ -113,7 +113,7 @@ const Show = ({ role }) => {
 
                 <div className="space-y-8">
                     <div>
-                        <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Assigned Permissions</h3>
+                        <h3 className="text-xl font-bold mb-6 text-foreground">Assigned Permissions</h3>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {Object.entries(groupedPermissions).map(([category, permissions]) => (
@@ -123,7 +123,7 @@ const Show = ({ role }) => {
                                     </h4>
                                     <div className="grid grid-cols-1 gap-2">
                                         {permissions.map((permission) => (
-                                            <div key={permission.id} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                                            <div key={permission.id} className="flex items-center text-sm text-muted-foreground">
                                                 <CheckCircle2 className="h-4 w-4 mr-2 text-green-500" />
                                                 {permission.name}
                                             </div>
@@ -134,7 +134,7 @@ const Show = ({ role }) => {
                         </div>
                         
                         {role.data.permissions.length === 0 && (
-                            <div className="text-center py-12 bg-gray-50 dark:bg-gray-900/50 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-800">
+                            <div className="text-center py-12 bg-background/50 rounded-lg border-2 border-dashed border-border">
                                 <Shield className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                                 <p className="text-gray-500 italic">No permissions assigned to this role.</p>
                             </div>
