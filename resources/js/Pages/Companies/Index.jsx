@@ -196,18 +196,7 @@ const Companies = ({ pagination }) => {
                 <TableActions
                     searchRoute={"companies.index"}
                     resourceType={"Companies"}
-                    storeRoute={"companies.store"}
-                    ResourceForm={CompanyForm}
-                    resourceInfo={[
-                        ["name", ""],
-                        ["website", ""],
-                        ["industry", ""],
-                        ["street_address", ""],
-                        ["city", ""],
-                        ["state", ""],
-                        ["zip_code", ""],
-                        ["description", ""],
-                    ]}
+                    createRoute={"companies.create"}
                 />
                 <Table
                     data={pagination.data.map((company) => {
@@ -226,18 +215,6 @@ const Companies = ({ pagination }) => {
                         { header: "Address", key: "address_full" },
                     ]}
                     resourceName={"companies"}
-                    EditResourceForm={CompanyForm}
-                    resourceInfoKeys={[
-                        "name",
-                        "website",
-                        "industry",
-                        "address_id",
-                        "description",
-                        "street_address",
-                        "city",
-                        "state",
-                        "zip_code",
-                    ]}
                 />
                 <TablePagination pagination={pagination.links} />
             </div>

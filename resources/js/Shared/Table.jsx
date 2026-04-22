@@ -1,12 +1,4 @@
-import { router, useForm } from "@inertiajs/react";
-import { Button } from "@/Components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/Components/ui/dialog";
+import { router, Link, useForm } from "@inertiajs/react";
 import {
     Table as TableUI,
     TableBody,
@@ -15,9 +7,23 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { useEffect, useState } from "react";
-import { Pencil, Trash2, AlertTriangle, Inbox } from "lucide-react";
+import { 
+    Inbox, 
+    ChevronRight, 
+    Pencil, 
+    Trash2, 
+    AlertTriangle 
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { Button } from "@/Components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/Components/ui/dialog";
 
 const StatusBadge = ({ status }) => {
     const statusStyles = {
@@ -26,6 +32,9 @@ const StatusBadge = ({ status }) => {
         lost: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
         active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
         inactive: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+        open: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+        closed: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+        converted: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
     };
 
     const style = statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
@@ -85,9 +94,9 @@ function EditButton({
                     <span className="sr-only">Edit</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-gray-800">
                 <DialogHeader>
-                    <DialogTitle>Edit Resource</DialogTitle>
+                    <DialogTitle className="text-gray-900 dark:text-white">Edit Resource</DialogTitle>
                 </DialogHeader>
                 <div className="py-4">
                     <EditResourceForm
@@ -130,9 +139,9 @@ function DeleteButton({ resourceRoute }) {
                     <span className="sr-only">Delete</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-800">
                 <DialogHeader>
-                    <DialogTitle className="flex flex-col items-center">
+                    <DialogTitle className="flex flex-col items-center text-gray-900 dark:text-white">
                         <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
                         Confirm Deletion
                     </DialogTitle>
@@ -185,6 +194,32 @@ const Table = ({
 
         return result;
     };
+
+    const handleRowClick = (item) => {
+        const showRoute = `${resourceName}.show`;
+        // Use try-catch or ziggy's check if possible.
+        // Inertia's route() throws if not found.
+        try {
+            const url = route(showRoute, item.id);
+            if (url) {
+                router.visit(url);
+            }
+        } catch (e) {
+            // If show route doesn't exist, do nothing or handle differently
+            console.log(`No show route for ${resourceName}`);
+        }
+    };
+
+    const hasShowRoute = (resource) => {
+        try {
+            return !!route(`${resource}.show`, 1);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    const canClickRow = hasShowRoute(resourceName);
+
     return (
         <div className="relative overflow-hidden shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700">
             <TableUI className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -196,7 +231,7 @@ const Table = ({
                             </TableHead>
                         ))}
                         <TableHead className="px-6 py-3 text-right font-semibold">
-                            Actions
+                            {EditResourceForm ? "Actions" : ""}
                         </TableHead>
                     </TableRow>
                 </TableHeader>
@@ -205,7 +240,11 @@ const Table = ({
                         data.map((item) => (
                             <TableRow
                                 key={resourceName + "-" + item.id}
-                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                className={cn(
+                                    "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors",
+                                    canClickRow && "cursor-pointer"
+                                )}
+                                onClick={() => canClickRow && handleRowClick(item)}
                             >
                                 {columns.map((column) => (
                                     <TableCell key={column.key + "body"} className="px-6 py-4 whitespace-nowrap">
@@ -218,30 +257,34 @@ const Table = ({
                                         )}
                                     </TableCell>
                                 ))}
-                                <TableCell className="px-6 py-4 text-right">
-                                    <div className="flex justify-end gap-1">
-                                        <EditButton
-                                            item={item}
-                                            resourceRoute={route(
-                                                resourceName + ".update",
-                                                item.id,
-                                            )}
-                                            EditResourceForm={EditResourceForm}
-                                            editFormData={editFormData}
-                                            resourceInfoKeys={resourceInfoKeys}
-                                        />
-                                        <DeleteButton
-                                            resourceRoute={route(
-                                                resourceName + ".destroy",
-                                                propertyIdPath
-                                                    ? getPropertyByPath(
-                                                          item,
-                                                          propertyIdPath,
-                                                      )
-                                                    : item.id,
-                                            )}
-                                        />
-                                    </div>
+                                <TableCell className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                                    {EditResourceForm ? (
+                                        <div className="flex justify-end gap-1">
+                                            <EditButton
+                                                item={item}
+                                                resourceRoute={route(
+                                                    resourceName + ".update",
+                                                    item.id,
+                                                )}
+                                                EditResourceForm={EditResourceForm}
+                                                editFormData={editFormData}
+                                                resourceInfoKeys={resourceInfoKeys}
+                                            />
+                                            <DeleteButton
+                                                resourceRoute={route(
+                                                    resourceName + ".destroy",
+                                                    propertyIdPath
+                                                        ? getPropertyByPath(
+                                                              item,
+                                                              propertyIdPath,
+                                                          )
+                                                        : item.id,
+                                                )}
+                                            />
+                                        </div>
+                                    ) : canClickRow ? (
+                                        <ChevronRight className="h-4 w-4 inline text-gray-400" />
+                                    ) : null}
                                 </TableCell>
                             </TableRow>
                         ))

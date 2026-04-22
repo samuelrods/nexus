@@ -1,16 +1,18 @@
-import { router } from "@inertiajs/react";
-import AddResourceModal from "./AddResourceModal";
+import { router, Link } from "@inertiajs/react";
 import { Input } from "@/Components/ui/input";
-import { Search } from "lucide-react";
+import { Button } from "@/Components/ui/button";
+import { Search, Plus } from "lucide-react";
 import { useState } from "react";
+import AddResourceModal from "@/Shared/AddResourceModal";
 
 const TableActions = ({
     searchRoute,
-    storeRoute,
+    createRoute,
     resourceType,
-    resourceInfo,
+    storeRoute,
     ResourceForm,
-    formData = null,
+    resourceInfo,
+    formData,
 }) => {
     const [searchValue, setSearchValue] = useState("");
 
@@ -40,14 +42,22 @@ const TableActions = ({
                 />
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
-                <AddResourceModal
-                    resourceType={resourceType}
-                    storeRoute={storeRoute}
-                    resourceInfo={resourceInfo}
-                    buttonTexts={["Add", resourceType]}
-                    ResourceForm={ResourceForm}
-                    formData={formData}
-                />
+                {ResourceForm ? (
+                    <AddResourceModal
+                        resourceType={resourceType.slice(0, -1)}
+                        resourceInfo={resourceInfo}
+                        storeRoute={storeRoute}
+                        ResourceForm={ResourceForm}
+                        formData={formData}
+                    />
+                ) : createRoute ? (
+                    <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                        <Link href={route(createRoute)}>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add {resourceType.slice(0, -1)}
+                        </Link>
+                    </Button>
+                ) : null}
             </div>
         </div>
     );

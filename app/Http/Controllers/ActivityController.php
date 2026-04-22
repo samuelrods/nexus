@@ -25,7 +25,7 @@ class ActivityController extends Controller
                 ->where('organization_id', $organizationId)
                 ->paginate(10);
 
-            return Inertia::render('Activities', [
+            return Inertia::render('Activities/Index', [
                 'pagination' => ActivityResource::collection($searchResults),
             ]);
         }
@@ -34,9 +34,19 @@ class ActivityController extends Controller
             ->orderBy('id')
             ->paginate(10);
 
-        return Inertia::render('Activities', [
+        return Inertia::render('Activities/Index', [
             'pagination' => ActivityResource::collection($activitiesPagination),
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Activity::class);
+
+        return Inertia::render('Activities/Create');
     }
 
     /**
@@ -46,13 +56,41 @@ class ActivityController extends Controller
     {
         $this->authorize('create', Activity::class);
 
-        Activity::create([
+        $activity = Activity::create([
             ...$request->validated(),
             'organization_id' => session('organization_id'),
             'user_id' => auth()->id(),
         ]);
 
-        return back()->with(['message' => 'Activity created successfully!', 'type' => 'success']);
+        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+            return new ActivityResource($activity);
+        }
+
+        return redirect()->route('activities.show', $activity->id)->with(['message' => 'Activity created successfully!', 'type' => 'success']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Activity $activity)
+    {
+        $this->authorize('view', $activity);
+
+        return Inertia::render('Activities/Show', [
+            'activity' => new ActivityResource($activity),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Activity $activity)
+    {
+        $this->authorize('update', $activity);
+
+        return Inertia::render('Activities/Edit', [
+            'activity' => new ActivityResource($activity),
+        ]);
     }
 
     /**
@@ -64,7 +102,7 @@ class ActivityController extends Controller
 
         $activity->update($request->validated());
 
-        return back()->with(['message' => 'Activity updated successfully!', 'type' => 'success']);
+        return redirect()->route('activities.show', $activity->id)->with(['message' => 'Activity updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -76,6 +114,6 @@ class ActivityController extends Controller
 
         $activity->delete();
 
-        return back()->with(['message' => 'Activity deleted successfully!', 'type' => 'success']);
+        return redirect()->route('activities.index')->with(['message' => 'Activity deleted successfully!', 'type' => 'success']);
     }
 }

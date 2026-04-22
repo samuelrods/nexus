@@ -1,7 +1,3 @@
-import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
-import TableActions from "@/Shared/TableActions";
-import TablePagination from "@/Shared/TablePagination";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -14,12 +10,13 @@ import {
 import { Calendar } from "@/Components/ui/calendar";
 import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
-import Table from "@/Shared/Table";
-import Select from "react-select";
-import ComboBox from "@/Shared/ComboBox";
+import RelationshipSelector from "@/Shared/RelationshipSelector";
+import ContactForm from "@/Pages/Contacts/Form";
+import LeadForm from "@/Pages/Leads/Form";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Select from "react-select";
 
 const ActivityForm = ({
     data,
@@ -27,7 +24,6 @@ const ActivityForm = ({
     errors,
     onSubmit,
     processing,
-    formData,
     updating = false,
 }) => {
     function toSqlDateFormat(date) {
@@ -49,19 +45,53 @@ const ActivityForm = ({
             <div className="w-full grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                     <Label>Contact</Label>
-                    <ComboBox
-                        onChange={(data) => setData("contact_id", data.value)}
-                        apiUrlPath={"/api/contacts-options"}
-                        placeholder={"Search contacts..."}
+                    <RelationshipSelector
+                        value={data.contact_id}
+                        label={data.contact_fullname}
+                        onChange={(val, lab) => {
+                            setData((prev) => ({
+                                ...prev,
+                                contact_id: val,
+                                contact_fullname: lab,
+                            }));
+                        }}
+                        resourceName="contacts"
+                        apiUrlPath="/api/contacts-options"
+                        ResourceForm={ContactForm}
+                        resourceInfo={[
+                            ["first_name", ""],
+                            ["last_name", ""],
+                            ["email", ""],
+                            ["phone_number", ""],
+                            ["organization_name", ""],
+                            ["job_title", ""],
+                            ["description", ""],
+                        ]}
+                        placeholder="Contact..."
                     />
                     <InputError message={errors.contact_id} />
                 </div>
                 <div className="space-y-1">
                     <Label>Lead (Optional)</Label>
-                    <ComboBox
-                        onChange={(data) => setData("lead_id", data.value)}
-                        apiUrlPath={"/api/leads-options"}
-                        placeholder={"Search leads..."}
+                    <RelationshipSelector
+                        value={data.lead_id}
+                        label={data.lead_description}
+                        onChange={(val, lab) => {
+                            setData((prev) => ({
+                                ...prev,
+                                lead_id: val,
+                                lead_description: lab,
+                            }));
+                        }}
+                        resourceName="leads"
+                        apiUrlPath="/api/leads-options"
+                        ResourceForm={LeadForm}
+                        resourceInfo={[
+                            ["source", ""],
+                            ["status", "open"],
+                            ["description", ""],
+                        ]}
+                        placeholder="Lead..."
                     />
                     <InputError message={errors.lead_id} />
                 </div>
@@ -78,7 +108,7 @@ const ActivityForm = ({
                         { value: "other", label: "Other" },
                     ]}
                     placeholder="Select Type"
-                    defaultValue={
+                    value={
                         data.type
                             ? {
                                   value: data.type,
@@ -132,7 +162,7 @@ const ActivityForm = ({
                     <Input
                         id="time"
                         placeholder="Time"
-                        value={data.time ?? ""}
+                        value={data.time || ""}
                         type="time"
                         onChange={(e) => setData("time", e.target.value)}
                         required
@@ -152,7 +182,7 @@ const ActivityForm = ({
                     required
                     rows={4}
                     className="bg-white dark:bg-gray-800"
-                    value={data.description}
+                    value={data.description || ""}
                 />
                 <InputError message={errors.description} />
             </div>
@@ -175,52 +205,4 @@ const ActivityForm = ({
     );
 };
 
-const Activities = ({ pagination }) => {
-    return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-            <TableActions
-                searchRoute={"activities.index"}
-                resourceType={"Activities"}
-                storeRoute={"activities.store"}
-                ResourceForm={ActivityForm}
-                resourceInfo={[
-                    ["contact_id", null],
-                    ["lead_id", null],
-                    ["type", null],
-                    ["date", null],
-                    ["time", null],
-                    ["description", ""],
-                ]}
-            />
-            <Table
-                data={pagination.data}
-                columns={[
-                    { header: "Contact", key: "contact_fullname" },
-                    { header: "Type", key: "type" },
-                    { header: "Date", key: "date" },
-                    { header: "Time", key: "time" },
-                    { header: "Description", key: "description" },
-                ]}
-                resourceName={"activities"}
-                EditResourceForm={ActivityForm}
-                resourceInfoKeys={[
-                    "contact_id",
-                    "lead_id",
-                    "type",
-                    "date",
-                    "time",
-                    "description",
-                ]}
-            />
-            <TablePagination pagination={pagination.links} />
-        </div>
-    );
-};
-
-Activities.layout = (page) => (
-    <Layout>
-        <ResouceLayout children={page} title="Activities" />
-    </Layout>
-);
-
-export default Activities;
+export default ActivityForm;

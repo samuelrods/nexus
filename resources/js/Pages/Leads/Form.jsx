@@ -1,14 +1,11 @@
-import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
-import TableActions from "@/Shared/TableActions";
-import TablePagination from "@/Shared/TablePagination";
 import { Button } from "@/Components/ui/button";
 import { Textarea } from "@/Components/ui/textarea";
 import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
-import Table from "@/Shared/Table";
-import ComboBox from "@/Shared/ComboBox";
+import RelationshipSelector from "@/Shared/RelationshipSelector";
+import CompanyForm from "@/Pages/Companies/Form";
+import ContactForm from "@/Pages/Contacts/Form";
 import { Loader2 } from "lucide-react";
 import Select from "react-select";
 
@@ -18,7 +15,6 @@ const LeadForm = ({
     errors,
     onSubmit,
     processing,
-    formData,
     updating = false,
 }) => {
     return (
@@ -28,17 +24,57 @@ const LeadForm = ({
         >
             <div className="w-full space-y-1">
                 <Label>Company</Label>
-                <ComboBox
-                    onChange={(data) => setData("company_id", data.value)}
-                    apiUrlPath={"/api/companies-options"}
+                <RelationshipSelector
+                    value={data.company_id}
+                    label={data.company_name}
+                    onChange={(val, lab) => {
+                        setData((prev) => ({
+                            ...prev,
+                            company_id: val,
+                            company_name: lab,
+                        }));
+                    }}
+                    resourceName="companies"
+                    apiUrlPath="/api/companies-options"
+                    ResourceForm={CompanyForm}
+                    resourceInfo={[
+                        ["name", ""],
+                        ["website", ""],
+                        ["industry", ""],
+                        ["description", ""],
+                        ["street_address", ""],
+                        ["city", ""],
+                        ["state", ""],
+                        ["zip_code", ""],
+                    ]}
+                    placeholder="Search or add company..."
                 />
                 <InputError message={errors.company_id} />
             </div>
             <div className="w-full space-y-1">
                 <Label>Contact</Label>
-                <ComboBox
-                    onChange={(data) => setData("contact_id", data.value)}
-                    apiUrlPath={"/api/contacts-options"}
+                <RelationshipSelector
+                    value={data.contact_id}
+                    label={data.contact_fullname}
+                    onChange={(val, lab) => {
+                        setData((prev) => ({
+                            ...prev,
+                            contact_id: val,
+                            contact_fullname: lab,
+                        }));
+                    }}
+                    resourceName="contacts"
+                    apiUrlPath="/api/contacts-options"
+                    ResourceForm={ContactForm}
+                    resourceInfo={[
+                        ["first_name", ""],
+                        ["last_name", ""],
+                        ["email", ""],
+                        ["phone", ""],
+                        ["position", ""],
+                        ["description", ""],
+                    ]}
+                    placeholder="Search or add contact..."
                 />
                 <InputError message={errors.contact_id} />
             </div>
@@ -53,7 +89,7 @@ const LeadForm = ({
                         { value: "other", label: "Other" },
                     ]}
                     placeholder="Select Source"
-                    defaultValue={
+                    value={
                         data.source
                             ? {
                                   value: data.source,
@@ -70,9 +106,6 @@ const LeadForm = ({
                             borderRadius: '0.5rem',
                             borderColor: 'rgb(229 231 235)',
                             padding: '2px',
-                            '&:hover': {
-                                borderColor: 'rgb(209 213 219)'
-                            }
                         })
                     }}
                     menuPortalTarget={document.body}
@@ -89,7 +122,7 @@ const LeadForm = ({
                         { value: "converted", label: "Converted" },
                     ]}
                     placeholder="Select Status"
-                    defaultValue={
+                    value={
                         data.status
                             ? {
                                   value: data.status,
@@ -106,9 +139,6 @@ const LeadForm = ({
                             borderRadius: '0.5rem',
                             borderColor: 'rgb(229 231 235)',
                             padding: '2px',
-                            '&:hover': {
-                                borderColor: 'rgb(209 213 219)'
-                            }
                         })
                     }}
                     menuPortalTarget={document.body}
@@ -124,7 +154,7 @@ const LeadForm = ({
                     required
                     rows={4}
                     className="bg-white dark:bg-gray-800"
-                    value={data.description}
+                    value={data.description || ""}
                 />
                 <InputError message={errors.description} />
             </div>
@@ -142,51 +172,4 @@ const LeadForm = ({
     );
 };
 
-const Leads = ({ pagination }) => {
-    return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <TableActions
-                searchRoute={"leads.index"}
-                resourceType={"Leads"}
-                storeRoute={"leads.store"}
-                ResourceForm={LeadForm}
-                resourceInfo={[
-                    ["source", null],
-                    ["status", null],
-                    ["description", ""],
-                    ["contact_id", null],
-                    ["company_id", null],
-                ]}
-            />
-            <Table
-                data={pagination.data}
-                columns={[
-                    { header: "Company", key: "company_name" },
-                    { header: "Contact", key: "contact_fullname" },
-                    { header: "Description", key: "description" },
-                    { header: "Source", key: "source" },
-                    { header: "Status", key: "status" },
-                ]}
-                resourceName={"leads"}
-                EditResourceForm={LeadForm}
-                resourceInfoKeys={[
-                    "source",
-                    "status",
-                    "description",
-                    "contact_id",
-                    "company_id",
-                ]}
-            />
-            <TablePagination pagination={pagination.links} />
-        </div>
-    );
-};
-
-
-Leads.layout = (page) => (
-    <Layout>
-        <ResouceLayout children={page} title="Leads" />
-    </Layout>
-);
-
-export default Leads;
+export default LeadForm;

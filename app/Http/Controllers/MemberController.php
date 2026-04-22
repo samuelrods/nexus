@@ -23,7 +23,7 @@ class MemberController extends Controller
         $this->authorize('viewAny', OrganizationMember::class);
 
         $organizationId = session('organization_id');
-        $organization = Organization::find($organizationId);
+        $organization = Organization::findOrFail($organizationId);
 
         $roles = Role::where('organization_id', $organizationId)
             ->orderBy('name')
@@ -31,11 +31,15 @@ class MemberController extends Controller
             ->get();
 
         if ($request->filled('query')) {
-            $searchResults = User::search($request->input('query'))
-                ->whereIn('id', $organization->members()->pluck('users.id')->toArray())
+            $searchResults = $organization->members()
+                ->where(function ($query) use ($request) {
+                    $query->where('first_name', 'like', '%' . $request->input('query') . '%')
+                        ->orWhere('last_name', 'like', '%' . $request->input('query') . '%')
+                        ->orWhere('email', 'like', '%' . $request->input('query') . '%');
+                })
                 ->paginate(10);
 
-            return Inertia::render('Members', [
+            return Inertia::render('Members/Index', [
                 'pagination' => MemberResource::collection($searchResults),
                 'rolesData' => MemberRolesResource::collection($roles),
             ]);
@@ -46,9 +50,61 @@ class MemberController extends Controller
             ->orderBy('users.id')
             ->paginate(10);
 
-        return Inertia::render('Members', [
+        return Inertia::render('Members/Index', [
             'pagination' => MemberResource::collection($membersPagination),
             'rolesData' => MemberRolesResource::collection($roles),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', OrganizationMember::class);
+
+        return Inertia::render('Members/Create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $this->authorize('create', OrganizationMember::class);
+
+        // This logic is mostly in InvitationController@store, but we can call it here or redirect.
+        // For consistency with other resources, we'll keep the invitation logic.
+        return app(InvitationController::class)->store($request);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(OrganizationMember $member)
+    {
+        $this->authorize('view', $member);
+
+        return Inertia::render('Members/Show', [
+            'member' => new MemberResource($member),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(OrganizationMember $member)
+    {
+        $this->authorize('update', $member);
+
+        $organizationId = session('organization_id');
+        $roles = Role::where('organization_id', $organizationId)
+            ->orderBy('name')
+            ->get();
+
+        return Inertia::render('Members/Edit', [
+            'member' => new MemberResource($member),
+            'roles' => MemberRolesResource::collection($roles),
         ]);
     }
 

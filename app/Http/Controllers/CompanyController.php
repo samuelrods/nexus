@@ -27,7 +27,7 @@ class CompanyController extends Controller
                 ->where('organization_id', $organizationId)
                 ->paginate(10);
 
-            return Inertia::render('Companies', [
+            return Inertia::render('Companies/Index', [
                 'pagination' => CompanyResource::collection($searchResults),
             ]);
         }
@@ -37,9 +37,19 @@ class CompanyController extends Controller
             ->orderBy('id')
             ->paginate(10);
 
-        return Inertia::render('Companies', [
+        return Inertia::render('Companies/Index', [
             'pagination' => CompanyResource::collection($companiesPagination),
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Company::class);
+
+        return Inertia::render('Companies/Create');
     }
 
     /**
@@ -60,7 +70,7 @@ class CompanyController extends Controller
             'organization_id' => $organizationId,
         ]);
 
-        Company::create([
+        $company = Company::create([
             'name' => $validated['name'],
             'website' => $validated['website'],
             'industry' => $validated['industry'],
@@ -69,7 +79,35 @@ class CompanyController extends Controller
             'organization_id' => $organizationId,
         ]);
 
-        return back()->with(['message' => 'Company created successfully!', 'type' => 'success']);
+        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+            return new CompanyResource($company);
+        }
+
+        return redirect()->route('companies.show', $company->id)->with(['message' => 'Company created successfully!', 'type' => 'success']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Company $company)
+    {
+        $this->authorize('view', $company);
+
+        return Inertia::render('Companies/Show', [
+            'company' => new CompanyResource($company),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Company $company)
+    {
+        $this->authorize('update', $company);
+
+        return Inertia::render('Companies/Edit', [
+            'company' => new CompanyResource($company),
+        ]);
     }
 
     /**
@@ -92,7 +130,7 @@ class CompanyController extends Controller
             $company->update($companyFields);
         }
 
-        return back()->with(['message' => 'Company updated successfully!', 'type' => 'success']);
+        return redirect()->route('companies.show', $company->id)->with(['message' => 'Company updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -104,27 +142,20 @@ class CompanyController extends Controller
 
         $company->delete();
 
-        return back()->with(['message' => 'Company deleted successfully!', 'type' => 'success']);
+        return redirect()->route('companies.index')->with(['message' => 'Company deleted successfully!', 'type' => 'success']);
     }
 
     public function getCompaniesOptions(Request $request)
     {
         $organizationId = session('organization_id');
 
-        if ($request->filled('query')) {
-            $companies = Company::search($request->input('query'))
-                ->where('organization_id', $organizationId)
-                ->take(10)
-                ->get();
+        $query = Company::where('organization_id', $organizationId);
 
-            return CompanyDataResource::collection($companies);
+        if ($request->filled('query')) {
+            $query->where('name', 'like', '%' . $request->input('query') . '%');
         }
 
-        $companies = Company::where('organization_id', $organizationId)
-            ->orderBy('name')
-            ->orderBy('id')
-            ->take(10)
-            ->get();
+        $companies = $query->orderBy('name')->take(10)->get();
 
         return CompanyDataResource::collection($companies);
     }

@@ -16,7 +16,8 @@ class LeadDataResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'label' => $this->company->name,
+            'label' => $this->company?->name ?? 'Lead #' . $this->id,
+            'description' => $this->description,
         ];
     }
 }

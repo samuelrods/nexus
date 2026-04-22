@@ -14,15 +14,19 @@ class MemberResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $this->resource instanceof \App\Models\User ? $this->resource : $this->user;
+        $membership = $this->resource instanceof \App\Models\OrganizationMember ? $this->resource : $this->memberships()->where('organization_id', session('organization_id'))->first();
+
         return [
-            'id' => $this->id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'full_name' => $this->full_name,
-            'role_name' => $this->roles->first()->name ?? null,
-            'role_id' => $this->roles->first()->id ?? null,
-            'email' => $this->email,
-            'membership' => $this->memberships()->where('organization_id', session('organization_id'))->first(),
+            'id' => $membership->id,
+            'user_id' => $user->id,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'full_name' => $user->full_name,
+            'role_name' => $user->roles->first()->name ?? null,
+            'role_id' => $user->roles->first()->id ?? null,
+            'email' => $user->email,
+            'membership' => $membership,
         ];
     }
 }

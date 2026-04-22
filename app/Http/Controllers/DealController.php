@@ -6,7 +6,6 @@ use App\Http\Requests\StoreDealRequest;
 use App\Http\Requests\UpdateDealRequest;
 use App\Http\Resources\DealResource;
 use App\Models\Deal;
-use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -26,7 +25,7 @@ class DealController extends Controller
                 ->where('organization_id', $organizationId)
                 ->paginate(10);
 
-            return Inertia::render('Deals', [
+            return Inertia::render('Deals/Index', [
                 'pagination' => DealResource::collection($searchResults),
             ]);
         }
@@ -35,9 +34,19 @@ class DealController extends Controller
             ->orderBy('id')
             ->paginate(10);
 
-        return Inertia::render('Deals', [
+        return Inertia::render('Deals/Index', [
             'pagination' => DealResource::collection($dealsPagination),
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Deal::class);
+
+        return Inertia::render('Deals/Create');
     }
 
     /**
@@ -47,13 +56,41 @@ class DealController extends Controller
     {
         $this->authorize('create', Deal::class);
 
-        Deal::create([
+        $deal = Deal::create([
             ...$request->validated(),
             'organization_id' => session('organization_id'),
             'user_id' => auth()->id(),
         ]);
 
-        return back()->with(['message' => 'Deal created successfully!', 'type' => 'success']);
+        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+            return new DealResource($deal);
+        }
+
+        return redirect()->route('deals.show', $deal->id)->with(['message' => 'Deal created successfully!', 'type' => 'success']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Deal $deal)
+    {
+        $this->authorize('view', $deal);
+
+        return Inertia::render('Deals/Show', [
+            'deal' => new DealResource($deal),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Deal $deal)
+    {
+        $this->authorize('update', $deal);
+
+        return Inertia::render('Deals/Edit', [
+            'deal' => new DealResource($deal),
+        ]);
     }
 
     /**
@@ -65,7 +102,7 @@ class DealController extends Controller
 
         $deal->update($request->validated());
 
-        return back()->with(['message' => 'Deal updated successfully!', 'type' => 'success']);
+        return redirect()->route('deals.show', $deal->id)->with(['message' => 'Deal updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -77,6 +114,6 @@ class DealController extends Controller
 
         $deal->delete();
 
-        return back()->with(['message' => 'Deal deleted successfully!', 'type' => 'success']);
+        return redirect()->route('deals.index')->with(['message' => 'Deal deleted successfully!', 'type' => 'success']);
     }
 }

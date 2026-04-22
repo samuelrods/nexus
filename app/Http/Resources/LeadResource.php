@@ -23,6 +23,7 @@ class LeadResource extends JsonResource
             'status' => $this->status,
             'source' => $this->source,
             'description' => $this->description,
+            'created_at' => $this->created_at,
         ];
     }
 }

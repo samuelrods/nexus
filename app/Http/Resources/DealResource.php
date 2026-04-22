@@ -22,8 +22,13 @@ class DealResource extends JsonResource
             'close_date' => $this->close_date,
             'status' => $this->status,
             'description' => $this->description,
-            'company_name' => $this->company->name,
-            'contact_fullname' => $this->contact->fullname,
+            'company_name' => $this->company?->name,
+            'company_id' => $this->company_id,
+            'contact_fullname' => $this->contact?->fullName,
+            'contact_id' => $this->contact_id,
+            'lead_description' => $this->lead?->description,
+            'lead_id' => $this->lead_id,
+            'created_at' => $this->created_at,
         ];
     }
 }

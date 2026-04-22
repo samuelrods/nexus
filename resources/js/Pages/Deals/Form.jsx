@@ -1,8 +1,3 @@
-import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
-import TableActions from "@/Shared/TableActions";
-import TablePagination from "@/Shared/TablePagination";
-import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -15,22 +10,23 @@ import {
 import { Calendar } from "@/Components/ui/calendar";
 import InputError from "@/Components/InputError";
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
-import Table from "@/Shared/Table";
-import Select from "react-select";
-import ComboBox from "@/Shared/ComboBox";
+import RelationshipSelector from "@/Shared/RelationshipSelector";
+import CompanyForm from "@/Pages/Companies/Form";
+import ContactForm from "@/Pages/Contacts/Form";
+import LeadForm from "@/Pages/Leads/Form";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2, DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Select from "react-select";
 
-function DealForm({
-    formData,
+const DealForm = ({
     data,
     setData,
     errors,
     onSubmit,
     processing,
     updating = false,
-}) {
+}) => {
     function toSqlDateFormat(date) {
         if (!date) return null;
         var year = date.getFullYear();
@@ -52,7 +48,7 @@ function DealForm({
                 <Input
                     id="name"
                     placeholder="Enter deal name"
-                    value={data.name ?? ""}
+                    value={data.name || ""}
                     onChange={(e) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
@@ -68,7 +64,7 @@ function DealForm({
                         placeholder="0.00"
                         type="number"
                         step={0.01}
-                        value={data.value ?? ""}
+                        value={data.value || ""}
                         onChange={(e) => setData("value", e.target.value)}
                         required
                         className="bg-white dark:bg-gray-800"
@@ -125,7 +121,7 @@ function DealForm({
                         { value: "lost", label: "Lost" },
                     ]}
                     placeholder="Select Status"
-                    defaultValue={
+                    value={
                         data.status
                             ? {
                                   value: data.status,
@@ -146,6 +142,92 @@ function DealForm({
                 />
                 <InputError message={errors.status} />
             </div>
+            
+            <div className="w-full space-y-1">
+                <Label>Lead</Label>
+                <RelationshipSelector
+                    value={data.lead_id}
+                    label={data.lead_description}
+                    onChange={(val, lab) => {
+                        setData((prev) => ({
+                            ...prev,
+                            lead_id: val,
+                            lead_description: lab,
+                        }));
+                    }}
+                    resourceName="leads"
+                    apiUrlPath="/api/leads-options"
+                    ResourceForm={LeadForm}
+                    resourceInfo={[
+                        ["source", ""],
+                        ["status", "open"],
+                        ["description", ""],
+                    ]}
+                    placeholder="Search or add lead..."
+                />
+                <InputError message={errors.lead_id} />
+            </div>
+
+            <div className="w-full grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                    <Label>Company</Label>
+                    <RelationshipSelector
+                        value={data.company_id}
+                        label={data.company_name}
+                        onChange={(val, lab) => {
+                            setData((prev) => ({
+                                ...prev,
+                                company_id: val,
+                                company_name: lab,
+                            }));
+                        }}
+                        resourceName="companies"
+                        apiUrlPath="/api/companies-options"
+                        ResourceForm={CompanyForm}
+                        resourceInfo={[
+                            ["name", ""],
+                            ["website", ""],
+                            ["industry", ""],
+                            ["description", ""],
+                            ["street_address", ""],
+                            ["city", ""],
+                            ["state", ""],
+                            ["zip_code", ""],
+                        ]}
+                        placeholder="Company..."
+                    />
+                    <InputError message={errors.company_id} />
+                </div>
+                <div className="space-y-1">
+                    <Label>Contact</Label>
+                    <RelationshipSelector
+                        value={data.contact_id}
+                        label={data.contact_fullname}
+                        onChange={(val, lab) => {
+                            setData((prev) => ({
+                                ...prev,
+                                contact_id: val,
+                                contact_fullname: lab,
+                            }));
+                        }}
+                        resourceName="contacts"
+                        apiUrlPath="/api/contacts-options"
+                        ResourceForm={ContactForm}
+                        resourceInfo={[
+                            ["first_name", ""],
+                            ["last_name", ""],
+                            ["email", ""],
+                            ["phone_number", ""],
+                            ["organization_name", ""],
+                            ["job_title", ""],
+                            ["description", ""],
+                        ]}
+                        placeholder="Contact..."
+                    />
+                    <InputError message={errors.contact_id} />
+                </div>
+            </div>
+
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
@@ -155,39 +237,11 @@ function DealForm({
                     required
                     rows={3}
                     className="bg-white dark:bg-gray-800"
-                    value={data.description}
+                    value={data.description || ""}
                 />
                 <InputError message={errors.description} />
             </div>
-            <div className="w-full space-y-1">
-                <Label>Lead</Label>
-                <ComboBox
-                    onChange={(data) => setData("lead_id", data.value)}
-                    apiUrlPath={"/api/leads-options"}
-                    placeholder={"Search leads..."}
-                />
-                <InputError message={errors.lead_id} />
-            </div>
-            <div className="w-full grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                    <Label>Company</Label>
-                    <ComboBox
-                        onChange={(data) => setData("company_id", data.value)}
-                        apiUrlPath={"/api/companies-options"}
-                        placeholder={"Company..."}
-                    />
-                    <InputError message={errors.company_id} />
-                </div>
-                <div className="space-y-1">
-                    <Label>Contact</Label>
-                    <ComboBox
-                        onChange={(data) => setData("contact_id", data.value)}
-                        apiUrlPath={"/api/contacts-options"}
-                        placeholder={"Contact..."}
-                    />
-                    <InputError message={errors.contact_id} />
-                </div>
-            </div>
+
             <div className="pt-4">
                 <Button
                     type="submit"
@@ -204,104 +258,6 @@ function DealForm({
             </div>
         </form>
     );
-}
-
-const Deals = ({ pagination }) => {
-    // Derived stats for demonstration
-    const totalDeals = pagination.data.length;
-    const totalValue = pagination.data.reduce((acc, deal) => acc + (parseFloat(deal.value) || 0), 0);
-    const wonDeals = pagination.data.filter(d => d.status === 'won').length;
-    const pendingDeals = pagination.data.filter(d => d.status === 'pending').length;
-
-    return (
-        <div className="space-y-6">
-            <StatsGrid>
-                <StatsCard 
-                    title="Total Deals" 
-                    value={totalDeals} 
-                    icon={Handshake} 
-                    color="blue"
-                    description="Total deals in current view"
-                />
-                <StatsCard 
-                    title="Total Value" 
-                    value={`$${totalValue.toLocaleString()}`} 
-                    icon={DollarSign} 
-                    color="green"
-                    trend="up"
-                    trendValue={12}
-                    description="Cumulative deal value"
-                />
-                <StatsCard 
-                    title="Won Deals" 
-                    value={wonDeals} 
-                    icon={TrendingUp} 
-                    color="purple"
-                    description="Successfully closed deals"
-                />
-                <StatsCard 
-                    title="Pending" 
-                    value={pendingDeals} 
-                    icon={Clock} 
-                    color="yellow"
-                    description="Deals awaiting closure"
-                />
-            </StatsGrid>
-
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                <TableActions
-                    searchRoute={"deals.index"}
-                    resourceType={"Deals"}
-                    storeRoute={"deals.store"}
-                    ResourceForm={DealForm}
-                    resourceInfo={[
-                        ["lead_id", null],
-                        ["contact_id", null],
-                        ["company_id", null],
-                        ["name", null],
-                        ["value", null],
-                        ["currency", null],
-                        ["close_date", null],
-                        ["status", null],
-                        ["description", ""],
-                    ]}
-                />
-                <Table
-                    data={pagination.data}
-                    columns={[
-                        { header: "Name", key: "name" },
-                        { header: "Value", key: "value" },
-                        { header: "Currency", key: "currency" },
-                        { header: "Close date", key: "close_date" },
-                        { header: "Status", key: "status" },
-                        { header: "Description", key: "description" },
-                        { header: "Company", key: "company_name" },
-                        { header: "Contact", key: "contact_fullname" },
-                    ]}
-                    resourceName={"deals"}
-                    EditResourceForm={DealForm}
-                    resourceInfoKeys={[
-                        "lead_id",
-                        "contact_id",
-                        "company_id",
-                        "name",
-                        "value",
-                        "currency",
-                        "close_date",
-                        "status",
-                        "description",
-                    ]}
-                />
-                <TablePagination pagination={pagination.links} />
-            </div>
-        </div>
-    );
 };
 
-Deals.layout = (page) => (
-    <Layout>
-        <ResouceLayout children={page} title="Deals" />
-    </Layout>
-);
-
-export default Deals;
+export default DealForm;

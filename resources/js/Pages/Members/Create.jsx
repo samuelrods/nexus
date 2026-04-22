@@ -1,0 +1,78 @@
+import Layout from "@/Shared/Layout";
+import ResouceLayout from "@/Shared/ResourceLayout";
+import { useForm, Link } from "@inertiajs/react";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import InputError from "@/Components/InputError";
+import { Loader2, ArrowLeft, Send } from "lucide-react";
+
+const Create = () => {
+    const { data, setData, post, processing, errors } = useForm({
+        memberInfo: "",
+    });
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        post(route("members.store"));
+    };
+
+    return (
+        <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-8 border-b pb-4">
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Invite Member</h2>
+                    <p className="text-gray-500 dark:text-gray-400">Send an invitation to a user to join your organization.</p>
+                </div>
+                <Button variant="ghost" asChild>
+                    <Link href={route("members.index")}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back
+                    </Link>
+                </Button>
+            </div>
+
+            <form onSubmit={onSubmit} className="space-y-6">
+                <div className="space-y-2">
+                    <Label htmlFor="memberInfo">Username or Email</Label>
+                    <Input
+                        id="memberInfo"
+                        placeholder="Enter username or email address"
+                        value={data.memberInfo}
+                        onChange={(e) => setData("memberInfo", e.target.value)}
+                        required
+                        autoComplete="off"
+                        className="bg-white dark:bg-gray-800"
+                    />
+                    <InputError message={errors.memberInfo} />
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                        The user must already have an account in Nexus to be invited.
+                    </p>
+                </div>
+
+                <div className="flex justify-end pt-4">
+                    <Button
+                        type="submit"
+                        disabled={processing}
+                        className="bg-blue-600 hover:bg-blue-700 min-w-[150px]"
+                    >
+                        {processing ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <Send className="mr-2 h-4 w-4" />
+                        )}
+                        {processing ? "Sending..." : "Send Invitation"}
+                    </Button>
+                </div>
+            </form>
+        </div>
+    );
+};
+
+Create.layout = (page) => (
+    <Layout>
+        <ResouceLayout children={page} title="Invite Member" />
+    </Layout>
+);
+
+export default Create;

@@ -26,7 +26,7 @@ class LeadController extends Controller
                 ->where('organization_id', $organizationId)
                 ->paginate(10);
 
-            return Inertia::render('Leads', [
+            return Inertia::render('Leads/Index', [
                 'pagination' => LeadResource::collection($searchResults),
             ]);
         }
@@ -35,9 +35,19 @@ class LeadController extends Controller
             ->orderBy('id')
             ->paginate(10);
 
-        return Inertia::render('Leads', [
+        return Inertia::render('Leads/Index', [
             'pagination' => LeadResource::collection($leadsPagination),
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Lead::class);
+
+        return Inertia::render('Leads/Create');
     }
 
     /**
@@ -47,12 +57,40 @@ class LeadController extends Controller
     {
         $this->authorize('create', Lead::class);
 
-        Lead::create([
+        $lead = Lead::create([
             ...$request->validated(),
             'organization_id' => session('organization_id'),
         ]);
 
-        return back()->with(['message' => 'Lead created successfully!', 'type' => 'success']);
+        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+            return new LeadResource($lead);
+        }
+
+        return redirect()->route('leads.show', $lead->id)->with(['message' => 'Lead created successfully!', 'type' => 'success']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Lead $lead)
+    {
+        $this->authorize('view', $lead);
+
+        return Inertia::render('Leads/Show', [
+            'lead' => new LeadResource($lead),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Lead $lead)
+    {
+        $this->authorize('update', $lead);
+
+        return Inertia::render('Leads/Edit', [
+            'lead' => new LeadResource($lead),
+        ]);
     }
 
     /**
@@ -64,7 +102,7 @@ class LeadController extends Controller
 
         $lead->update($request->validated());
 
-        return back()->with(['message' => 'Lead updated successfully!', 'type' => 'success']);
+        return redirect()->route('leads.show', $lead->id)->with(['message' => 'Lead updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -76,26 +114,26 @@ class LeadController extends Controller
 
         $lead->delete();
 
-        return back()->with(['message' => 'Lead deleted successfully!', 'type' => 'success']);
+        return redirect()->route('leads.index')->with(['message' => 'Lead deleted successfully!', 'type' => 'success']);
     }
 
     public function getLeadsOptions(Request $request)
     {
         $organizationId = session('organization_id');
 
-        if ($request->filled('query')) {
-            $leads = Lead::search($request->input('query'))
-                ->where('organization_id', $organizationId)
-                ->take(10)
-                ->get();
+        $query = Lead::where('organization_id', $organizationId);
 
-            return LeadDataResource::collection($leads);
+        if ($request->filled('query')) {
+            $searchTerm = '%' . $request->input('query') . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('description', 'like', $searchTerm)
+                    ->orWhereHas('company', function ($q) use ($searchTerm) {
+                        $q->where('name', 'like', $searchTerm);
+                    });
+            });
         }
 
-        $leads = Lead::where('organization_id', $organizationId)
-            ->orderBy('id')
-            ->take(10)
-            ->get();
+        $leads = $query->orderBy('id')->take(10)->get();
 
         return LeadDataResource::collection($leads);
     }

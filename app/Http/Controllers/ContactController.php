@@ -26,7 +26,7 @@ class ContactController extends Controller
                 ->where('organization_id', $organizationId)
                 ->paginate(10);
 
-            return Inertia::render('Contacts', [
+            return Inertia::render('Contacts/Index', [
                 'pagination' => ContactResource::collection($searchResults),
             ]);
         }
@@ -36,9 +36,19 @@ class ContactController extends Controller
             ->orderBy('id')
             ->paginate(10);
 
-        return Inertia::render('Contacts', [
+        return Inertia::render('Contacts/Index', [
             'pagination' => ContactResource::collection($contactsPagination),
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $this->authorize('create', Contact::class);
+
+        return Inertia::render('Contacts/Create');
     }
 
     /**
@@ -48,13 +58,41 @@ class ContactController extends Controller
     {
         $this->authorize('create', Contact::class);
 
-        Contact::create([
+        $contact = Contact::create([
             ...$request->validated(),
             'organization_id' => session('organization_id'),
             'user_id' => auth()->id(),
         ]);
 
-        return back()->with(['message' => 'Contact created successfully!', 'type' => 'success']);
+        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+            return new ContactResource($contact);
+        }
+
+        return redirect()->route('contacts.show', $contact->id)->with(['message' => 'Contact created successfully!', 'type' => 'success']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Contact $contact)
+    {
+        $this->authorize('view', $contact);
+
+        return Inertia::render('Contacts/Show', [
+            'contact' => new ContactResource($contact),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Contact $contact)
+    {
+        $this->authorize('update', $contact);
+
+        return Inertia::render('Contacts/Edit', [
+            'contact' => new ContactResource($contact),
+        ]);
     }
 
     /**
@@ -66,7 +104,7 @@ class ContactController extends Controller
 
         $contact->update($request->validated());
 
-        return back()->with(['message' => 'Contact updated successfully!', 'type' => 'success']);
+        return redirect()->route('contacts.show', $contact->id)->with(['message' => 'Contact updated successfully!', 'type' => 'success']);
     }
 
     /**
@@ -83,27 +121,25 @@ class ContactController extends Controller
 
         $contact->delete();
 
-        return back()->with(['message' => 'Contact deleted successfully!', 'type' => 'success']);
+        return redirect()->route('contacts.index')->with(['message' => 'Contact deleted successfully!', 'type' => 'success']);
     }
 
     public function getContactsOptions(Request $request)
     {
         $organizationId = session('organization_id');
 
-        if ($request->filled('query')) {
-            $contacts = Contact::search($request->input('query'))
-                ->where('organization_id', $organizationId)
-                ->take(10)
-                ->get();
+        $query = Contact::where('organization_id', $organizationId);
 
-            return ContactDataResource::collection($contacts);
+        if ($request->filled('query')) {
+            $searchTerm = '%' . $request->input('query') . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('first_name', 'like', $searchTerm)
+                    ->orWhere('last_name', 'like', $searchTerm)
+                    ->orWhere('email', 'like', $searchTerm);
+            });
         }
 
-        $contacts = Contact::where('organization_id', $organizationId)
-            ->orderBy('first_name')
-            ->orderBy('id')
-            ->take(10)
-            ->get();
+        $contacts = $query->orderBy('first_name')->take(10)->get();
 
         return ContactDataResource::collection($contacts);
     }
