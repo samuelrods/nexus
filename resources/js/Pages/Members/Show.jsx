@@ -10,8 +10,12 @@ import {
     Mail,
     Shield,
     Calendar,
-    AlertTriangle
+    AlertTriangle,
+    BadgeCheck
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Badge } from "@/Components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -91,33 +95,48 @@ const Show = ({ member }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 space-y-6">
-                    <div className="bg-card p-8 rounded-lg shadow-sm border border-border">
-                        <div className="flex items-start gap-6 mb-8 border-b pb-6">
-                            <div className="bg-blue-100 dark:bg-blue-900 p-4 rounded-full text-blue-600 dark:text-blue-300">
-                                <User className="h-12 w-12" />
+                    <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+                        <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
+                        <div className="px-8 pb-8">
+                            <div className="relative flex justify-between items-end -mt-12 mb-6">
+                                <Avatar className="h-24 w-24 border-4 border-card shadow-lg">
+                                    <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
+                                        {memberData?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="pb-2">
+                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800">
+                                        Active Account
+                                    </Badge>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-3xl font-bold text-foreground">{memberData?.full_name}</h1>
-                                <p className="text-muted-foreground flex items-center mt-1">
+                            
+                            <div className="mb-8">
+                                <h1 className="text-3xl font-bold text-foreground mb-1">{memberData?.full_name}</h1>
+                                <p className="text-muted-foreground flex items-center">
                                     <Mail className="h-4 w-4 mr-2" />
                                     {memberData?.email}
                                 </p>
                             </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                            <div>
-                                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Organization Role</h3>
-                                <div className="flex items-center gap-2">
-                                    <Shield className="h-5 w-5 text-purple-500" />
-                                    <span className="text-lg font-semibold text-foreground">{memberData?.role_name}</span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t">
+                                <div>
+                                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Organization Role</h3>
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-lg">
+                                            <Shield className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                        </div>
+                                        <span className="text-lg font-bold text-foreground">{memberData?.role_name}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">Member Since</h3>
-                                <div className="flex items-center gap-2 text-muted-foreground">
-                                    <Calendar className="h-5 w-5 text-gray-400" />
-                                    <span>Joined the organization</span>
+                                <div>
+                                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Member Status</h3>
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
+                                            <BadgeCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                        </div>
+                                        <span className="text-lg font-bold text-foreground">Verified Member</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,23 +144,30 @@ const Show = ({ member }) => {
                 </div>
 
                 <div className="space-y-6">
-                    <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
-                        <h3 className="text-lg font-semibold mb-4 text-foreground border-b pb-2">Profile Info</h3>
-                        <dl className="space-y-4">
-                            <div>
-                                <dt className="text-sm font-medium text-muted-foreground">First Name</dt>
-                                <dd className="text-base font-medium text-foreground mt-1">{memberData?.first_name}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Last Name</dt>
-                                <dd className="text-base font-medium text-foreground mt-1">{memberData?.last_name}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Email Address</dt>
-                                <dd className="text-base font-medium text-foreground mt-1 truncate">{memberData?.email}</dd>
-                            </div>
-                        </dl>
-                    </div>
+                    <Card className="border-border shadow-sm">
+                        <CardHeader className="pb-3 border-b">
+                            <CardTitle className="text-lg font-bold flex items-center gap-2">
+                                <User className="h-5 w-5 text-primary" />
+                                Profile Info
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            <dl className="space-y-4">
+                                <div>
+                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">First Name</dt>
+                                    <dd className="text-base font-medium text-foreground mt-1">{memberData?.first_name}</dd>
+                                </div>
+                                <div>
+                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Last Name</dt>
+                                    <dd className="text-base font-medium text-foreground mt-1">{memberData?.last_name}</dd>
+                                </div>
+                                <div>
+                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email Address</dt>
+                                    <dd className="text-base font-medium text-foreground mt-1 truncate">{memberData?.email}</dd>
+                                </div>
+                            </dl>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </div>
