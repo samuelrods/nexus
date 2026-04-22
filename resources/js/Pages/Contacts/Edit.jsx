@@ -20,12 +20,7 @@ const Edit = ({ contact }) => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
-            <div className="mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-foreground">Edit Contact: {contact.data.full_name}</h2>
-                <p className="text-muted-foreground">Update the contact details below.</p>
-            </div>
-
+        <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
             <ContactForm
                 data={data}
                 setData={setData}

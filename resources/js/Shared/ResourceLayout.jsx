@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import { ChevronRight, Home } from "lucide-react";
 
-const ResouceLayout = ({ children, title }) => {
+const ResouceLayout = ({ children, title, description, hideHeader = false }) => {
     const { url } = usePage();
     // Split by '/', then take the first part of any part that contains '?' to remove query strings
     const pathParts = url.split('/')
@@ -32,16 +32,20 @@ const ResouceLayout = ({ children, title }) => {
                         ))}
                     </ol>
                 </nav>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div>
-                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-                            {title}
-                        </h1>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Manage your {title.toLowerCase()} and view their details.
-                        </p>
+                {!hideHeader && (
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+                                {title}
+                            </h1>
+                            {description && (
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                    {description}
+                                </p>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
             <div className="space-y-6">
                 {children}

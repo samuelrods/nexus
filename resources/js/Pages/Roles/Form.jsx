@@ -63,7 +63,7 @@ const RoleForm = ({
     return (
         <form
             onSubmit={onSubmit}
-            className="space-y-8 flex flex-col items-center max-w-4xl mx-auto"
+            className="space-y-8 w-full max-w-2xl"
         >
             <div className="w-full">
                 <Label htmlFor="name" className="mb-2 block">Role Name</Label>

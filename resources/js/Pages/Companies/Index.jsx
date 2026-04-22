@@ -24,7 +24,7 @@ const CompanyForm = ({
     return (
         <form
             onSubmit={onSubmit}
-            className="space-y-4 flex flex-col items-center max-w-lg mx-auto"
+            className="space-y-4 w-full max-w-2xl"
         >
             <div className="w-full space-y-1">
                 <Label htmlFor="name">Company Name</Label>

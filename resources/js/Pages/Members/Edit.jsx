@@ -18,7 +18,7 @@ const Edit = ({ member, roles }) => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
+        <div className="max-w-2xl bg-card p-8 rounded-lg shadow-sm border border-border">
             <div className="flex items-center justify-between mb-8 border-b pb-4">
                 <div className="flex items-center gap-3">
                     <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-full text-blue-600 dark:text-blue-300">

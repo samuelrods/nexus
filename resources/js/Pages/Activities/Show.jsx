@@ -47,7 +47,7 @@ const Show = ({ activity }) => {
     };
 
     return (
-        <div className="space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
                     <Link href={route("activities.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
@@ -204,7 +204,7 @@ const Show = ({ activity }) => {
 
 Show.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title={`Activity Details`} />
+        <ResouceLayout children={page} title={`Activity Details`} hideHeader={true} />
     </Layout>
 );
 

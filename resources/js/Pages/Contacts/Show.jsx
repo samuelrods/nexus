@@ -36,7 +36,7 @@ const Show = ({ contact }) => {
     };
 
     return (
-        <div className="space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
                     <Link href={route("contacts.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
@@ -175,7 +175,7 @@ const Show = ({ contact }) => {
 
 Show.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title={`Contact: ${page.props.contact.data.full_name}`} />
+        <ResouceLayout children={page} title={`Contact: ${page.props.contact.data.full_name}`} hideHeader={true} />
     </Layout>
 );
 

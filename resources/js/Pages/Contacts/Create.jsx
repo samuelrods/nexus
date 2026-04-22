@@ -20,14 +20,10 @@ const Create = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
-            <div className="mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-foreground">Create New Contact</h2>
-                <p className="text-muted-foreground">Fill in the information below to add a new contact to your network.</p>
-            </div>
-            
-            <ContactForm
-                data={data}
+        <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
+
+
+            <ContactForm                data={data}
                 setData={setData}
                 errors={errors}
                 onSubmit={onSubmit}

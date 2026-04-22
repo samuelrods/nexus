@@ -18,7 +18,7 @@ const Create = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
+        <div className="max-w-2xl bg-card p-8 rounded-lg shadow-sm border border-border">
             <div className="flex items-center justify-between mb-8 border-b pb-4">
                 <div>
                     <h2 className="text-2xl font-bold text-foreground">Invite Member</h2>

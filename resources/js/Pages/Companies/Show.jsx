@@ -36,7 +36,7 @@ const Show = ({ company }) => {
     };
 
     return (
-        <div className="space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
                     <Link href={route("companies.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
@@ -120,16 +120,15 @@ const Show = ({ company }) => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-border">
                                 <div>
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Website</h3>
-                                    <a 
-                                        href={company.data.website} 
-                                        target="_blank" 
+                                    <a
+                                        href={company.data.website}
+                                        target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-blue-600 hover:underline flex items-center"
+                                        className="text-blue-600 hover:underline flex items-center break-all"
                                     >
-                                        <Globe className="h-4 w-4 mr-2" />
+                                        <Globe className="h-4 w-4 mr-2 shrink-0" />
                                         {company.data.website}
-                                    </a>
-                                </div>
+                                    </a>                                </div>
                                 <div>
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Location</h3>
                                     <p className="text-muted-foreground flex items-start">
@@ -150,10 +149,6 @@ const Show = ({ company }) => {
                         <h3 className="text-lg font-semibold mb-4 text-foreground border-b pb-2">Details</h3>
                         <dl className="space-y-4">
                             <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Industry</dt>
-                                <dd className="text-base text-foreground">{company.data.industry}</dd>
-                            </div>
-                            <div>
                                 <dt className="text-sm font-medium text-muted-foreground">Added On</dt>
                                 <dd className="text-base text-foreground flex items-center">
                                     <Calendar className="h-4 w-4 mr-2 text-gray-400" />
@@ -170,7 +165,7 @@ const Show = ({ company }) => {
 
 Show.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title={`Company: ${page.props.company.data.name}`} />
+        <ResouceLayout children={page} title={`Company: ${page.props.company.data.name}`} hideHeader={true} />
     </Layout>
 );
 

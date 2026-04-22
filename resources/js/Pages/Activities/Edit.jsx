@@ -21,12 +21,7 @@ const Edit = ({ activity }) => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
-            <div className="mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-foreground">Edit Activity</h2>
-                <p className="text-muted-foreground">Update the activity details.</p>
-            </div>
-
+        <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
             <ActivityForm
                 data={data}
                 setData={setData}

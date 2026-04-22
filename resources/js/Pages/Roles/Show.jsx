@@ -42,7 +42,7 @@ const Show = ({ role }) => {
     }, {});
 
     return (
-        <div className="space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
                     <Link href={route("roles.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
@@ -148,7 +148,7 @@ const Show = ({ role }) => {
 
 Show.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title={`Role: ${page.props.role.data.name}`} />
+        <ResouceLayout children={page} title={`Role: ${page.props.role.data.name}`} hideHeader={true} />
     </Layout>
 );
 

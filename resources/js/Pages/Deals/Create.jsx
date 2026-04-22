@@ -22,14 +22,10 @@ const Create = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-card p-8 rounded-lg shadow-sm border border-border">
-            <div className="mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold text-foreground">Create New Deal</h2>
-                <p className="text-muted-foreground">Add a new business deal to your pipeline.</p>
-            </div>
-            
-            <DealForm
-                data={data}
+        <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
+
+
+            <DealForm                data={data}
                 setData={setData}
                 errors={errors}
                 onSubmit={onSubmit}
