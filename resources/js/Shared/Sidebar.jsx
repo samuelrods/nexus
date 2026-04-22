@@ -103,12 +103,12 @@ const Sidebar = ({ sidebarOpen }) => {
     return (
         <aside
             className={cn(
-                "fixed left-0 top-0 z-30 h-screen pt-20 transition-transform bg-card border-r border-border",
+                "fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] transition-transform bg-card border-r border-border",
                 collapsed ? "w-20" : "w-64"
             )}
             aria-label="Sidebar"
         >
-            <div className="h-full px-3 pb-4 overflow-y-auto bg-card">
+            <div className="h-full px-3 py-4 overflow-y-auto bg-card">
                 <ul className="space-y-2 font-medium">
                     <SidebarItem href="/dashboard" icon={LayoutDashboard} collapsed={collapsed}>
                         Dashboard
