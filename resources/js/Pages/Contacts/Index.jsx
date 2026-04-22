@@ -6,22 +6,20 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { Users, UserPlus, Briefcase, Mail } from "lucide-react";
 
-const Contacts = ({ pagination }) => {
-    const totalContacts = pagination.total || pagination.data.length;
-
+const Contacts = ({ pagination, stats }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
                 <StatsCard 
                     title="Total Contacts" 
-                    value={totalContacts} 
+                    value={stats.total_contacts} 
                     icon={Users} 
                     color="blue"
                     description="Total people in your network"
                 />
                 <StatsCard 
                     title="New This Month" 
-                    value={Math.floor(totalContacts * 0.15)} 
+                    value={stats.new_this_month} 
                     icon={UserPlus} 
                     color="green"
                     trend="up"
@@ -30,7 +28,7 @@ const Contacts = ({ pagination }) => {
                 />
                 <StatsCard 
                     title="Key Accounts" 
-                    value={Math.floor(totalContacts * 0.3)} 
+                    value={stats.key_accounts} 
                     icon={Briefcase} 
                     color="purple"
                     description="Contacts with associated deals"

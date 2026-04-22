@@ -20,6 +20,7 @@ const Dashboard = ({
     dealPieChartRange,
     activityPieChartData,
     activityPieChartRange,
+    teamMemberCount,
 }) => {
     const { auth } = usePage().props;
 
@@ -83,7 +84,7 @@ const Dashboard = ({
                 />
                 <StatsCard 
                     title="Team Members" 
-                    value={auth.user.memberships.length} // Just a placeholder
+                    value={teamMemberCount} 
                     icon={Users} 
                     color="yellow"
                     description="Active organization members"

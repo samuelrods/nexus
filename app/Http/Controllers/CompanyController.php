@@ -22,6 +22,11 @@ class CompanyController extends Controller
 
         $organizationId = session('organization_id');
 
+        $stats = [
+            'total_companies' => Company::where('organization_id', $organizationId)->count(),
+            'industries' => Company::where('organization_id', $organizationId)->distinct('industry')->count('industry'),
+        ];
+
         if ($request->filled('query')) {
             $searchResults = Company::search($request->input('query'))
                 ->where('organization_id', $organizationId)
@@ -29,6 +34,7 @@ class CompanyController extends Controller
 
             return Inertia::render('Companies/Index', [
                 'pagination' => CompanyResource::collection($searchResults),
+                'stats' => $stats,
             ]);
         }
 
@@ -39,6 +45,7 @@ class CompanyController extends Controller
 
         return Inertia::render('Companies/Index', [
             'pagination' => CompanyResource::collection($companiesPagination),
+            'stats' => $stats,
         ]);
     }
 

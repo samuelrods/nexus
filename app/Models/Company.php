@@ -31,6 +31,11 @@ class Company extends Model
         return $this->belongsTo(Organization::class);
     }
 
+    public function deals()
+    {
+        return $this->hasMany(Deal::class);
+    }
+
     public function toSearchableArray()
     {
         return [

@@ -20,6 +20,13 @@ class DealController extends Controller
 
         $organizationId = session('organization_id');
 
+        $stats = [
+            'total_deals' => Deal::where('organization_id', $organizationId)->count(),
+            'total_value' => Deal::where('organization_id', $organizationId)->sum('value'),
+            'won_deals' => Deal::where('organization_id', $organizationId)->where('status', 'won')->count(),
+            'pending_deals' => Deal::where('organization_id', $organizationId)->where('status', 'pending')->count(),
+        ];
+
         if ($request->filled('query')) {
             $searchResults = Deal::search($request->input('query'))
                 ->where('organization_id', $organizationId)
@@ -27,6 +34,7 @@ class DealController extends Controller
 
             return Inertia::render('Deals/Index', [
                 'pagination' => DealResource::collection($searchResults),
+                'stats' => $stats,
             ]);
         }
 
@@ -36,6 +44,7 @@ class DealController extends Controller
 
         return Inertia::render('Deals/Index', [
             'pagination' => DealResource::collection($dealsPagination),
+            'stats' => $stats,
         ]);
     }
 

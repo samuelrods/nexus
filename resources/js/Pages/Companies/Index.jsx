@@ -153,30 +153,27 @@ const CompanyForm = ({
     );
 };
 
-const Companies = ({ pagination }) => {
-    const totalCompanies = pagination.total || pagination.data.length;
-    const industries = [...new Set(pagination.data.map(c => c.industry))].length;
-
+const Companies = ({ pagination, stats }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
                 <StatsCard 
                     title="Total Companies" 
-                    value={totalCompanies} 
+                    value={stats.total_companies} 
                     icon={Building2} 
                     color="blue"
                     description="Registered organizations"
                 />
                 <StatsCard 
                     title="Industries" 
-                    value={industries} 
+                    value={stats.industries} 
                     icon={Factory} 
                     color="purple"
                     description="Diverse market sectors"
                 />
                 <StatsCard 
                     title="Active Sites" 
-                    value={totalCompanies} 
+                    value={stats.total_companies} 
                     icon={Globe} 
                     color="green"
                     trend="up"
@@ -185,7 +182,7 @@ const Companies = ({ pagination }) => {
                 />
                 <StatsCard 
                     title="HQ Locations" 
-                    value={totalCompanies} 
+                    value={stats.total_companies} 
                     icon={MapPin} 
                     color="yellow"
                     description="Global distribution"

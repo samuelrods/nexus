@@ -6,26 +6,20 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
 
-const Deals = ({ pagination }) => {
-    // Derived stats for demonstration
-    const totalDeals = pagination.data.length;
-    const totalValue = pagination.data.reduce((acc, deal) => acc + (parseFloat(deal.value) || 0), 0);
-    const wonDeals = pagination.data.filter(d => d.status === 'won').length;
-    const pendingDeals = pagination.data.filter(d => d.status === 'pending').length;
-
+const Deals = ({ pagination, stats }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
                 <StatsCard 
                     title="Total Deals" 
-                    value={totalDeals} 
+                    value={stats.total_deals} 
                     icon={Handshake} 
                     color="blue"
-                    description="Total deals in current view"
+                    description="Total deals for organization"
                 />
                 <StatsCard 
                     title="Total Value" 
-                    value={`$${totalValue.toLocaleString()}`} 
+                    value={`$${stats.total_value.toLocaleString()}`} 
                     icon={DollarSign} 
                     color="green"
                     trend="up"
@@ -34,14 +28,14 @@ const Deals = ({ pagination }) => {
                 />
                 <StatsCard 
                     title="Won Deals" 
-                    value={wonDeals} 
+                    value={stats.won_deals} 
                     icon={TrendingUp} 
                     color="purple"
                     description="Successfully closed deals"
                 />
                 <StatsCard 
                     title="Pending" 
-                    value={pendingDeals} 
+                    value={stats.pending_deals} 
                     icon={Clock} 
                     color="yellow"
                     description="Deals awaiting closure"

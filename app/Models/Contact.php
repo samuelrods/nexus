@@ -43,6 +43,11 @@ class Contact extends Model
         return $this->hasMany(Lead::class);
     }
 
+    public function deals(): HasMany
+    {
+        return $this->hasMany(Deal::class);
+    }
+
     protected function fullName(): Attribute
     {
         return Attribute::make(get: fn() => "{$this->first_name} {$this->last_name}");

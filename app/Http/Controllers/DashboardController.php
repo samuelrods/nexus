@@ -23,6 +23,8 @@ class DashboardController extends Controller
         $dealPieChartRange = $request->input('deals-pie-chart-range', 7);
         $activityPieChartRange = $request->input('activities-pie-chart-range', 7);
 
+        $organization = Organization::find(session('organization_id'));
+
         return Inertia::render('Dashboard', [
             'dealAreaChartData' => fn() => $this->getDealAreaChartData($dealChartRange),
             'dealAreaChartRange' => $dealChartRange,
@@ -30,6 +32,7 @@ class DashboardController extends Controller
             'dealPieChartRange' => $dealPieChartRange,
             'activityPieChartData' => fn() => $this->getActivityPieChartData($activityPieChartRange),
             'activityPieChartRange' => $activityPieChartRange,
+            'teamMemberCount' => $organization->members()->count(),
         ]);
     }
 

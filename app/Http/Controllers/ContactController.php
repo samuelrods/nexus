@@ -21,6 +21,14 @@ class ContactController extends Controller
 
         $organizationId = session('organization_id');
 
+        $stats = [
+            'total_contacts' => Contact::where('organization_id', $organizationId)->count(),
+            'new_this_month' => 0, // No created_at column in contacts table
+            'key_accounts' => Contact::where('organization_id', $organizationId)
+                ->has('deals')
+                ->count(),
+        ];
+
         if ($request->filled('query')) {
             $searchResults = Contact::search($request->input('query'))
                 ->where('organization_id', $organizationId)
@@ -28,6 +36,7 @@ class ContactController extends Controller
 
             return Inertia::render('Contacts/Index', [
                 'pagination' => ContactResource::collection($searchResults),
+                'stats' => $stats,
             ]);
         }
 
@@ -38,6 +47,7 @@ class ContactController extends Controller
 
         return Inertia::render('Contacts/Index', [
             'pagination' => ContactResource::collection($contactsPagination),
+            'stats' => $stats,
         ]);
     }
 
