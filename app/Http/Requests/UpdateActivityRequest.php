@@ -15,6 +15,18 @@ class UpdateActivityRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->time && strlen($this->time) === 5) {
+            $this->merge([
+                'time' => $this->time . ':00',
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>

@@ -155,7 +155,10 @@ const ActivityForm = ({
                         placeholder="Time"
                         value={data.time || ""}
                         type="time"
-                        onChange={(e) => setData("time", e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setData("time", value.length === 5 ? `${value}:00` : value);
+                        }}
                         required
                         step={300} // 5 minutes
                     />
