@@ -15,8 +15,18 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        $memberships = auth()->user()->memberships()->with(['organization.user'])->get();
-        $invitations = auth()->user()->invitations()->where('status', 'pending')->with('organization.user')->get();
+        $memberships = auth()->user()->memberships()
+            ->with(['organization' => function($query) {
+                $query->withCount(['members', 'deals'])->with('user');
+            }])
+            ->get();
+            
+        $invitations = auth()->user()->invitations()
+            ->where('status', 'pending')
+            ->with(['organization' => function($query) {
+                $query->withCount(['members', 'deals'])->with('user');
+            }])
+            ->get();
 
         return Inertia::render('Organizations', [
             'memberships' => $memberships,
@@ -65,7 +75,7 @@ class OrganizationController extends Controller
      */
     public function settings()
     {
-        $organization = Organization::findOrFail(session('organization_id'));
+        $organization = Organization::withCount(['members', 'deals'])->findOrFail(session('organization_id'));
 
         return Inertia::render('Organizations/Settings', [
             'organization' => $organization
