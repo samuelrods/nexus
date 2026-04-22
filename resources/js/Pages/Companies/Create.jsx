@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm } from "@inertiajs/react";
 import CompanyForm from "./Form";
 
@@ -36,7 +36,7 @@ const Create = () => {
 
 Create.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Create Company" />
+        <ResourceLayout children={page} title="Create Company" />
     </Layout>
 );
 

@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, Link } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -71,7 +71,7 @@ const Create = () => {
 
 Create.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Invite Member" />
+        <ResourceLayout children={page} title="Invite Member" />
     </Layout>
 );
 

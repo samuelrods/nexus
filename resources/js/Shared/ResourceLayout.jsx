@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import { ChevronRight, Home } from "lucide-react";
 
-const ResouceLayout = ({ children, title, description, hideHeader = false }) => {
+const ResourceLayout = ({ children, title, description, hideHeader = false }) => {
     const { url } = usePage();
     // Split by '/', then take the first part of any part that contains '?' to remove query strings
     const pathParts = url.split('/')
@@ -54,4 +54,4 @@ const ResouceLayout = ({ children, title, description, hideHeader = false }) => 
     );
 };
 
-export default ResouceLayout;
+export default ResourceLayout;

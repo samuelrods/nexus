@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
 import { Button } from "@/Components/ui/button";
@@ -59,7 +59,7 @@ const Activities = ({ pagination, filters }) => {
 
 Activities.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Activities" />
+        <ResourceLayout children={page} title="Activities" />
     </Layout>
 );
 

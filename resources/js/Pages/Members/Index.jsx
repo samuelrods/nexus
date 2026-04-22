@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import Table from "@/Shared/Table";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
@@ -30,7 +30,7 @@ const Index = ({ pagination, filters }) => {
 
 Index.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Members" />
+        <ResourceLayout children={page} title="Members" />
     </Layout>
 );
 

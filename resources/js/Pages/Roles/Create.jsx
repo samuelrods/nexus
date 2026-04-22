@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm } from "@inertiajs/react";
 import RoleForm from "./Form";
 
@@ -31,7 +31,7 @@ const Create = ({ permissions }) => {
 
 Create.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Create Role" />
+        <ResourceLayout children={page} title="Create Role" />
     </Layout>
 );
 

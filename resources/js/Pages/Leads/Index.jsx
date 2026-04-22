@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
 import { Button } from "@/Components/ui/button";
@@ -58,7 +58,7 @@ const Leads = ({ pagination, filters }) => {
 
 Leads.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Leads" />
+        <ResourceLayout children={page} title="Leads" />
     </Layout>
 );
 

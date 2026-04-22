@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import Table from "@/Shared/Table";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
@@ -35,7 +35,7 @@ const Roles = ({ pagination, permissions }) => {
 
 Roles.layout = (page) => (
     <Layout title="Roles">
-        <ResouceLayout children={page} title="Roles" />
+        <ResourceLayout children={page} title="Roles" />
     </Layout>
 );
 

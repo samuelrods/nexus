@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { 
@@ -148,7 +148,7 @@ const Show = ({ role }) => {
 
 Show.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title={`Role: ${page.props.role.data.name}`} hideHeader={true} />
+        <ResourceLayout children={page} title={`Role: ${page.props.role.data.name}`} hideHeader={true} />
     </Layout>
 );
 

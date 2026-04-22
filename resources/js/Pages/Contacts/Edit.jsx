@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm } from "@inertiajs/react";
 import ContactForm from "./Form";
 
@@ -35,7 +35,7 @@ const Edit = ({ contact }) => {
 
 Edit.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Edit Contact" />
+        <ResourceLayout children={page} title="Edit Contact" />
     </Layout>
 );
 

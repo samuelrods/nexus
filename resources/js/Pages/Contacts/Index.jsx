@@ -1,5 +1,5 @@
 import Layout from "@/Shared/Layout";
-import ResouceLayout from "@/Shared/ResourceLayout";
+import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
 import TablePagination from "@/Shared/TablePagination";
 import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
@@ -70,7 +70,7 @@ const Contacts = ({ pagination, stats, filters }) => {
 
 Contacts.layout = (page) => (
     <Layout>
-        <ResouceLayout children={page} title="Contacts" />
+        <ResourceLayout children={page} title="Contacts" />
     </Layout>
 );
 
