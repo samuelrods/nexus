@@ -7,6 +7,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { 
     Inbox, 
     ChevronRight, 
@@ -31,20 +32,24 @@ import {
 
 const StatusBadge = ({ status }) => {
     const statusStyles = {
-        pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-        won: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-        lost: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-        active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-        inactive: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
-        open: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-        closed: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
-        converted: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+        pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-900/50",
+        won: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50",
+        lost: "bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400 border-rose-200 dark:border-rose-900/50",
+        active: "bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-400 border-sky-200 dark:border-sky-900/50",
+        inactive: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700",
+        open: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-900/50",
+        closed: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700",
+        converted: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-900/50",
+        // Member Roles
+        owner: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200 dark:border-purple-900/50",
+        admin: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900/50",
+        member: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-900/50",
     };
 
-    const style = statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+    const style = statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700";
 
     return (
-        <span className={cn("px-2.5 py-0.5 rounded-full text-xs font-medium capitalize", style)}>
+        <span className={cn("px-2.5 py-1 rounded-full text-xs font-semibold capitalize border", style)}>
             {status}
         </span>
     );
@@ -285,8 +290,19 @@ const Table = ({
                             >
                                 {columns.map((column) => (
                                     <TableCell key={column.key + "body"} className="px-6 py-4 whitespace-nowrap">
-                                        {column.key === "status" || column.key === "type" ? (
+                                        {column.key === "status" || column.key === "type" || column.key === "role_name" ? (
                                             <StatusBadge status={item[column.key]} />
+                                        ) : column.key === "full_name" || column.key === "name" ? (
+                                            <div className="flex items-center gap-3">
+                                                <Avatar className="h-8 w-8 border border-border">
+                                                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                                                        {item[column.key]?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <span className="text-foreground font-semibold">
+                                                    {item[column.key] ?? "—"}
+                                                </span>
+                                            </div>
                                         ) : (
                                             <span className="text-foreground font-medium">
                                                 {item[column.key] ?? "—"}

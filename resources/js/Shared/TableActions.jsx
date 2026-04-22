@@ -64,24 +64,24 @@ const TableActions = ({
     return (
         <div className="flex flex-col space-y-4 mb-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="relative w-full max-w-sm">
+                <div className="relative w-full max-w-md">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <Search className="w-4 h-4 text-muted-foreground" />
                     </div>
                     <Input
                         type="text"
                         placeholder={"Search " + resourceType.toLowerCase() + "..."}
-                        className="pl-10 bg-card border-border focus:ring-blue-500 focus:border-blue-500 block w-full text-foreground"
+                        className="pl-10 bg-muted/50 border-border focus:ring-primary focus:border-primary block w-full text-foreground rounded-xl transition-all duration-200"
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                     />
                 </div>
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
                     {hasActiveFilters && (
                         <Button
                             variant="ghost"
                             onClick={clearFilters}
-                            className="text-muted-foreground hover:text-foreground"
+                            className="text-muted-foreground hover:text-foreground transition-colors"
                         >
                             <X className="w-4 h-4 mr-2" />
                             Clear
@@ -96,7 +96,7 @@ const TableActions = ({
                             formData={formData}
                         />
                     ) : createRoute ? (
-                        <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                        <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95">
                             <Link href={route(createRoute)}>
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add {singularize(resourceType)}
