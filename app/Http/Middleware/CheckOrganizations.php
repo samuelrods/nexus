@@ -23,17 +23,26 @@ class CheckOrganizations
             // Verify the user actually belongs to this organization
             if ($request->user()->organizations->contains($slug->id)) {
                 $organization = $slug;
-            } else {
-                return redirect()->route('organizations.index')->with(['message' => 'You do not have access to this organization.', 'type' => 'error']);
             }
         } elseif (is_string($slug)) {
             $organization = $request->user()->organizations()->where('slug', $slug)->first();
+            
+            // If found, replace the string parameter with the model for controllers
+            if ($organization) {
+                $request->route()->setParameter('organization', $organization);
+            }
         }
 
         // If no organization found from route, fallback to session
         if (!$organization) {
             $organizationId = session('organization_id');
             $organization = $organizationId ? $request->user()->organizations()->find($organizationId) : null;
+            
+            // If we found it from session but were on a route that expects an organization,
+            // we should probably redirect to the correct slug
+            if ($organization && is_string($slug) && $slug !== $organization->slug) {
+                 return redirect()->route($request->route()->getName() ?: 'dashboard', ['organization' => $organization->slug]);
+            }
         }
 
         // If still no organization, handle selection/auto-selection
