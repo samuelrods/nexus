@@ -12,7 +12,10 @@ import {
     ChevronRight, 
     Pencil, 
     Trash2, 
-    AlertTriangle 
+    AlertTriangle,
+    ArrowUp,
+    ArrowDown,
+    ArrowUpDown
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
@@ -180,6 +183,7 @@ const Table = ({
     EditResourceForm,
     editFormData,
     resourceInfoKeys,
+    filters = {},
 }) => {
     const getPropertyByPath = (obj, path) => {
         const keys = path.split(".");
@@ -198,15 +202,12 @@ const Table = ({
 
     const handleRowClick = (item) => {
         const showRoute = `${resourceName}.show`;
-        // Use try-catch or ziggy's check if possible.
-        // Inertia's route() throws if not found.
         try {
             const url = route(showRoute, item.id);
             if (url) {
                 router.visit(url);
             }
         } catch (e) {
-            // If show route doesn't exist, do nothing or handle differently
             console.log(`No show route for ${resourceName}`);
         }
     };
@@ -221,14 +222,49 @@ const Table = ({
 
     const canClickRow = hasShowRoute(resourceName);
 
+    const handleSort = (sortKey) => {
+        if (!sortKey) return;
+
+        let newDir = "asc";
+        if (filters.sort_by === sortKey && filters.sort_dir === "asc") {
+            newDir = "desc";
+        }
+
+        router.get(
+            route(`${resourceName}.index`),
+            { ...filters, sort_by: sortKey, sort_dir: newDir },
+            { preserveState: true }
+        );
+    };
+
+    const getSortIcon = (column) => {
+        if (!column.sortKey) return null;
+        if (filters.sort_by !== column.sortKey) return <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />;
+        return filters.sort_dir === "asc" ? (
+            <ArrowUp className="ml-2 h-4 w-4 text-blue-500" />
+        ) : (
+            <ArrowDown className="ml-2 h-4 w-4 text-blue-500" />
+        );
+    };
+
     return (
         <div className="relative overflow-hidden shadow-md sm:rounded-lg border border-border">
             <TableUI className="w-full text-sm text-left text-muted-foreground">
                 <TableHeader className="text-xs text-muted-foreground uppercase bg-muted">
                     <TableRow className="border-b border-border">
                         {columns.map((column) => (
-                            <TableHead key={column.key} className="px-6 py-3 font-semibold">
-                                {column.header}
+                            <TableHead 
+                                key={column.key} 
+                                className={cn(
+                                    "px-6 py-3 font-semibold",
+                                    column.sortKey && "cursor-pointer hover:bg-muted/80 transition-colors"
+                                )}
+                                onClick={() => handleSort(column.sortKey)}
+                            >
+                                <div className="flex items-center">
+                                    {column.header}
+                                    {getSortIcon(column)}
+                                </div>
                             </TableHead>
                         ))}
                         <TableHead className="px-6 py-3 text-right font-semibold">
@@ -249,7 +285,7 @@ const Table = ({
                             >
                                 {columns.map((column) => (
                                     <TableCell key={column.key + "body"} className="px-6 py-4 whitespace-nowrap">
-                                        {column.key === "status" ? (
+                                        {column.key === "status" || column.key === "type" ? (
                                             <StatusBadge status={item[column.key]} />
                                         ) : (
                                             <span className="text-foreground font-medium">

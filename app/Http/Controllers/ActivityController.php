@@ -6,6 +6,7 @@ use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -20,22 +21,38 @@ class ActivityController extends Controller
 
         $organizationId = session('organization_id');
 
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDir = $request->input('sort_dir', 'desc');
+        $type = $request->input('type');
+
+        $sortQuery = $sortBy;
+        if ($sortBy === 'contact_fullname') {
+            $sortQuery = Contact::selectRaw("CONCAT(first_name, ' ', last_name)")->whereColumn('contacts.id', 'activities.contact_id');
+        }
+
         if ($request->filled('query')) {
             $searchResults = Activity::search($request->input('query'))
                 ->where('organization_id', $organizationId)
-                ->paginate(10);
+                ->query(function ($q) use ($sortQuery, $sortDir, $type) {
+                    $q->orderBy($sortQuery, $sortDir);
+                    if ($type) $q->where('type', $type);
+                })
+                ->paginate(10)->withQueryString();
 
             return Inertia::render('Activities/Index', [
                 'pagination' => ActivityResource::collection($searchResults),
+                'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'type']),
             ]);
         }
 
         $activitiesPagination = Activity::where('organization_id', $organizationId)
-            ->orderBy('id')
-            ->paginate(10);
+            ->when($type, fn($q) => $q->where('type', $type))
+            ->orderBy($sortQuery, $sortDir)
+            ->paginate(10)->withQueryString();
 
         return Inertia::render('Activities/Index', [
             'pagination' => ActivityResource::collection($activitiesPagination),
+            'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'type']),
         ]);
     }
 

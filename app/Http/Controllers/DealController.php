@@ -6,6 +6,8 @@ use App\Http\Requests\StoreDealRequest;
 use App\Http\Requests\UpdateDealRequest;
 use App\Http\Resources\DealResource;
 use App\Models\Deal;
+use App\Models\Company;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,24 +29,42 @@ class DealController extends Controller
             'pending_deals' => Deal::where('organization_id', $organizationId)->where('status', 'pending')->count(),
         ];
 
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDir = $request->input('sort_dir', 'desc');
+        $status = $request->input('status');
+
+        $sortQuery = $sortBy;
+        if ($sortBy === 'company_name') {
+            $sortQuery = Company::select('name')->whereColumn('companies.id', 'deals.company_id');
+        } elseif ($sortBy === 'contact_fullname') {
+            $sortQuery = Contact::selectRaw("CONCAT(first_name, ' ', last_name)")->whereColumn('contacts.id', 'deals.contact_id');
+        }
+
         if ($request->filled('query')) {
             $searchResults = Deal::search($request->input('query'))
                 ->where('organization_id', $organizationId)
-                ->paginate(10);
+                ->query(function ($q) use ($sortQuery, $sortDir, $status) {
+                    $q->orderBy($sortQuery, $sortDir);
+                    if ($status) $q->where('status', $status);
+                })
+                ->paginate(10)->withQueryString();
 
             return Inertia::render('Deals/Index', [
                 'pagination' => DealResource::collection($searchResults),
                 'stats' => $stats,
+                'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'status']),
             ]);
         }
 
         $dealsPagination = Deal::where('organization_id', $organizationId)
-            ->orderBy('id')
-            ->paginate(10);
+            ->when($status, fn($q) => $q->where('status', $status))
+            ->orderBy($sortQuery, $sortDir)
+            ->paginate(10)->withQueryString();
 
         return Inertia::render('Deals/Index', [
             'pagination' => DealResource::collection($dealsPagination),
             'stats' => $stats,
+            'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'status']),
         ]);
     }
 

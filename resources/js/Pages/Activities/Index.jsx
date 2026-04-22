@@ -21,24 +21,36 @@ import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Activities = ({ pagination }) => {
+const Activities = ({ pagination, filters }) => {
+    const typeOptions = [
+        { label: "Call", value: "call" },
+        { label: "Meeting", value: "meeting" },
+        { label: "Email", value: "email" },
+        { label: "Other", value: "other" },
+    ];
+
     return (
         <div className="bg-card p-6 rounded-lg shadow">
             <TableActions
                 searchRoute={"activities.index"}
                 resourceType={"Activities"}
                 createRoute={"activities.create"}
+                filters={filters}
+                filterOptions={[
+                    { label: "Type", name: "type", allLabel: "All Types", options: typeOptions },
+                ]}
             />
             <Table
                 data={pagination.data}
                 columns={[
-                    { header: "Contact", key: "contact_fullname" },
-                    { header: "Type", key: "type" },
-                    { header: "Date", key: "date" },
+                    { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
+                    { header: "Type", key: "type", sortKey: "type" },
+                    { header: "Date", key: "date", sortKey: "date" },
                     { header: "Time", key: "time" },
                     { header: "Description", key: "description" },
                 ]}
                 resourceName={"activities"}
+                filters={filters}
             />
             <TablePagination pagination={pagination.links} />
         </div>

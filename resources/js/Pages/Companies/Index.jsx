@@ -153,7 +153,7 @@ const CompanyForm = ({
     );
 };
 
-const Companies = ({ pagination, stats }) => {
+const Companies = ({ pagination, stats, filters, industries = [] }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
@@ -194,6 +194,15 @@ const Companies = ({ pagination, stats }) => {
                     searchRoute={"companies.index"}
                     resourceType={"Companies"}
                     createRoute={"companies.create"}
+                    filters={filters}
+                    filterOptions={[
+                        { 
+                            label: "Industry", 
+                            name: "industry", 
+                            allLabel: "All Industries",
+                            options: industries.map(i => ({ label: i, value: i }))
+                        },
+                    ]}
                 />
                 <Table
                     data={pagination.data.map((company) => {
@@ -206,12 +215,13 @@ const Companies = ({ pagination, stats }) => {
                         };
                     })}
                     columns={[
-                        { header: "Name", key: "name" },
-                        { header: "Website", key: "website" },
-                        { header: "Industry", key: "industry" },
+                        { header: "Name", key: "name", sortKey: "name" },
+                        { header: "Website", key: "website", sortKey: "website" },
+                        { header: "Industry", key: "industry", sortKey: "industry" },
                         { header: "Address", key: "address_full" },
                     ]}
                     resourceName={"companies"}
+                    filters={filters}
                 />
                 <TablePagination pagination={pagination.links} />
             </div>

@@ -27,25 +27,51 @@ class CompanyController extends Controller
             'industries' => Company::where('organization_id', $organizationId)->distinct('industry')->count('industry'),
         ];
 
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDir = $request->input('sort_dir', 'desc');
+        $industry = $request->input('industry');
+
+        $allIndustries = Company::where('organization_id', $organizationId)
+            ->whereNotNull('industry')
+            ->distinct()
+            ->pluck('industry')
+            ->sort()
+            ->values();
+
         if ($request->filled('query')) {
             $searchResults = Company::search($request->input('query'))
                 ->where('organization_id', $organizationId)
-                ->paginate(10);
+                ->query(function ($q) use ($sortBy, $sortDir, $industry) {
+                    $q->orderBy($sortBy, $sortDir);
+                    if ($industry) $q->where('industry', $industry);
+                })
+                ->paginate(10)->withQueryString();
 
             return Inertia::render('Companies/Index', [
                 'pagination' => CompanyResource::collection($searchResults),
                 'stats' => $stats,
+                'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'industry']),
+                'industries' => $allIndustries,
             ]);
         }
 
         $companiesPagination = Company::where('organization_id', $organizationId)
-            ->orderBy('name')
-            ->orderBy('id')
-            ->paginate(10);
+            ->when($industry, fn($q) => $q->where('industry', $industry))
+            ->orderBy($sortBy, $sortDir)
+            ->paginate(10)->withQueryString();
+
+        $allIndustries = Company::where('organization_id', $organizationId)
+            ->whereNotNull('industry')
+            ->distinct()
+            ->pluck('industry')
+            ->sort()
+            ->values();
 
         return Inertia::render('Companies/Index', [
             'pagination' => CompanyResource::collection($companiesPagination),
             'stats' => $stats,
+            'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'industry']),
+            'industries' => $allIndustries,
         ]);
     }
 

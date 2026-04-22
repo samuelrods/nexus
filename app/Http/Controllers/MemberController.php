@@ -30,29 +30,27 @@ class MemberController extends Controller
             ->select(['id', 'name'])
             ->get();
 
-        if ($request->filled('query')) {
-            $searchResults = $organization->members()
-                ->where(function ($query) use ($request) {
-                    $query->where('first_name', 'like', '%' . $request->input('query') . '%')
-                        ->orWhere('last_name', 'like', '%' . $request->input('query') . '%')
-                        ->orWhere('email', 'like', '%' . $request->input('query') . '%');
-                })
-                ->paginate(10);
+        $sortBy = $request->input('sort_by', 'first_name');
+        $sortDir = $request->input('sort_dir', 'asc');
 
-            return Inertia::render('Members/Index', [
-                'pagination' => MemberResource::collection($searchResults),
-                'rolesData' => MemberRolesResource::collection($roles),
-            ]);
+        $query = $organization->members();
+
+        if ($request->filled('query')) {
+            $searchTerm = '%' . $request->input('query') . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('first_name', 'like', $searchTerm)
+                    ->orWhere('last_name', 'like', $searchTerm)
+                    ->orWhere('email', 'like', $searchTerm);
+            });
         }
 
-        $membersPagination = $organization->members()
-            ->orderBy('first_name')
-            ->orderBy('users.id')
-            ->paginate(10);
+        $membersPagination = $query->orderBy($sortBy, $sortDir)
+            ->paginate(10)->withQueryString();
 
         return Inertia::render('Members/Index', [
             'pagination' => MemberResource::collection($membersPagination),
             'rolesData' => MemberRolesResource::collection($roles),
+            'filters' => $request->only(['query', 'sort_by', 'sort_dir']),
         ]);
     }
 

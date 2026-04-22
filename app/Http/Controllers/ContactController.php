@@ -31,25 +31,37 @@ class ContactController extends Controller
                 ->count(),
         ];
 
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDir = $request->input('sort_dir', 'desc');
+
+        $sortQuery = $sortBy;
+        if ($sortBy === 'full_name') {
+            $sortQuery = "first_name"; // or use raw concat if needed for sorting by full name
+        }
+
         if ($request->filled('query')) {
             $searchResults = Contact::search($request->input('query'))
                 ->where('organization_id', $organizationId)
-                ->paginate(10);
+                ->query(function ($q) use ($sortQuery, $sortDir) {
+                    $q->orderBy($sortQuery, $sortDir);
+                })
+                ->paginate(10)->withQueryString();
 
             return Inertia::render('Contacts/Index', [
                 'pagination' => ContactResource::collection($searchResults),
                 'stats' => $stats,
+                'filters' => $request->only(['query', 'sort_by', 'sort_dir']),
             ]);
         }
 
         $contactsPagination = Contact::where('organization_id', $organizationId)
-            ->orderBy('first_name')
-            ->orderBy('id')
-            ->paginate(10);
+            ->orderBy($sortQuery, $sortDir)
+            ->paginate(10)->withQueryString();
 
         return Inertia::render('Contacts/Index', [
             'pagination' => ContactResource::collection($contactsPagination),
             'stats' => $stats,
+            'filters' => $request->only(['query', 'sort_by', 'sort_dir']),
         ]);
     }
 

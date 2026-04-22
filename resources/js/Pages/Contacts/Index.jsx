@@ -6,7 +6,7 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { Users, UserPlus, Briefcase, Mail } from "lucide-react";
 
-const Contacts = ({ pagination, stats }) => {
+const Contacts = ({ pagination, stats, filters }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
@@ -47,17 +47,19 @@ const Contacts = ({ pagination, stats }) => {
                     searchRoute={"contacts.index"}
                     resourceType={"Contacts"}
                     createRoute={"contacts.create"}
+                    filters={filters}
                 />
                 <Table
                     data={pagination.data}
                     columns={[
-                        { header: "Name", key: "full_name" },
-                        { header: "Email", key: "email" },
+                        { header: "Name", key: "full_name", sortKey: "full_name" },
+                        { header: "Email", key: "email", sortKey: "email" },
                         { header: "Phone Number", key: "phone_number" },
-                        { header: "Organization", key: "organization_name" },
-                        { header: "Job Title", key: "job_title" },
+                        { header: "Organization", key: "organization_name", sortKey: "organization_name" },
+                        { header: "Job Title", key: "job_title", sortKey: "job_title" },
                     ]}
                     resourceName={"contacts"}
+                    filters={filters}
                 />
                 <TablePagination pagination={pagination.links} />
             </div>

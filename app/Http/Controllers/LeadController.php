@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateLeadRequest;
 use App\Http\Resources\LeadDataResource;
 use App\Http\Resources\LeadResource;
 use App\Models\Lead;
+use App\Models\Company;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,22 +23,43 @@ class LeadController extends Controller
 
         $organizationId = session('organization_id');
 
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDir = $request->input('sort_dir', 'desc');
+        $status = $request->input('status');
+        $source = $request->input('source');
+
+        $sortQuery = $sortBy;
+        if ($sortBy === 'company_name') {
+            $sortQuery = Company::select('name')->whereColumn('companies.id', 'leads.company_id');
+        } elseif ($sortBy === 'contact_fullname') {
+            $sortQuery = Contact::selectRaw("CONCAT(first_name, ' ', last_name)")->whereColumn('contacts.id', 'leads.contact_id');
+        }
+
         if ($request->filled('query')) {
             $searchResults = Lead::search($request->input('query'))
                 ->where('organization_id', $organizationId)
-                ->paginate(10);
+                ->query(function ($q) use ($sortQuery, $sortDir, $status, $source) {
+                    $q->orderBy($sortQuery, $sortDir);
+                    if ($status) $q->where('status', $status);
+                    if ($source) $q->where('source', $source);
+                })
+                ->paginate(10)->withQueryString();
 
             return Inertia::render('Leads/Index', [
                 'pagination' => LeadResource::collection($searchResults),
+                'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'status', 'source']),
             ]);
         }
 
         $leadsPagination = Lead::where('organization_id', $organizationId)
-            ->orderBy('id')
-            ->paginate(10);
+            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($source, fn($q) => $q->where('source', $source))
+            ->orderBy($sortQuery, $sortDir)
+            ->paginate(10)->withQueryString();
 
         return Inertia::render('Leads/Index', [
             'pagination' => LeadResource::collection($leadsPagination),
+            'filters' => $request->only(['query', 'sort_by', 'sort_dir', 'status', 'source']),
         ]);
     }
 

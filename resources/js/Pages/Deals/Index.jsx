@@ -6,7 +6,13 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
 
-const Deals = ({ pagination, stats }) => {
+const Deals = ({ pagination, stats, filters }) => {
+    const statusOptions = [
+        { label: "Pending", value: "pending" },
+        { label: "Won", value: "won" },
+        { label: "Lost", value: "lost" },
+    ];
+
     return (
         <div className="space-y-6">
             <StatsGrid>
@@ -47,19 +53,24 @@ const Deals = ({ pagination, stats }) => {
                     searchRoute={"deals.index"}
                     resourceType={"Deals"}
                     createRoute={"deals.create"}
+                    filters={filters}
+                    filterOptions={[
+                        { label: "Status", name: "status", allLabel: "All Statuses", options: statusOptions },
+                    ]}
                 />
                 <Table
                     data={pagination.data}
                     columns={[
-                        { header: "Name", key: "name" },
-                        { header: "Value", key: "value" },
+                        { header: "Name", key: "name", sortKey: "name" },
+                        { header: "Value", key: "value", sortKey: "value" },
                         { header: "Currency", key: "currency" },
-                        { header: "Close date", key: "close_date" },
-                        { header: "Status", key: "status" },
-                        { header: "Company", key: "company_name" },
-                        { header: "Contact", key: "contact_fullname" },
+                        { header: "Close date", key: "close_date", sortKey: "close_date" },
+                        { header: "Status", key: "status", sortKey: "status" },
+                        { header: "Company", key: "company_name", sortKey: "company_name" },
+                        { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
                     ]}
                     resourceName={"deals"}
+                    filters={filters}
                 />
                 <TablePagination pagination={pagination.links} />
             </div>
