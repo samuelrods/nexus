@@ -23,17 +23,7 @@ const chartConfig = {
     },
 };
 
-const DealsChart = ({ data, range }) => {
-    const handleRangeData = (newRange) => {
-        router.get(route('dashboard'), {
-            "deals-range": newRange,
-        }, {
-            preserveState: true,
-            preserveScroll: true,
-            only: ['dealAreaChartData', 'dealAreaChartRange']
-        });
-    };
-
+const DealsChart = ({ data }) => {
     return (
         <div className="w-full">
             <div className="flex justify-between items-start mb-4">
@@ -95,22 +85,6 @@ const DealsChart = ({ data, range }) => {
                     />
                 </AreaChart>
             </ChartContainer>
-
-            <div className="flex justify-between items-center pt-4 mt-4 border-t border-gray-100 dark:border-gray-700">
-                <Select
-                    defaultValue={range.toString()}
-                    onValueChange={(value) => handleRangeData(parseInt(value))}
-                >
-                    <SelectTrigger className="w-[180px] h-9">
-                        <SelectValue placeholder="Select range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="7">Last 7 days</SelectItem>
-                        <SelectItem value="30">Last 30 days</SelectItem>
-                        <SelectItem value="90">Last 90 days</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
         </div>
     );
 };

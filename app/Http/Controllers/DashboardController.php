@@ -16,23 +16,36 @@ class DashboardController extends Controller
     public function __invoke(Request $request)
     {
         $request->validate([
-            'deals-range' => ['sometimes', Rule::in([7, 30, 90])],
+            'range' => ['sometimes', Rule::in([7, 30, 90, 365])],
         ]);
 
-        $dealChartRange = $request->input('deals-range', 7);
-        $dealPieChartRange = $request->input('deals-pie-chart-range', 7);
-        $activityPieChartRange = $request->input('activities-pie-chart-range', 7);
+        $range = $request->input('range', 30);
 
         $organization = Organization::find(session('organization_id'));
 
         return Inertia::render('Dashboard', [
-            'dealAreaChartData' => fn() => $this->getDealAreaChartData($dealChartRange),
-            'dealAreaChartRange' => $dealChartRange,
-            'dealPieChartData' => fn() => $this->getDealPieChartData($dealPieChartRange),
-            'dealPieChartRange' => $dealPieChartRange,
-            'activityPieChartData' => fn() => $this->getActivityPieChartData($activityPieChartRange),
-            'activityPieChartRange' => $activityPieChartRange,
+            'dealAreaChartData' => fn() => $this->getDealAreaChartData($range),
+            'dealPieChartData' => fn() => $this->getDealPieChartData($range),
+            'activityPieChartData' => fn() => $this->getActivityPieChartData($range),
+            'range' => $range,
             'teamMemberCount' => $organization->members()->count(),
+            'totalLeads' => $organization->leads()->count(),
+            'totalContacts' => $organization->contacts()->count(),
+            'upcomingActivities' => $organization->activities()
+                ->where('date', '>=', now()->toDateTimeString())
+                ->orderBy('date')
+                ->limit(5)
+                ->get(),
+            'recentLeads' => $organization->leads()
+                ->with('contact')
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get(),
+            'topDeals' => $organization->deals()
+                ->where('status', 'pending')
+                ->orderBy('value', 'desc')
+                ->limit(5)
+                ->get(),
         ]);
     }
 
