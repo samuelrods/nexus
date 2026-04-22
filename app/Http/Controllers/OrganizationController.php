@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use App\Models\OrganizationMember;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -53,22 +54,64 @@ class OrganizationController extends Controller
             'user_id' => auth()->id(),
         ]));
 
-        // create a role for the owner
-        Role::create([
-            'name' => 'owner',
-            'guard_name' => 'web',
-            'organization_id' => $organization->id,
-        ]);
+        // create default roles
+        $this->createDefaultRoles($organization);
 
         setPermissionsTeamId($organization->id);
 
         // assign the owner role to the owner
-        $organization->user->syncRoles([$organization->roles->first()->name]);
+        $organization->user->assignRole('owner');
 
         session(['organization_id' => $organization->id]);
         setPermissionsTeamId($organization->id);
 
         return to_route('dashboard', ['organization' => $organization->slug])->with(['message' => 'Organization created successfully!', 'type' => 'success']);
+    }
+
+    /**
+     * Create default roles for a new organization.
+     */
+    private function createDefaultRoles(Organization $organization)
+    {
+        $allPermissions = Permission::all();
+
+        // 1. Owner - Full Access
+        $owner = Role::create([
+            'name' => 'owner',
+            'guard_name' => 'web',
+            'organization_id' => $organization->id,
+        ]);
+        $owner->syncPermissions($allPermissions);
+
+        // 2. Administrator - Full Access
+        $admin = Role::create([
+            'name' => 'administrator',
+            'guard_name' => 'web',
+            'organization_id' => $organization->id,
+        ]);
+        $admin->syncPermissions($allPermissions);
+
+        // 3. Manager - Most Access, no Role Management
+        $manager = Role::create([
+            'name' => 'manager',
+            'guard_name' => 'web',
+            'organization_id' => $organization->id,
+        ]);
+        $manager->syncPermissions($allPermissions->filter(function($p) {
+            return !str_contains($p->name, 'roles');
+        }));
+
+        // 4. Member - Basic Access
+        $member = Role::create([
+            'name' => 'member',
+            'guard_name' => 'web',
+            'organization_id' => $organization->id,
+        ]);
+        $member->syncPermissions($allPermissions->filter(function($p) {
+            return str_starts_with($p->name, 'read-') || 
+                   str_starts_with($p->name, 'create-') ||
+                   (str_starts_with($p->name, 'update-') && !str_contains($p->name, 'members') && !str_contains($p->name, 'roles'));
+        }));
     }
 
     /**
