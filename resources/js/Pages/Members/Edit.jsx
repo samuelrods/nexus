@@ -1,20 +1,23 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm, Link } from "@inertiajs/react";
+import { useForm, Link, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 import { Loader2, ArrowLeft, Save, User } from "lucide-react";
 
 const Edit = ({ member, roles }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const memberData = member?.data ?? member;
+
     const { data, setData, put, processing, errors } = useForm({
         role_id: memberData?.role_id,
     });
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("members.update", memberData?.id));
+        put(route("members.update", { organization: organizationSlug, member: memberData?.id }));
     };
 
     return (
@@ -30,7 +33,7 @@ const Edit = ({ member, roles }) => {
                     </div>
                 </div>
                 <Button variant="ghost" asChild>
-                    <Link href={route("members.index")}>
+                    <Link href={route("members.index", { organization: organizationSlug })}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
                     </Link>

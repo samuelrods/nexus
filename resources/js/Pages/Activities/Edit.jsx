@@ -1,9 +1,12 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import ActivityForm from "./Form";
 
 const Edit = ({ activity }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const { data, setData, put, processing, errors } = useForm({
         contact_id: activity.data.contact_id,
         contact_fullname: activity.data.contact_fullname,
@@ -17,7 +20,7 @@ const Edit = ({ activity }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("activities.update", activity.data.id));
+        put(route("activities.update", { organization: organizationSlug, activity: activity.data.id }));
     };
 
     return (

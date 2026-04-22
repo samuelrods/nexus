@@ -1,22 +1,24 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import ContactForm from "./Form";
 
-const Create = () => {
+const Create = ({ companies }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const { data, setData, post, processing, errors } = useForm({
         first_name: "",
         last_name: "",
         email: "",
         phone_number: "",
-        organization_name: "",
         job_title: "",
+        organization_name: "",
         description: "",
     });
 
     const onSubmit = (e) => {
         e.preventDefault();
-        post(route("contacts.store"));
+        post(route("contacts.store", { organization: organizationSlug }));
     };
 
     return (

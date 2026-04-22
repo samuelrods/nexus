@@ -1,22 +1,24 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import ContactForm from "./Form";
 
-const Edit = ({ contact }) => {
+const Edit = ({ contact, companies }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const { data, setData, put, processing, errors } = useForm({
         first_name: contact.data.first_name || "",
         last_name: contact.data.last_name || "",
         email: contact.data.email || "",
         phone_number: contact.data.phone_number || "",
-        organization_name: contact.data.organization_name || "",
         job_title: contact.data.job_title || "",
+        organization_name: contact.data.organization_name || "",
         description: contact.data.description || "",
     });
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("contacts.update", contact.data.id));
+        put(route("contacts.update", { organization: organizationSlug, contact: contact.data.id }));
     };
 
     return (

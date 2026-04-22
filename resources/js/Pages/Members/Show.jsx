@@ -26,12 +26,14 @@ import {
 import { useState } from "react";
 
 const Show = ({ member }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const memberData = member?.data ?? member;
     const [isDeleting, setIsDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("members.destroy", memberData?.id), {
+        router.delete(route("members.destroy", { organization: organizationSlug, member: memberData?.id }), {
             onStart: () => setIsDeleting(true),
             onFinish: () => setIsDeleting(false),
         });
@@ -41,14 +43,14 @@ const Show = ({ member }) => {
         <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("members.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                    <Link href={route("members.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Members
                     </Link>
                 </Button>
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>
-                        <Link href={route("members.edit", memberData?.id)}>
+                        <Link href={route("members.edit", { organization: organizationSlug, member: memberData?.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>

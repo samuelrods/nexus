@@ -1,3 +1,4 @@
+import { usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Textarea } from "@/Components/ui/textarea";
 import { Label } from "@/Components/ui/label";
@@ -22,6 +23,9 @@ const LeadForm = ({
     processing,
     updating = false,
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     return (
         <form
             onSubmit={onSubmit}
@@ -40,7 +44,7 @@ const LeadForm = ({
                         }));
                     }}
                     resourceName="companies"
-                    apiUrlPath={route("companies.options")}
+                    apiUrlPath={route("companies.options", { organization: organizationSlug })}
                     ResourceForm={CompanyForm}
                     resourceInfo={[
                         ["name", ""],
@@ -69,7 +73,7 @@ const LeadForm = ({
                         }));
                     }}
                     resourceName="contacts"
-                    apiUrlPath={route("contacts.options")}
+                    apiUrlPath={route("contacts.options", { organization: organizationSlug })}
                     ResourceForm={ContactForm}
                     resourceInfo={[
                         ["first_name", ""],

@@ -2,6 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 import { Label } from "@/Components/ui/label";
+import { usePage } from "@inertiajs/react";
 import {
     Popover,
     PopoverContent,
@@ -32,6 +33,9 @@ const DealForm = ({
     processing,
     updating = false,
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     function toSqlDateFormat(date) {
         if (!date) return null;
         var year = date.getFullYear();
@@ -130,7 +134,7 @@ const DealForm = ({
                         }));
                     }}
                     resourceName="leads"
-                    apiUrlPath={route("leads.options")}
+                    apiUrlPath={route("leads.options", { organization: organizationSlug })}
                     ResourceForm={LeadForm}
                     resourceInfo={[
                         ["source", ""],
@@ -156,7 +160,7 @@ const DealForm = ({
                             }));
                         }}
                         resourceName="companies"
-                        apiUrlPath={route("companies.options")}
+                        apiUrlPath={route("companies.options", { organization: organizationSlug })}
                         ResourceForm={CompanyForm}
                         resourceInfo={[
                             ["name", ""],
@@ -185,7 +189,7 @@ const DealForm = ({
                             }));
                         }}
                         resourceName="contacts"
-                        apiUrlPath={route("contacts.options")}
+                        apiUrlPath={route("contacts.options", { organization: organizationSlug })}
                         ResourceForm={ContactForm}
                         resourceInfo={[
                             ["first_name", ""],

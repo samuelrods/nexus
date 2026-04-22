@@ -1,6 +1,6 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { 
     Shield,
@@ -31,11 +31,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 
 const Show = ({ role }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("roles.destroy", role.data.id), {
+        router.delete(route("roles.destroy", { organization: organizationSlug, role: role.data.id }), {
             onStart: () => setIsDeleting(true),
             onFinish: () => {
                 setIsDeleting(false);
@@ -88,7 +90,7 @@ const Show = ({ role }) => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <Button variant="ghost" asChild className="pl-0 hover:bg-transparent -ml-2 mb-2 group">
-                        <Link href={route("roles.index")} className="flex items-center text-muted-foreground hover:text-foreground">
+                        <Link href={route("roles.index", { organization: organizationSlug })} className="flex items-center text-muted-foreground hover:text-foreground">
                             <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                             Back to Roles
                         </Link>
@@ -110,7 +112,7 @@ const Show = ({ role }) => {
                     {role.data.name.toLowerCase() !== "owner" ? (
                         <>
                             <Button variant="outline" asChild className="bg-background shadow-sm">
-                                <Link href={route("roles.edit", role.data.id)}>
+                                <Link href={route("roles.edit", { organization: organizationSlug, role: role.data.id })}>
                                     <Pencil className="mr-2 h-4 w-4" />
                                     Edit Configuration
                                 </Link>
@@ -229,7 +231,7 @@ const Show = ({ role }) => {
                                 </p>
                                 {role.data.name.toLowerCase() !== 'owner' && (
                                     <Button variant="link" asChild className="mt-2">
-                                        <Link href={route("roles.edit", role.data.id)}>Assign Permissions</Link>
+                                        <Link href={route("roles.edit", { organization: organizationSlug, role: role.data.id })}>Assign Permissions</Link>
                                     </Button>
                                 )}
                             </CardContent>
@@ -258,7 +260,7 @@ const Show = ({ role }) => {
                                         {role.data.users.slice(0, 5).map((member) => (
                                             <Link 
                                                 key={member.id} 
-                                                href={route("members.show", member.id)}
+                                                href={route("members.show", { organization: organizationSlug, member: member.id })}
                                                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors group"
                                             >
                                                 <Avatar className="h-8 w-8 border border-border">
@@ -275,7 +277,7 @@ const Show = ({ role }) => {
                                         ))}
                                         {role.data.users_count > 5 && (
                                             <Button variant="ghost" size="sm" className="w-full text-xs text-blue-600 hover:text-blue-700 font-bold" asChild>
-                                                <Link href={route("members.index", { role: role.data.name })}>
+                                                <Link href={route("members.index", { organization: organizationSlug, role: role.data.name })}>
                                                     View all {role.data.users_count} members
                                                 </Link>
                                             </Button>

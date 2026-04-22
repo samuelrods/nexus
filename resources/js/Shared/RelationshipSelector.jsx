@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { usePage } from "@inertiajs/react";
 import {
     Dialog,
     DialogContent,
@@ -24,6 +25,9 @@ const RelationshipSelector = ({
     resourceInfo,
     placeholder = "Search...",
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const [open, setOpen] = useState(false);
     const [tab, setTab] = useState("search");
     const [searchTerm, setSearchTerm] = useState("");
@@ -83,7 +87,7 @@ const RelationshipSelector = ({
         setErrors({});
         try {
             // We use axios to get a JSON response
-            const response = await axios.post(route(`${resourceName}.store`), formData, {
+            const response = await axios.post(route(`${resourceName}.store`, { organization: organizationSlug }), formData, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'

@@ -1,6 +1,6 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { 
     User, 
@@ -36,11 +36,13 @@ const TypeIcon = ({ type }) => {
 };
 
 const Show = ({ activity }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("activities.destroy", activity.data.id), {
+        router.delete(route("activities.destroy", { organization: organizationSlug, activity: activity.data.id }), {
             onStart: () => setIsDeleting(true),
             onFinish: () => setIsDeleting(false),
         });
@@ -50,14 +52,14 @@ const Show = ({ activity }) => {
         <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("activities.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                    <Link href={route("activities.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Activities
                     </Link>
                 </Button>
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>
-                        <Link href={route("activities.edit", activity.data.id)}>
+                        <Link href={route("activities.edit", { organization: organizationSlug, activity: activity.data.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>
@@ -139,7 +141,7 @@ const Show = ({ activity }) => {
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Contact Involved</h3>
                                     {activity.data.contact_id ? (
                                         <Link 
-                                            href={route('contacts.show', activity.data.contact_id)}
+                                            href={route('contacts.show', { organization: organizationSlug, contact: activity.data.contact_id })}
                                             className="group flex items-center p-3 rounded-lg border border-border hover:border-blue-500 transition-colors"
                                         >
                                             <User className="h-10 w-10 text-gray-400 group-hover:text-blue-500 mr-3" />
@@ -156,7 +158,7 @@ const Show = ({ activity }) => {
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Related Lead</h3>
                                     {activity.data.lead_id ? (
                                         <Link 
-                                            href={route('leads.show', activity.data.lead_id)}
+                                            href={route('leads.show', { organization: organizationSlug, lead: activity.data.lead_id })}
                                             className="group flex items-center p-3 rounded-lg border border-border hover:border-blue-500 transition-colors"
                                         >
                                             <ActivityIcon className="h-10 w-10 text-gray-400 group-hover:text-blue-500 mr-3" />

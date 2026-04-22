@@ -34,11 +34,11 @@ const OrganizationCard = ({ membership }) => {
     const handleDeleteOrLeave = () => {
         if (isOwner) {
             if (confirm("Are you sure you want to delete this organization? This action cannot be undone.")) {
-                router.delete(route("organizations.destroy", organization.id));
+                router.delete(route("organizations.destroy", { organization: organization.slug }));
             }
         } else {
             if (confirm("Are you sure you want to leave this organization?")) {
-                router.delete(route("members.destroy", membership.id));
+                router.delete(route("members.destroy", { organization: organization.slug, member: membership.id }));
             }
         }
     };

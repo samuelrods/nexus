@@ -1,6 +1,6 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { 
     User, 
@@ -25,28 +25,30 @@ import {
 import { useState } from "react";
 
 const Show = ({ contact }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("contacts.destroy", contact.data.id), {
+        router.delete(route("contacts.destroy", { organization: organizationSlug, contact: contact.data.id }), {
             onStart: () => setIsDeleting(true),
             onFinish: () => setIsDeleting(false),
         });
     };
 
     return (
-        <div className="space-y-6 max-w-5xl">
+        <div className="space-y-6 max-w-5_xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("contacts.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                    <Link href={route("contacts.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Contacts
                     </Link>
                 </Button>
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>
-                        <Link href={route("contacts.edit", contact.data.id)}>
+                        <Link href={route("contacts.edit", { organization: organizationSlug, contact: contact.data.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>

@@ -1,9 +1,11 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import CompanyForm from "./Form";
 
 const Create = () => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         website: "",
@@ -17,7 +19,7 @@ const Create = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        post(route("companies.store"));
+        post(route("companies.store", { organization: organizationSlug }));
     };
 
     return (

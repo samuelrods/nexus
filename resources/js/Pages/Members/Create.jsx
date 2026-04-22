@@ -1,6 +1,6 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm, Link } from "@inertiajs/react";
+import { useForm, Link, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
@@ -8,13 +8,16 @@ import InputError from "@/Components/InputError";
 import { Loader2, ArrowLeft, Send } from "lucide-react";
 
 const Create = () => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const { data, setData, post, processing, errors } = useForm({
         memberInfo: "",
     });
 
     const onSubmit = (e) => {
         e.preventDefault();
-        post(route("members.store"));
+        post(route("members.store", { organization: organizationSlug }));
     };
 
     return (
@@ -25,7 +28,7 @@ const Create = () => {
                     <p className="text-muted-foreground">Send an invitation to a user to join your organization.</p>
                 </div>
                 <Button variant="ghost" asChild>
-                    <Link href={route("members.index")}>
+                    <Link href={route("members.index", { organization: organizationSlug })}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
                     </Link>

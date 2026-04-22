@@ -1,4 +1,4 @@
-import { router, Link, useForm } from "@inertiajs/react";
+import { router, Link, useForm, usePage } from "@inertiajs/react";
 import {
     Table as TableUI,
     TableBody,
@@ -190,6 +190,9 @@ const Table = ({
     resourceInfoKeys,
     filters = {},
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const getPropertyByPath = (obj, path) => {
         const keys = path.split(".");
         let result = obj;
@@ -208,7 +211,7 @@ const Table = ({
     const handleRowClick = (item) => {
         const showRoute = `${resourceName}.show`;
         try {
-            const url = route(showRoute, item.id);
+            const url = route(showRoute, { organization: organizationSlug, [singularize(resourceName)]: item.id });
             if (url) {
                 router.visit(url);
             }
@@ -219,7 +222,7 @@ const Table = ({
 
     const hasShowRoute = (resource) => {
         try {
-            return !!route(`${resource}.show`, 1);
+            return !!route(`${resource}.show`, { organization: organizationSlug, [singularize(resource)]: 1 });
         } catch (e) {
             return false;
         }
@@ -236,7 +239,7 @@ const Table = ({
         }
 
         router.get(
-            route(`${resourceName}.index`),
+            route(`${resourceName}.index`, { organization: organizationSlug }),
             { ...filters, sort_by: sortKey, sort_dir: newDir },
             { preserveState: true }
         );
@@ -319,7 +322,10 @@ const Table = ({
                                                 item={item}
                                                 resourceRoute={route(
                                                     resourceName + ".update",
-                                                    item.id,
+                                                    { 
+                                                        organization: organizationSlug, 
+                                                        [singularize(resourceName)]: item.id 
+                                                    },
                                                 )}
                                                 EditResourceForm={EditResourceForm}
                                                 editFormData={editFormData}
@@ -328,12 +334,15 @@ const Table = ({
                                             <DeleteButton
                                                 resourceRoute={route(
                                                     resourceName + ".destroy",
-                                                    propertyIdPath
-                                                        ? getPropertyByPath(
-                                                              item,
-                                                              propertyIdPath,
-                                                          )
-                                                        : item.id,
+                                                    { 
+                                                        organization: organizationSlug, 
+                                                        [singularize(resourceName)]: propertyIdPath
+                                                            ? getPropertyByPath(
+                                                                item,
+                                                                propertyIdPath,
+                                                            )
+                                                            : item.id
+                                                    },
                                                 )}
                                             />
                                         </div>

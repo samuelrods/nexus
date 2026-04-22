@@ -1,8 +1,8 @@
-import { router, Link } from "@inertiajs/react";
+import { router, Link, usePage } from "@inertiajs/react";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { Search, Plus, X } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import AddResourceModal from "@/Shared/AddResourceModal";
 import singularize from "@/Shared/utils/singularize";
 import {
@@ -25,17 +25,20 @@ const TableActions = ({
     filters = {},
     filterOptions = [],
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const [searchValue, setSearchValue] = useState(filters.query || "");
 
     const debouncedSearch = useCallback(
         debounce((query) => {
             router.get(
-                route(searchRoute),
+                route(searchRoute, { organization: organizationSlug }),
                 { ...filters, query: query || undefined, page: undefined },
                 { preserveState: true }
             );
         }, 300),
-        [filters, searchRoute]
+        [filters, searchRoute, organizationSlug]
     );
 
     useEffect(() => {
@@ -46,20 +49,25 @@ const TableActions = ({
 
     const handleFilterChange = (name, value) => {
         router.get(
-            route(searchRoute),
+            route(searchRoute, { organization: organizationSlug }),
             { ...filters, [name]: value === "all" ? undefined : value, page: undefined },
             { preserveState: true }
         );
     };
 
     const clearFilters = () => {
-        router.get(route(searchRoute), {}, { preserveState: true });
+        router.get(route(searchRoute, { organization: organizationSlug }), {}, { preserveState: true });
         setSearchValue("");
     };
 
     const hasActiveFilters = Object.keys(filters).some(
         (key) => filters[key] && key !== "sort_by" && key !== "sort_dir" && key !== "page"
     );
+
+    const createRouteUrl = useMemo(() => {
+        if (!createRoute) return null;
+        return route(createRoute, { organization: organizationSlug });
+    }, [createRoute, organizationSlug]);
 
     return (
         <div className="flex flex-col space-y-4 mb-6">
@@ -97,7 +105,7 @@ const TableActions = ({
                         />
                     ) : createRoute ? (
                         <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95">
-                            <Link href={route(createRoute)}>
+                            <Link href={createRouteUrl}>
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add {singularize(resourceType)}
                             </Link>

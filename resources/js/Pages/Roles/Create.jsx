@@ -1,11 +1,14 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm, Link } from "@inertiajs/react";
+import { useForm, Link, usePage } from "@inertiajs/react";
 import RoleForm from "./Form";
 import { Button } from "@/Components/ui/button";
 import { ArrowLeft, ShieldPlus } from "lucide-react";
 
 const Create = ({ permissions }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         permissions: [],
@@ -13,7 +16,7 @@ const Create = ({ permissions }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        post(route("roles.store"));
+        post(route("roles.store", { organization: organizationSlug }));
     };
 
     return (
@@ -21,7 +24,7 @@ const Create = ({ permissions }) => {
             <div className="flex items-center justify-between">
                 <div>
                     <Button variant="ghost" asChild className="pl-0 hover:bg-transparent -ml-2 mb-2 group">
-                        <Link href={route("roles.index")} className="flex items-center text-muted-foreground hover:text-foreground">
+                        <Link href={route("roles.index", { organization: organizationSlug })} className="flex items-center text-muted-foreground hover:text-foreground">
                             <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                             Back to Roles
                         </Link>

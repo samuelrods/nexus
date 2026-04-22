@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import {
     Dialog,
@@ -16,6 +16,9 @@ const AddResourceModal = ({
     ResourceForm,
     formData,
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const [openModal, setOpenModal] = useState(false);
     const { data, setData, post, processing, reset, errors } = useForm(
         Object.fromEntries(resourceInfo),
@@ -28,7 +31,7 @@ const AddResourceModal = ({
 
     function submit(e) {
         e.preventDefault();
-        post(route(storeRoute), {
+        post(route(storeRoute, { organization: organizationSlug }), {
             onSuccess: () => {
                 onCloseModal();
             },

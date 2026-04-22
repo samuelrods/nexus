@@ -1,6 +1,6 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { 
     Building2, 
@@ -42,11 +42,13 @@ const StatusBadge = ({ status }) => {
 };
 
 const Show = ({ deal }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("deals.destroy", deal.data.id), {
+        router.delete(route("deals.destroy", { organization: organizationSlug, deal: deal.data.id }), {
             onStart: () => setIsDeleting(true),
             onFinish: () => setIsDeleting(false),
         });
@@ -56,14 +58,14 @@ const Show = ({ deal }) => {
         <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("deals.index")} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                    <Link href={route("deals.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Deals
                     </Link>
                 </Button>
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>
-                        <Link href={route("deals.edit", deal.data.id)}>
+                        <Link href={route("deals.edit", { organization: organizationSlug, deal: deal.data.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>
@@ -142,7 +144,7 @@ const Show = ({ deal }) => {
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Linked Company</h3>
                                     {deal.data.company_id ? (
                                         <Link 
-                                            href={route('companies.show', deal.data.company_id)}
+                                            href={route('companies.show', { organization: organizationSlug, company: deal.data.company_id })}
                                             className="group flex items-center p-3 rounded-lg border border-border hover:border-blue-500 transition-colors"
                                         >
                                             <Building2 className="h-10 w-10 text-gray-400 group-hover:text-blue-500 mr-3" />
@@ -159,7 +161,7 @@ const Show = ({ deal }) => {
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Primary Contact</h3>
                                     {deal.data.contact_id ? (
                                         <Link 
-                                            href={route('contacts.show', deal.data.contact_id)}
+                                            href={route('contacts.show', { organization: organizationSlug, contact: deal.data.contact_id })}
                                             className="group flex items-center p-3 rounded-lg border border-border hover:border-blue-500 transition-colors"
                                         >
                                             <User className="h-10 w-10 text-gray-400 group-hover:text-blue-500 mr-3" />
@@ -178,7 +180,7 @@ const Show = ({ deal }) => {
                                 <div className="pt-6 border-t border-border">
                                     <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">Originating Lead</h3>
                                     <Link 
-                                        href={route('leads.show', deal.data.lead_id)}
+                                        href={route('leads.show', { organization: organizationSlug, lead: deal.data.lead_id })}
                                         className="group flex items-center p-3 rounded-lg border border-border hover:border-blue-500 transition-colors"
                                     >
                                         <Activity className="h-10 w-10 text-gray-400 group-hover:text-blue-500 mr-3" />

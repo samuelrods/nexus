@@ -1,9 +1,12 @@
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import DealForm from "./Form";
 
 const Edit = ({ deal }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
+
     const { data, setData, put, processing, errors } = useForm({
         name: deal.data.name,
         value: deal.data.value,
@@ -20,7 +23,7 @@ const Edit = ({ deal }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("deals.update", deal.data.id));
+        put(route("deals.update", { organization: organizationSlug, deal: deal.data.id }));
     };
 
     return (
