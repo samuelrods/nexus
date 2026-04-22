@@ -67,7 +67,10 @@ class OrganizationController extends Controller
         // $member->user->syncRoles($role->name);
 
 
-        return to_route('organizations.index')->with(['message' => 'Organization created successfully!', 'type' => 'success']);
+        session(['organization_id' => $organization->id]);
+        setPermissionsTeamId($organization->id);
+
+        return to_route('dashboard')->with(['message' => 'Organization created successfully!', 'type' => 'success']);
     }
 
     /**
@@ -87,6 +90,8 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, Organization $organization)
     {
+        $this->authorize('update', $organization);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'currency' => ['required', 'string', 'size:3'],
@@ -102,10 +107,14 @@ class OrganizationController extends Controller
      */
     public function destroy(Organization $organization)
     {
+        $this->authorize('delete', $organization);
+
         $organization->roles->each(function ($role) {
             $role->delete();
         });
         $organization->delete();
         session()->forget('organization_id');
+
+        return to_route('organizations.index')->with(['message' => 'Organization deleted successfully!', 'type' => 'success']);
     }
 }
