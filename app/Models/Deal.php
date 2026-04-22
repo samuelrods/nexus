@@ -25,7 +25,7 @@ class Deal extends Model
         'organization_id'
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function lead(): BelongsTo
     {

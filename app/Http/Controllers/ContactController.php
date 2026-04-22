@@ -23,7 +23,9 @@ class ContactController extends Controller
 
         $stats = [
             'total_contacts' => Contact::where('organization_id', $organizationId)->count(),
-            'new_this_month' => 0, // No created_at column in contacts table
+            'new_this_month' => Contact::where('organization_id', $organizationId)
+                ->where('created_at', '>=', now()->startOfMonth())
+                ->count(),
             'key_accounts' => Contact::where('organization_id', $organizationId)
                 ->has('deals')
                 ->count(),

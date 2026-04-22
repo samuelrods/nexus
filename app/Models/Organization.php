@@ -16,7 +16,7 @@ class Organization extends Model
 
     protected $fillable = ['name', 'user_id', 'created_at'];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function user(): BelongsTo
     {
