@@ -2,19 +2,9 @@ import Alert from "@/Shared/Alert";
 import { Head, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Components/ui/card";
-import { Label } from "@/Components/ui/label";
-import { Input } from "@/Components/ui/input";
 import { Badge } from "@/Components/ui/badge";
 import { Avatar, AvatarFallback } from "@/Components/ui/avatar";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter,
-} from "@/Components/ui/dialog";
-import { useState } from "react";
+import CreateOrganizationModal from "@/Components/CreateOrganizationModal";
 import { 
     MailOpen, 
     Building2, 
@@ -182,65 +172,6 @@ const InvitationItem = ({ invitation }) => {
     );
 };
 
-const CreateOrganizationModal = () => {
-    const [open, setOpen] = useState(false);
-    const [name, setName] = useState("");
-    const [processing, setProcessing] = useState(false);
-
-    const onSubmit = (e) => {
-        e.preventDefault();
-        setProcessing(true);
-        router.post(route("organizations.store"), { name }, {
-            onFinish: () => {
-                setProcessing(false);
-                setOpen(false);
-                setName("");
-            }
-        });
-    };
-
-    return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 group">
-                    <Plus className="mr-2 h-4 w-4 transition-transform group-hover:rotate-90" />
-                    Create Organization
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">New Organization</DialogTitle>
-                    <CardDescription>
-                        Create a new workspace for your team and deals.
-                    </CardDescription>
-                </DialogHeader>
-                <form onSubmit={onSubmit} className="space-y-6 pt-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="name" className="text-sm font-medium">Organization Name</Label>
-                        <Input
-                            id="name"
-                            placeholder="e.g. Acme Corp"
-                            autoComplete="off"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            className="h-11"
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button 
-                            type="submit" 
-                            className="w-full bg-blue-600 hover:bg-blue-700 h-11"
-                            disabled={processing || !name.trim()}
-                        >
-                            {processing ? "Creating..." : "Create Organization"}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
-    );
-};
 
 const Organizations = ({ memberships, invitations }) => {
     return (
