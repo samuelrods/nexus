@@ -4,6 +4,9 @@ import { Textarea } from "@/Components/ui/textarea";
 import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 import { Loader2 } from "lucide-react";
+import RelationshipSelector from "@/Shared/RelationshipSelector";
+import CompanyForm from "@/Pages/Companies/Form";
+import { usePage } from "@inertiajs/react";
 
 const ContactForm = ({
     data,
@@ -13,6 +16,8 @@ const ContactForm = ({
     processing,
     updating = false,
 }) => {
+    const { auth } = usePage().props;
+    const organizationSlug = auth.organization?.slug;
     return (
         <form
             onSubmit={onSubmit}
@@ -73,16 +78,33 @@ const ContactForm = ({
             </div>
 
             <div className="w-full space-y-1">
-                <Label htmlFor="organization_name">Organization Name</Label>
-                <Input
-                    id="organization_name"
-                    placeholder="Current Company/Org"
-                    value={data.organization_name || ""}
-                    onChange={(e) => setData("organization_name", e.target.value)}
-                    required
-                    className="bg-card"
+                <Label htmlFor="company_id">Company</Label>
+                <RelationshipSelector
+                    value={data.company_id}
+                    label={data.company_name}
+                    onChange={(val, lab) => {
+                        setData((prev) => ({
+                            ...prev,
+                            company_id: val,
+                            company_name: lab,
+                        }));
+                    }}
+                    resourceName="companies"
+                    apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                    ResourceForm={CompanyForm}
+                    resourceInfo={[
+                        ["name", ""],
+                        ["website", ""],
+                        ["industry", ""],
+                        ["description", ""],
+                        ["street_address", ""],
+                        ["city", ""],
+                        ["state", ""],
+                        ["zip_code", ""],
+                    ]}
+                    placeholder="Search or create company..."
                 />
-                <InputError message={errors.organization_name} />
+                <InputError message={errors.company_id} />
             </div>
 
             <div className="w-full space-y-1">

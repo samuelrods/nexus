@@ -12,7 +12,8 @@ const Create = ({ companies }) => {
         email: "",
         phone_number: "",
         job_title: "",
-        organization_name: "",
+        company_id: null,
+        company_name: "",
         description: "",
     });
 
