@@ -1,8 +1,9 @@
+import React from "react";
 import Layout from "@/Shared/Layout";
 import ActivitiesPieChart from "@/Shared/charts/ActivitiesPieChart";
 import DealsAreaChart from "@/Shared/charts/DealsAreaChart";
 import DealsPieChart from "@/Shared/charts/DealsPieChart";
-import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
+import { StatsCard } from "@/Shared/StatsGrid";
 import { Head, router, usePage, Link } from "@inertiajs/react";
 import {
     Select,
@@ -11,7 +12,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
-import { Button } from "@/Components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
 import { 
     ChevronDown, 
@@ -25,6 +25,19 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
 
+interface DashboardProps {
+    dealAreaChartData: any;
+    dealPieChartData: any;
+    activityPieChartData: any;
+    range: string | number;
+    teamMemberCount: number;
+    totalLeads: number;
+    totalContacts: number;
+    upcomingActivities: any[];
+    recentLeads: any[];
+    topDeals: any[];
+}
+
 const Dashboard = ({
     dealAreaChartData,
     dealPieChartData,
@@ -36,10 +49,10 @@ const Dashboard = ({
     upcomingActivities,
     recentLeads,
     topDeals,
-}) => {
+}: DashboardProps) => {
     const { auth } = usePage().props;
 
-    const handleRangeChange = (newRange) => {
+    const handleRangeChange = (newRange: string) => {
         router.get(route('dashboard', { organization: auth.organization.slug }), {
             range: newRange,
         }, {
@@ -96,7 +109,7 @@ const Dashboard = ({
                 />
                 <StatsCard 
                     title="Active Deals" 
-                    value={Object.values(dealPieChartData).reduce((a, b) => a + b, 0)} 
+                    value={Object.values(dealPieChartData).reduce((a: any, b: any) => a + b, 0)} 
                     icon={Target} 
                     color="blue"
                 />
@@ -114,7 +127,7 @@ const Dashboard = ({
                 />
                 <StatsCard 
                     title="Activities" 
-                    value={Object.values(activityPieChartData).reduce((a, b) => a + b, 0)} 
+                    value={Object.values(activityPieChartData).reduce((a: any, b: any) => a + b, 0)} 
                     icon={Calendar} 
                     color="red"
                 />
@@ -278,6 +291,6 @@ const Dashboard = ({
     );
 };
 
-Dashboard.layout = (page) => <Layout children={page} title="Dashboard" />;
+(Dashboard as any).layout = (page: React.ReactNode) => <Layout children={page} />;
 
 export default Dashboard;

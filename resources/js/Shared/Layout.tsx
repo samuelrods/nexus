@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { usePage } from "@inertiajs/react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Alert from "./Alert";
 import { cn } from "@/lib/utils";
 
-const Layout = ({ children }) => {
+interface LayoutProps {
+    children: React.ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const { auth } = usePage().props;
 

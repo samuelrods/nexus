@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import {
     DropdownMenu,
@@ -13,10 +14,14 @@ import { ModeToggle } from "@/Components/ModeToggle";
 import CreateOrganizationModal from "@/Components/CreateOrganizationModal";
 import { cn } from "@/lib/utils";
 
-const Navbar = ({ toggleSidebar }) => {
+interface NavbarProps {
+    toggleSidebar: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     const { auth } = usePage().props;
 
-    const handleOrganizationSelection = (organizationId) => {
+    const handleOrganizationSelection = (organizationId: number) => {
         router.put(route("users.organization"), {
             organization_id: organizationId,
         });
@@ -34,7 +39,16 @@ const Navbar = ({ toggleSidebar }) => {
                     >
                         <Menu className="h-6 w-6" />
                     </Button>
-                    <Link href={auth.organization ? route("dashboard", { organization: auth.organization.slug }) : route("organizations.index")} className="flex items-center">
+                    <Link
+                        href={
+                            auth.organization
+                                ? route("dashboard", {
+                                      organization: auth.organization.slug,
+                                  })
+                                : route("organizations.index")
+                        }
+                        className="flex items-center"
+                    >
                         <span className="self-center whitespace-nowrap text-xl font-bold text-blue-600 dark:text-blue-400">
                             Nexus
                         </span>
@@ -45,10 +59,14 @@ const Navbar = ({ toggleSidebar }) => {
                     {/* Organization Switcher */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" className="hidden sm:flex gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="hidden sm:flex gap-2"
+                            >
                                 <Building className="h-4 w-4" />
                                 <span>
-                                    {auth.organization?.name.length > 15
+                                    {auth.organization?.name && auth.organization.name.length > 15
                                         ? auth.organization.name.substring(0, 15) + "..."
                                         : auth.organization?.name || "Select Organization"}
                                 </span>
@@ -58,29 +76,45 @@ const Navbar = ({ toggleSidebar }) => {
                             <DropdownMenuLabel>Switch Organization</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <div className="max-h-[300px] overflow-y-auto">
-                                {auth.user?.memberships?.map((membership) => (
+                                {auth.user?.memberships?.map((membership: any) => (
                                     <DropdownMenuItem
                                         key={"navbar-" + membership.organization.id}
-                                        onClick={() => handleOrganizationSelection(membership.organization.id)}
+                                        onClick={() =>
+                                            handleOrganizationSelection(
+                                                membership.organization.id
+                                            )
+                                        }
                                         className="cursor-pointer"
                                     >
                                         <div className="flex items-center gap-2 w-full">
-                                            <div className={cn(
-                                                "w-2 h-2 rounded-full",
-                                                auth.organization?.id === membership.organization.id ? "bg-blue-600" : "bg-transparent"
-                                            )} />
-                                            <span className="truncate">{membership.organization.name}</span>
+                                            <div
+                                                className={cn(
+                                                    "w-2 h-2 rounded-full",
+                                                    auth.organization?.id ===
+                                                        membership.organization.id
+                                                        ? "bg-blue-600"
+                                                        : "bg-transparent"
+                                                )}
+                                            />
+                                            <span className="truncate">
+                                                {membership.organization.name}
+                                            </span>
                                         </div>
                                     </DropdownMenuItem>
                                 ))}
                             </div>
                             <DropdownMenuSeparator />
-                            <CreateOrganizationModal trigger={
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="cursor-pointer text-blue-600 focus:text-blue-600 focus:bg-blue-50 dark:focus:bg-blue-900/20">
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    <span>Create Organization</span>
-                                </DropdownMenuItem>
-                            } />
+                            <CreateOrganizationModal
+                                trigger={
+                                    <DropdownMenuItem
+                                        onSelect={(e) => e.preventDefault()}
+                                        className="cursor-pointer text-blue-600 focus:text-blue-600 focus:bg-blue-50 dark:focus:bg-blue-900/20"
+                                    >
+                                        <Plus className="h-4 w-4 mr-2" />
+                                        <span>Create Organization</span>
+                                    </DropdownMenuItem>
+                                }
+                            />
                             <DropdownMenuItem asChild>
                                 <Link href="/organizations" className="cursor-pointer">
                                     <Menu className="h-4 w-4 mr-2" />
@@ -95,20 +129,37 @@ const Navbar = ({ toggleSidebar }) => {
                     {/* User Profile Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-full">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="rounded-full"
+                            >
                                 <UserCircle className="h-8 w-8 text-muted-foreground" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel>
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-semibold text-foreground">{auth.user?.full_name}</span>
-                                    <span className="text-xs text-muted-foreground truncate">{auth.user?.email}</span>
+                                    <span className="text-sm font-semibold text-foreground">
+                                        {auth.user?.full_name}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground truncate">
+                                        {auth.user?.email}
+                                    </span>
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link href={auth.organization ? route("dashboard", { organization: auth.organization.slug }) : route("organizations.index")} className="cursor-pointer flex items-center">
+                                <Link
+                                    href={
+                                        auth.organization
+                                            ? route("dashboard", {
+                                                  organization: auth.organization.slug,
+                                              })
+                                            : route("organizations.index")
+                                    }
+                                    className="cursor-pointer flex items-center"
+                                >
                                     <LayoutDashboard className="h-4 w-4 mr-2" />
                                     Dashboard
                                 </Link>

@@ -12,7 +12,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
-import debounce from "lodash/debounce";
+
+// Custom debounce function to remove lodash dependency
+const debounce = (fn: Function, ms: number) => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    return function (this: any, ...args: any[]) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn.apply(this, args), ms);
+    };
+};
 
 const TableActions = ({
     searchRoute,
@@ -24,14 +32,14 @@ const TableActions = ({
     formData,
     filters = {},
     filterOptions = [],
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
     const [searchValue, setSearchValue] = useState(filters.query || "");
 
     const debouncedSearch = useCallback(
-        debounce((query) => {
+        debounce((query: string) => {
             router.get(
                 route(searchRoute, { organization: organizationSlug }),
                 { ...filters, query: query || undefined, page: undefined },
@@ -47,7 +55,7 @@ const TableActions = ({
         }
     }, [searchValue]);
 
-    const handleFilterChange = (name, value) => {
+    const handleFilterChange = (name: string, value: string) => {
         router.get(
             route(searchRoute, { organization: organizationSlug }),
             { ...filters, [name]: value === "all" ? undefined : value, page: undefined },
@@ -81,7 +89,7 @@ const TableActions = ({
                         placeholder={"Search " + resourceType.toLowerCase() + "..."}
                         className="pl-10 bg-muted/50 border-border focus:ring-primary focus:border-primary block w-full text-foreground rounded-xl transition-all duration-200"
                         value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e: any) => setSearchValue(e.target.value)}
                     />
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -105,7 +113,7 @@ const TableActions = ({
                         />
                     ) : createRoute ? (
                         <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95">
-                            <Link href={createRouteUrl}>
+                            <Link href={createRouteUrl || "#"}>
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add {singularize(resourceType)}
                             </Link>
@@ -116,7 +124,7 @@ const TableActions = ({
 
             {filterOptions.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                    {filterOptions.map((filter) => (
+                    {filterOptions.map((filter: any) => (
                         <div key={filter.name} className="w-full sm:w-40">
                             <Select
                                 value={filters[filter.name] || "all"}
@@ -127,7 +135,7 @@ const TableActions = ({
                                 </SelectTrigger>
                                 <SelectContent className="bg-card border-border">
                                     <SelectItem value="all">{filter.allLabel || `All ${filter.label}`}</SelectItem>
-                                    {filter.options.map((option) => (
+                                    {filter.options.map((option: any) => (
                                         <SelectItem key={option.value} value={option.value}>
                                             {option.label}
                                         </SelectItem>

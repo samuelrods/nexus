@@ -4,10 +4,15 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react"
-import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { DayPicker, getDefaultClassNames, type DayPickerProps, type DayButtonProps, type WeekNumberProps } from "react-day-picker";
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/Components/ui/button"
+import { VariantProps } from "class-variance-authority";
+
+export type CalendarProps = DayPickerProps & {
+  buttonVariant?: VariantProps<typeof buttonVariants>["variant"]
+}
 
 function Calendar({
   className,
@@ -18,7 +23,7 @@ function Calendar({
   formatters,
   components,
   ...props
-}) {
+}: CalendarProps) {
   const defaultClassNames = getDefaultClassNames()
 
   return (
@@ -117,7 +122,7 @@ function Calendar({
           return (<ChevronDownIcon className={cn("size-4", className)} {...props} />);
         },
         DayButton: CalendarDayButton,
-        WeekNumber: ({ children, ...props }) => {
+        WeekNumber: ({ children, ...props }: WeekNumberProps) => {
           return (
             <td {...props}>
               <div
@@ -138,10 +143,10 @@ function CalendarDayButton({
   day,
   modifiers,
   ...props
-}) {
+}: DayButtonProps) {
   const defaultClassNames = getDefaultClassNames()
 
-  const ref = React.useRef(null)
+  const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
