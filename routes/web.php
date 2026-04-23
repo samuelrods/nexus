@@ -51,14 +51,15 @@ Route::middleware(['auth', 'check_organization'])->group(function () {
         Route::get('/api/companies-options', [CompanyController::class, 'getCompaniesOptions'])->name('companies.options');
         Route::get('/api/contacts-options', [ContactController::class, 'getContactsOptions'])->name('contacts.options');
         Route::get('/api/leads-options', [LeadController::class, 'getLeadsOptions'])->name('leads.options');
+        
+        Route::post('/invitations', [InvitationController::class, 'store'])->name('invitations.store');
     });
 
     Route::apiResource('organizations', OrganizationController::class)->withoutMiddleware('check_organization');
 
-    Route::controller(InvitationController::class)->group(function () {
-        Route::post('/invitations', 'store')->name('invitations.store');
-        Route::put('/invitations/{invitation}', 'update')->name('invitations.update');
-    })->withoutMiddleware('check_organization');
+    Route::put('/invitations/{invitation}', [InvitationController::class, 'update'])
+        ->name('invitations.update')
+        ->withoutMiddleware('check_organization');
 
     Route::put('/users/organization', [UserController::class, 'setOrganization'])
         ->name('users.organization')
