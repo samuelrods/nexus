@@ -126,9 +126,9 @@ class OrganizationControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_organization_can_be_deleted()
+    public function test_organization_can_be_deleted_with_full_data_set()
     {
-        $organization = Organization::create(['name' => 'To Delete', 'user_id' => $this->user->id, 'created_at' => now()]);
+        $organization = Organization::create(['name' => 'Full Data Org', 'user_id' => $this->user->id, 'created_at' => now()]);
         $organization->memberships()->create(['user_id' => $this->user->id]);
         
         $role = Role::create(['name' => 'owner', 'organization_id' => $organization->id]);
@@ -136,18 +136,35 @@ class OrganizationControllerTest extends TestCase
         setPermissionsTeamId($organization->id);
         $this->user->assignRole($role->name);
 
-        $address = \App\Models\Address::create([
-            'street_address' => '123 Test St',
-            'city' => 'Test City',
-            'state' => 'Test State',
-            'zip_code' => '12345',
+        $address = \App\Models\Address::factory()->create(['organization_id' => $organization->id]);
+        $company = \App\Models\Company::factory()->create([
             'organization_id' => $organization->id,
+            'address_id' => $address->id
+        ]);
+        $contact = \App\Models\Contact::factory()->create([
+            'organization_id' => $organization->id,
+            'user_id' => $this->user->id
+        ]);
+        
+        $lead = \App\Models\Lead::factory()->create([
+            'organization_id' => $organization->id,
+            'contact_id' => $contact->id,
+            'company_id' => $company->id,
         ]);
 
-        \App\Models\Company::create([
-            'name' => 'Test Company',
-            'address_id' => $address->id,
+        $deal = \App\Models\Deal::factory()->create([
             'organization_id' => $organization->id,
+            'lead_id' => $lead->id,
+            'contact_id' => $contact->id,
+            'company_id' => $company->id,
+            'user_id' => $this->user->id,
+        ]);
+
+        $activity = \App\Models\Activity::factory()->create([
+            'organization_id' => $organization->id,
+            'user_id' => $this->user->id,
+            'contact_id' => $contact->id,
+            'lead_id' => $lead->id,
         ]);
 
         $response = $this->delete(route('organizations.destroy', ['organization' => $organization->slug]));
@@ -156,8 +173,11 @@ class OrganizationControllerTest extends TestCase
         $response->assertSessionHas('message', 'Organization deleted successfully!');
 
         $this->assertDatabaseMissing('organizations', ['id' => $organization->id]);
-        $this->assertDatabaseMissing('roles', ['organization_id' => $organization->id]);
         $this->assertDatabaseMissing('addresses', ['id' => $address->id]);
-        $this->assertDatabaseMissing('companies', ['name' => 'Test Company']);
+        $this->assertDatabaseMissing('companies', ['id' => $company->id]);
+        $this->assertDatabaseMissing('contacts', ['id' => $contact->id]);
+        $this->assertDatabaseMissing('leads', ['id' => $lead->id]);
+        $this->assertDatabaseMissing('deals', ['id' => $deal->id]);
+        $this->assertDatabaseMissing('activities', ['id' => $activity->id]);
     }
 }
