@@ -60,10 +60,18 @@ services:
       MEILI_NO_ANALYTICS: 'true'
     restart: unless-stopped
 
-  # 5. Vite / Node (Optional - helps with HMR)
-  # We will just run npm run dev inside the 'app' container, 
-  # but we need to open the port here.
-  
+  # 5. Playwright E2E Testing
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container_name: nexus_playwright
+    volumes:
+      - ./:/var/www:z
+    working_dir: /var/www
+    networks:
+      - nexus-network
+    depends_on:
+      - nginx
+
 networks:
   nexus-network:
     driver: bridge
