@@ -20,11 +20,13 @@ import { cn } from "@/lib/utils";
 const SidebarItem = ({ href, icon: Icon, children, collapsed, isSubItem }) => {
     const { url } = usePage();
     const active = url.startsWith(href);
+    const testId = `sidebar-item-${String(children).toLowerCase().replace(/\s+/g, '-')}`;
 
     return (
         <li>
             <Link
                 href={href}
+                data-testid={testId}
                 className={cn(
                     "flex items-center p-2 text-foreground rounded-lg hover:bg-accent hover:text-accent-foreground group transition-colors",
                     active && "bg-accent text-accent-foreground",
@@ -48,6 +50,7 @@ const SidebarGroup = ({ title, icon: Icon, children, collapsed, activePaths = []
     const { url } = usePage();
     const isActive = activePaths.some(path => url.startsWith(path));
     const [isOpen, setIsOpen] = useState(isActive);
+    const testId = `sidebar-group-${title.toLowerCase().replace(/\s+/g, '-')}`;
 
     useEffect(() => {
         if (isActive && !collapsed) {
@@ -68,6 +71,7 @@ const SidebarGroup = ({ title, icon: Icon, children, collapsed, activePaths = []
             <button
                 type="button"
                 onClick={handleToggle}
+                data-testid={testId}
                 className={cn(
                     "flex items-center w-full p-2 text-base text-foreground transition duration-75 rounded-lg group hover:bg-accent hover:text-accent-foreground",
                     isActive && !isOpen && "bg-accent text-accent-foreground",
