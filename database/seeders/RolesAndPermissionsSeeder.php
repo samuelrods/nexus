@@ -8,6 +8,7 @@ use App\Enums\ContactPermissions;
 use App\Enums\DealPermissions;
 use App\Enums\LeadPermissions;
 use App\Enums\MemberPermissions;
+use App\Enums\OrganizationPermissions;
 use App\Enums\RolePermissions;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -50,6 +51,10 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         foreach (ActivityPermissions::toArray() as $permission) {
+            app(Permission::class)->findOrCreate($permission, 'web');
+        }
+
+        foreach (OrganizationPermissions::toArray() as $permission) {
             app(Permission::class)->findOrCreate($permission, 'web');
         }
     }

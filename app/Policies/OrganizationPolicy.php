@@ -64,16 +64,4 @@ class OrganizationPolicy
     {
         return false;
     }
-
-    /**
-     * Perform pre-authorization checks on the model.
-    */
-    public function before(User $user, string $ability): bool|null
-    {
-        if ($user->hasRole('owner')) {
-            return true;
-        }
-
-        return null;
-    }
 }
