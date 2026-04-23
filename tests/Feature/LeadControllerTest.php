@@ -7,61 +7,24 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Lead;
 use App\Models\Organization;
-use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
-use Illuminate\Support\Facades\URL;
+use Tests\Traits\SetupOrganization;
 
 class LeadControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-
-    protected $user;
-    protected $organization;
+    use SetupOrganization;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        // Create a user and organization
-        $user = User::factory()->create();
-        $organization = Organization::create(['name' => $this->faker->unique()->company, 'user_id' => $user->id, 'created_at' => now()]);
-
-        $organization->memberships()->create(['user_id' => $user->id]);
-        $role = Role::create(['name' => 'owner', 'organization_id' => $organization->id]);
-
-        // seed permissions
-        $this->seed(RolesAndPermissionsSeeder::class);
-        $role->syncPermissions(\App\Models\Permission::all());
-
-        // Set the user as the logged in user
-        $this->actingAs($user);
-
-        // Set the organization as the current organization
-        $this->session(['organization_id' => $organization->id]);
-
-        // Set the organization as the current team
-        setPermissionsTeamId($organization->id);
-
-        $user->assignRole($role->name);
-
-        // Set the organization as a default for URL generation
-        URL::defaults(['organization' => $organization->slug]);
-
-        // Set the previous URL
-        $this->from(route('leads.index', ['organization' => $organization->slug]));
-
-        // Clear the cached permissions
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-
-        // Create user and organization properties
-        $this->user = $user;
-        $this->organization = $organization;
+        $this->setupOrganization();
+        $this->from(route('leads.index', ['organization' => $this->organization->slug]));
     }
 
     public function test_index_method()

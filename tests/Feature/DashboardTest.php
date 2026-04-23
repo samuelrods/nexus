@@ -4,21 +4,22 @@ namespace Tests\Feature;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
+use Tests\Traits\SetupOrganization;
 
 class DashboardTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
+    use SetupOrganization;
 
     public function test_dashboard_can_be_rendered(): void
     {
-        $user = User::factory()->create();
-        $organization = Organization::factory()->create(['user_id' => $user->id]);
-        $organization->members()->attach($user->id);
+        $this->setupOrganization();
 
-        $response = $this->actingAs($user)
-            ->get(route('dashboard', ['organization' => $organization->slug]));
+        $response = $this->get(route('dashboard', ['organization' => $this->organization->slug]));
 
         $response->assertStatus(200);
         $response->assertInertia(fn (Assert $page) => $page
@@ -48,12 +49,11 @@ class DashboardTest extends TestCase
 
     public function test_dashboard_requires_organization_membership(): void
     {
-        $owner = User::factory()->create();
-        $user = User::factory()->create();
-        $organization = Organization::factory()->create(['user_id' => $owner->id]); // User is not a member
+        $this->setupOrganization();
+        $otherUser = User::factory()->create();
 
-        $response = $this->actingAs($user)
-            ->get(route('dashboard', ['organization' => $organization->slug]));
+        $response = $this->actingAs($otherUser)
+            ->get(route('dashboard', ['organization' => $this->organization->slug]));
 
         // Based on CheckOrganizations middleware, it should redirect to organizations.index
         $response->assertRedirect(route('organizations.index'));

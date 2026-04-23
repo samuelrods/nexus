@@ -2,45 +2,24 @@
 
 namespace Tests\Feature;
 
-use App\Models\Organization;
 use App\Models\OrganizationInvitation;
 use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use Illuminate\Support\Facades\URL;
+use Tests\Traits\SetupOrganization;
 
 class InvitationControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-
-    protected $user;
-    protected $organization;
+    use SetupOrganization;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        // Create a user and organization
-        $this->user = User::factory()->create();
-        $this->organization = Organization::create(['name' => 'Nexus Org', 'user_id' => $this->user->id, 'created_at' => now()]);
-        $this->organization->memberships()->create(['user_id' => $this->user->id]);
-        
-        $role = Role::create(['name' => 'owner', 'organization_id' => $this->organization->id]);
-        
-        // seed permissions
-        $this->seed(RolesAndPermissionsSeeder::class);
-
-        // Set the user as the logged in user
-        $this->actingAs($this->user);
-        
-        setPermissionsTeamId($this->organization->id);
-        $this->user->assignRole($role->name);
-        
-        URL::defaults(['organization' => $this->organization->slug]);
+        $this->setupOrganization();
     }
 
     public function test_can_invite_user_by_email()

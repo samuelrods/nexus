@@ -2,72 +2,43 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Http\Resources\RoleResource;
 use App\Models\Organization;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\URL;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
+use Tests\Traits\SetupOrganization;
 
 class RoleControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-
-    protected $user;
-    protected $organization;
+    use SetupOrganization;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        // seed permissions
-        $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
-
-        // Create a user and organization
-        $this->user = User::factory()->create();
-        $this->organization = Organization::create(['name' => $this->faker->unique()->company, 'user_id' => $this->user->id, 'created_at' => now()]);
-        $this->organization->memberships()->create(['user_id' => $this->user->id]);
-        $role = Role::create(['name' => 'owner', 'organization_id' => $this->organization->id]);
-        $role->syncPermissions(Permission::all());
-
-        // Set the user as the logged in user
-        $this->actingAs($this->user);
-
-        // Set the organization as the current organization
-        $this->session(['organization_id' => $this->organization->id]);
-
-        // Set the organization as the current team
-        setPermissionsTeamId($this->organization->id);
-
-        $this->user->assignRole($role->name);
-
-        // Set the organization as a default for URL generation
-        URL::defaults(['organization' => $this->organization->slug]);
-
-        // Set the previous URL
+        $this->setupOrganization();
         $this->from(route('roles.index', ['organization' => $this->organization->slug]));
-
-        // Clear the cached permissions
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
     public function test_roles_can_be_listed(): void
     {
+        $organization = $this->organization;
+
         // Create roles
-        $roles = Role::factory()->count(3)->create();
+        Role::factory()->count(3)->create(['organization_id' => $organization->id]);
 
         // Make the index request
-        $response = $this->get(route('roles.index', ['organization' => $this->organization->slug]));
+        $response = $this->get(route('roles.index', ['organization' => $organization->slug]));
 
         // Assert the response status is 200 (OK)
         $response->assertStatus(200);
 
-        // Assert the fetched roles match the created roles
+        // Assert the fetched roles match the created roles (3 created + 1 owner)
         $response->assertInertia(fn(Assert $page) => $page->component('Roles/Index')
             ->has('pagination.data', 4)
             ->has('permissions')
@@ -76,8 +47,8 @@ class RoleControllerTest extends TestCase
 
     public function test_role_can_be_created_with_valid_data(): void
     {
-        // Create permissions
-        $permissions = Permission::factory()->count(3)->create();
+        // Get some existing permissions
+        $permissions = Permission::limit(3)->get();
 
         // Make the create request
         $data = [
@@ -95,10 +66,11 @@ class RoleControllerTest extends TestCase
         // Assert the role has the correct name
         $this->assertDatabaseHas('roles', [
             'name' => $data['name'],
+            'organization_id' => $this->organization->id,
         ]);
 
         // Assert the role has the correct permissions
-        $role = Role::where('name', $data['name'])->first();
+        $role = Role::where('name', $data['name'])->where('organization_id', $this->organization->id)->first();
         $this->assertCount(count($data['permissions']), $role->permissions);
         $this->assertTrue($role->permissions->pluck('id')->contains($permissions->first()->id));
     }
@@ -114,8 +86,8 @@ class RoleControllerTest extends TestCase
 
     public function test_role_can_be_updated_with_valid_data(): void
     {
-        // Create permissions
-        $permissions = Permission::factory()->count(3)->create();
+        // Get some existing permissions
+        $permissions = Permission::limit(3)->get();
 
         // Create a role
         $role = Role::factory()->create(['organization_id' => $this->organization->id]);
@@ -138,6 +110,7 @@ class RoleControllerTest extends TestCase
 
         // Assert the role has the new name
         $this->assertDatabaseHas('roles', [
+            'id' => $role->id,
             'name' => $data['name'],
         ]);
 
@@ -188,8 +161,6 @@ class RoleControllerTest extends TestCase
         $response = $this->delete(route('roles.destroy', ['organization' => $this->organization->slug, 'role' => $role]));
 
         $response->assertStatus(403);
-        // Policy returns false for owner, so 403 is expected.
-        // The controller's nice message is unreachable if the policy blocks it.
 
         $this->assertDatabaseHas('roles', ['id' => $role->id]);
     }
@@ -204,7 +175,6 @@ class RoleControllerTest extends TestCase
         ]);
 
         $response->assertStatus(403);
-        // Policy returns false for owner
 
         $this->assertEquals('owner', $role->fresh()->name);
     }
