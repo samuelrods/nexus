@@ -14,7 +14,9 @@ use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 class ContactControllerTest extends TestCase
 {
@@ -48,8 +50,11 @@ class ContactControllerTest extends TestCase
 
         $user->assignRole($role->name);
 
+        // Set the organization as a default for URL generation
+        URL::defaults(['organization' => $organization->slug]);
+
         // Set the previous URL
-        $this->from(route('contacts.index'));
+        $this->from(route('contacts.index', ['organization' => $organization->slug]));
 
         // Clear the cached permissions
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
@@ -66,13 +71,16 @@ class ContactControllerTest extends TestCase
 
         $contacts = Contact::factory()->count(15)->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
 
-        $response = $this->get('/contacts');
+        $response = $this->get(route('contacts.index', ['organization' => $organization->slug]));
 
         $response->assertStatus(200);
 
         // assert the fetched contacts match the created contacts
-        $response->assertInertia(fn($page) => $page->component('Contacts')
-            ->has('pagination.data', 10));
+        $response->assertInertia(fn(Assert $page) => $page->component('Contacts/Index')
+            ->has('pagination.data', 10)
+            ->has('stats')
+            ->has('filters')
+        );
     }
 
     public function test_member_can_see_contacts_with_permissions(): void
@@ -89,13 +97,16 @@ class ContactControllerTest extends TestCase
 
         $contacts = Contact::factory()->count(15)->create(['organization_id' => $organization->id, 'user_id' => $member->id]);
 
-        $response = $this->actingAs($member)->get('/contacts');
+        $response = $this->actingAs($member)->get(route('contacts.index', ['organization' => $organization->slug]));
 
         $response->assertStatus(200);
 
         // assert the fetched contacts match the created contacts
-        $response->assertInertia(fn($page) => $page->component('Contacts')
-            ->has('pagination.data', 10));
+        $response->assertInertia(fn(Assert $page) => $page->component('Contacts/Index')
+            ->has('pagination.data', 10)
+            ->has('stats')
+            ->has('filters')
+        );
     }
 
     public function test_member_cannot_see_contacts_without_permission(): void
@@ -106,7 +117,7 @@ class ContactControllerTest extends TestCase
         $member = User::factory()->create();
         $organization->memberships()->create(['user_id' => $member->id]);
 
-        $response = $this->actingAs($member)->get('/contacts');
+        $response = $this->actingAs($member)->get(route('contacts.index', ['organization' => $organization->slug]));
 
         $response->assertStatus(403);
     }
@@ -129,12 +140,12 @@ class ContactControllerTest extends TestCase
             'description' => 'Lorem ipsum dolor sit amet.',
         ];
 
-        $response = $this->post(route('contacts.store'), $data);
+        $response = $this->post(route('contacts.store', ['organization' => $organization->slug]), $data);
 
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect();
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('message', 'Contact created.');
+        $response->assertSessionHas('message', 'Contact created successfully!');
         $response->assertSessionHas('type', 'success');
 
         $this->assertDatabaseHas('contacts', [
@@ -161,7 +172,7 @@ class ContactControllerTest extends TestCase
             'description' => 'Lorem ipsum dolor sit amet.',
         ];
 
-        $response = $this->post('/contacts', $data);
+        $response = $this->post(route('contacts.store', ['organization' => $this->organization->slug]), $data);
 
         $response->assertSessionHasErrors(['email']);
     }
@@ -190,12 +201,12 @@ class ContactControllerTest extends TestCase
 
         $this->actingAs($member);
 
-        $response = $this->post(route('contacts.store'), $data);
+        $response = $this->post(route('contacts.store', ['organization' => $organization->slug]), $data);
 
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect();
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('message', 'Contact created.');
+        $response->assertSessionHas('message', 'Contact created successfully!');
         $response->assertSessionHas('type', 'success');
 
         $this->assertDatabaseHas('contacts', [
@@ -225,13 +236,13 @@ class ContactControllerTest extends TestCase
         ];
 
         // act
-        $response = $this->put(route('contacts.update', $contact->id), $data);
+        $response = $this->put(route('contacts.update', ['organization' => $organization->slug, 'contact' => $contact->id]), $data);
 
         // assert
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect();
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('message', 'Contact updated.');
+        $response->assertSessionHas('message', 'Contact updated successfully!');
         $response->assertSessionHas('type', 'success');
 
         $this->assertDatabaseHas('contacts', [
@@ -240,7 +251,7 @@ class ContactControllerTest extends TestCase
         ]);
     }
 
-    public function test_contact_cannot_be_updated_with_valid_data_by_owner(): void
+    public function test_contact_cannot_be_updated_with_invalid_data_by_owner(): void
     {
         // arrange
         $user = $this->user;
@@ -253,7 +264,7 @@ class ContactControllerTest extends TestCase
         ];
 
         // act
-        $response = $this->put(route('contacts.update', $contact->id), $data);
+        $response = $this->put(route('contacts.update', ['organization' => $organization->slug, 'contact' => $contact->id]), $data);
 
         // assert
         $response->assertSessionHasErrors(['email']);
@@ -299,15 +310,15 @@ class ContactControllerTest extends TestCase
         /**
          * ACT
          */
-        $response = $this->put(route('contacts.update', $contact->id), $data);
+        $response = $this->put(route('contacts.update', ['organization' => $organization->slug, 'contact' => $contact->id]), $data);
 
         /**
          * ASSERT
          */
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect();
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('message', 'Contact updated.');
+        $response->assertSessionHas('message', 'Contact updated successfully!');
         $response->assertSessionHas('type', 'success');
 
         $this->assertDatabaseHas('contacts', [
@@ -336,7 +347,7 @@ class ContactControllerTest extends TestCase
         $this->actingAs($member);
 
         // act
-        $response = $this->put(route('contacts.update', $contact->id), $data);
+        $response = $this->put(route('contacts.update', ['organization' => $organization->slug, 'contact' => $contact->id]), $data);
 
         // assert
         $response->assertStatus(403);
@@ -351,13 +362,13 @@ class ContactControllerTest extends TestCase
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
 
         // act
-        $response = $this->delete(route('contacts.destroy', $contact->id));
+        $response = $this->delete(route('contacts.destroy', ['organization' => $organization->slug, 'contact' => $contact->id]));
 
         // assert
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect(route('contacts.index', ['organization' => $organization->slug]));
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('message', 'Contact deleted.');
+        $response->assertSessionHas('message', 'Contact deleted successfully!');
         $response->assertSessionHas('type', 'success');
 
         $this->assertDatabaseMissing('contacts', [
@@ -383,13 +394,13 @@ class ContactControllerTest extends TestCase
         $this->actingAs($member);
 
         // act
-        $response = $this->delete(route('contacts.destroy', $contact->id));
+        $response = $this->delete(route('contacts.destroy', ['organization' => $organization->slug, 'contact' => $contact->id]));
 
         // assert
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect(route('contacts.index', ['organization' => $organization->slug]));
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('message', 'Contact deleted.');
+        $response->assertSessionHas('message', 'Contact deleted successfully!');
         $response->assertSessionHas('type', 'success');
 
         $this->assertDatabaseMissing('contacts', [
@@ -411,7 +422,7 @@ class ContactControllerTest extends TestCase
         $this->actingAs($member);
 
         // act
-        $response = $this->delete(route('contacts.destroy', $contact->id));
+        $response = $this->delete(route('contacts.destroy', ['organization' => $organization->slug, 'contact' => $contact->id]));
 
         // assert
         $response->assertStatus(403);
@@ -437,11 +448,11 @@ class ContactControllerTest extends TestCase
         ]);
 
         // act
-        $response = $this->delete(route('contacts.destroy', $contact->id));
+        $response = $this->delete(route('contacts.destroy', ['organization' => $organization->slug, 'contact' => $contact->id]));
 
         // assert
         $response->assertStatus(302);
-        $response->assertRedirect(route('contacts.index'));
+        $response->assertRedirect(route('contacts.index', ['organization' => $organization->slug]));
         $response->assertSessionHas('message', 'Contact has leads and cannot be deleted.');
         $response->assertSessionHas('type', 'failure');
 

@@ -15,10 +15,11 @@ use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
-trait CreatesApplicationData
+trait CreatesActivityTestData
 {
     protected function createApplicationData($organization, $user, $num = 1)
     {
@@ -39,14 +40,14 @@ trait CreatesApplicationData
         $activities = collect();
 
         $leads->each(function (Lead $lead, $index) use ($organization, $contacts, $companies, $activities, $user) {
-            $deal = Activity::factory()->create([
+            $activity = Activity::factory()->create([
                 'user_id' => $user->id,
                 'contact_id' => $contacts[$index]->id,
                 'lead_id' => $lead->id,
                 'organization_id' => $organization->id,
             ]);
 
-            $activities->push($deal);
+            $activities->push($activity);
         });
 
         return compact('companies', 'contacts', 'leads', 'activities');
@@ -57,7 +58,7 @@ class ActivityControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-    use CreatesApplicationData;
+    use CreatesActivityTestData;
 
     protected $user;
     protected $organization;
@@ -87,8 +88,11 @@ class ActivityControllerTest extends TestCase
 
         $user->assignRole($role->name);
 
+        // Set the organization as a default for URL generation
+        URL::defaults(['organization' => $organization->slug]);
+
         // Set the previous URL
-        $this->from(route('activities.index'));
+        $this->from(route('activities.index', ['organization' => $organization->slug]));
 
         // Clear the cached permissions
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
@@ -110,18 +114,16 @@ class ActivityControllerTest extends TestCase
         $activities = $data['activities'];
 
         // Make a GET request to the index method
-        $response = $this->get(route('activities.index'));
+        $response = $this->get(route('activities.index', ['organization' => $organization->slug]));
 
         // Assert that the response has a successful status code
         $response->assertStatus(200);
 
         // Assert that the response has the expected data
         $response->assertInertia(
-            fn($page) => $page->component('Activities')
-            ->has(
-                'pagination.data',
-                $activities->count()
-            )
+            fn(Assert $page) => $page->component('Activities/Index')
+            ->has('pagination.data', $activities->count())
+            ->has('filters')
         );
     }
 
@@ -146,15 +148,16 @@ class ActivityControllerTest extends TestCase
             'lead_id' => $lead->id,
             'type' => $this->faker->randomElement(['call', 'email', 'meeting', 'other']),
             'date' => $this->faker->date(),
-            'time' => $this->faker->time(),
+            'time' => $this->faker->time('H:i:s'),
             'description' => $this->faker->sentence(),
         ];
 
         // Make a POST request to the store method
-        $response = $this->post(route('activities.store'), $data);
+        $response = $this->post(route('activities.store', ['organization' => $organization->slug]), $data);
 
         // Assert that the response has a successful status code
         $response->assertRedirect();
+        $response->assertSessionHas('message', 'Activity created successfully!');
 
         // Assert that the activity was created in the database
         $this->assertDatabaseHas('activities', $data + ['user_id' => $user->id, 'organization_id' => $organization->id]);
@@ -175,15 +178,16 @@ class ActivityControllerTest extends TestCase
         $data = [
             'type' => $this->faker->randomElement(['call', 'email', 'meeting', 'other']),
             'date' => $this->faker->date(),
-            'time' => $this->faker->time(),
+            'time' => $this->faker->time('H:i:s'),
             'description' => $this->faker->sentence(),
         ];
 
         // Make a PUT request to the update method
-        $response = $this->put(route('activities.update', $activity), $data);
+        $response = $this->put(route('activities.update', ['organization' => $organization->slug, 'activity' => $activity->id]), $data);
 
         // Assert that the response has a successful status code
         $response->assertRedirect();
+        $response->assertSessionHas('message', 'Activity updated successfully!');
 
         // Assert that the activity was updated in the database
         $this->assertDatabaseHas('activities', $data + ['id' => $activity->id]);
@@ -201,10 +205,11 @@ class ActivityControllerTest extends TestCase
         $activity = $data['activities'][0];
 
         // Make a DELETE request to the destroy method
-        $response = $this->delete(route('activities.destroy', $activity));
+        $response = $this->delete(route('activities.destroy', ['organization' => $organization->slug, 'activity' => $activity->id]));
 
         // Assert that the response has a successful status code
         $response->assertRedirect();
+        $response->assertSessionHas('message', 'Activity deleted successfully!');
 
         // Assert that the activity was deleted from the database
         $this->assertDatabaseMissing('activities', ['id' => $activity->id]);

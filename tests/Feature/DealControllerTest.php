@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Http\Controllers\DealController;
 use App\Models\Address;
@@ -15,8 +15,9 @@ use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 trait CreatesApplicationData
 {
@@ -88,8 +89,11 @@ class DealControllerTest extends TestCase
 
         $user->assignRole($role->name);
 
+        // Set the organization as a default for URL generation
+        URL::defaults(['organization' => $organization->slug]);
+
         // Set the previous URL
-        $this->from(route('deals.index'));
+        $this->from(route('deals.index', ['organization' => $organization->slug]));
 
         // Clear the cached permissions
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
@@ -110,14 +114,16 @@ class DealControllerTest extends TestCase
         $data = $this->createApplicationData($organization, $user, 3);
 
         // act
-        $response = $this->get(route('deals.index'));
+        $response = $this->get(route('deals.index', ['organization' => $organization->slug]));
 
         // assert
         $response->assertStatus(200)
             ->assertInertia(
-                fn($page) => $page
-                ->component('Deals')
-                ->has('pagination', $data['deals']->count())
+                fn(Assert $page) => $page
+                ->component('Deals/Index')
+                ->has('pagination.data', $data['deals']->count())
+                ->has('stats')
+                ->has('filters')
             );
     }
 
@@ -144,7 +150,7 @@ class DealControllerTest extends TestCase
             'description' => 'Test description',
         ];
 
-        $response = $this->post(route('deals.store'), $data);
+        $response = $this->post(route('deals.store', ['organization' => $organization->slug]), $data);
 
         $response->assertRedirect()
             ->assertSessionHas('message', 'Deal created successfully!')
@@ -168,7 +174,7 @@ class DealControllerTest extends TestCase
             'value' => 200,
         ];
 
-        $response = $this->put(route('deals.update', $deal), $newData);
+        $response = $this->put(route('deals.update', ['organization' => $organization->slug, 'deal' => $deal]), $newData);
 
         $response->assertRedirect()
             ->assertSessionHas('message', 'Deal updated successfully!')
@@ -187,7 +193,7 @@ class DealControllerTest extends TestCase
         $data = $this->createApplicationData($organization, $user);
         $deal = $data['deals'][0];
 
-        $response = $this->delete(route('deals.destroy', $deal));
+        $response = $this->delete(route('deals.destroy', ['organization' => $organization->slug, 'deal' => $deal]));
 
         $response->assertRedirect()
             ->assertSessionHas('message', 'Deal deleted successfully!')

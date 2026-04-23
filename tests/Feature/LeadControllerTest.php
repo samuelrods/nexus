@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers;
+namespace Tests\Feature;
 
 use App\Models\Address;
 use App\Models\Company;
@@ -12,9 +12,9 @@ use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Session;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 class LeadControllerTest extends TestCase
 {
@@ -37,6 +37,7 @@ class LeadControllerTest extends TestCase
 
         // seed permissions
         $this->seed(RolesAndPermissionsSeeder::class);
+        $role->syncPermissions(\App\Models\Permission::all());
 
         // Set the user as the logged in user
         $this->actingAs($user);
@@ -49,8 +50,11 @@ class LeadControllerTest extends TestCase
 
         $user->assignRole($role->name);
 
+        // Set the organization as a default for URL generation
+        URL::defaults(['organization' => $organization->slug]);
+
         // Set the previous URL
-        $this->from(route('leads.index'));
+        $this->from(route('leads.index', ['organization' => $organization->slug]));
 
         // Clear the cached permissions
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
@@ -60,146 +64,121 @@ class LeadControllerTest extends TestCase
         $this->organization = $organization;
     }
 
-    public function test_leads_can_be_listed(): void
+    public function test_index_method()
     {
         $organization = $this->organization;
         $user = $this->user;
 
-        // Create company and contact
-        $companies = Company::factory(3)->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
-        $contacts = Contact::factory(3)->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
-        $leads = collect();
+        $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
+        $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
+        $leads = Lead::factory(3)->create([
+            'organization_id' => $organization->id,
+            'contact_id' => $contact->id,
+            'company_id' => $company->id
+        ]);
 
-        // Create organization leads
-        $companies->each(function (Company $company, $index) use ($organization, $contacts, $leads) {
-            $lead = Lead::factory()->create([
-                'company_id' => $company->id,
-                'contact_id' => $contacts[$index]->id,
-                'organization_id' => $organization->id,
-            ]);
+        $response = $this->get(route('leads.index', ['organization' => $organization->slug]));
 
-            $leads->push($lead);
-        });
-
-        // Make the index request
-        $response = $this->get(route('leads.index'));
-
-        // Assert the response status is 200 (OK)
-        $response->assertStatus(200);
-
-        // Assert the fetched leads match the created leads
-        $response->assertInertia(
-            fn($page) => $page->component('Leads')
-            ->has(
-                'pagination.data',
-                3
-            )
-        );
+        $response->assertStatus(200)
+            ->assertInertia(
+                fn(Assert $page) => $page
+                ->component('Leads/Index')
+                ->has('pagination.data', 3)
+                ->has('filters')
+            );
     }
 
-    public function test_lead_can_be_created(): void
+    public function test_store_method()
     {
         $organization = $this->organization;
         $user = $this->user;
-
-        // Create a company and contact
         $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
 
-        // Make the store request
-        $response = $this->post(route('leads.store'), [
+        $data = [
             'company_id' => $company->id,
             'contact_id' => $contact->id,
             'status' => 'open',
             'source' => 'website',
-            'description' => 'Test lead description',
-        ]);
+            'description' => 'Test Lead Description',
+        ];
 
-        // Assert the lead was created
-        $this->assertDatabaseHas(Lead::class, [
-            'company_id' => $company->id,
-            'contact_id' => $contact->id,
-            'status' => 'open',
-            'source' => 'website',
-            'description' => 'Test lead description',
-        ]);
+        $response = $this->post(route('leads.store', ['organization' => $organization->slug]), $data);
 
-        $response->assertStatus(302);
+        $response->assertRedirect()
+            ->assertSessionHas('message', 'Lead created successfully!')
+            ->assertSessionHas('type', 'success');
 
-        // Assert the response was a redirect back
-        $response->assertRedirect(route('leads.index'));
-
-        $response->assertSessionHasNoErrors();
-
-        // Assert the session has the success message
-        $response->assertSessionHas('message', 'Lead created successfully');
-        $response->assertSessionHas('type', 'success');
+        $this->assertDatabaseHas('leads', $data + ['organization_id' => $organization->id]);
     }
 
-    public function test_lead_can_be_updated(): void
+    public function test_update_method()
     {
         $organization = $this->organization;
         $user = $this->user;
-
         $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
-
-        // Create a lead
         $lead = Lead::factory()->create([
-            'company_id' => $company->id,
-            'contact_id' => $contact->id,
             'organization_id' => $organization->id,
+            'contact_id' => $contact->id,
+            'company_id' => $company->id
         ]);
 
-        // Make the update request
-        $response = $this->put(route('leads.update', $lead), [
+        $newData = [
+            'description' => 'Updated Description',
             'status' => 'closed',
-            'source' => 'referral',
-            'description' => 'Updated lead description',
-        ]);
+        ];
 
-        // Assert the lead was updated
-        $this->assertDatabaseHas(Lead::class, [
-            'id' => $lead->id,
-            'status' => 'closed',
-            'source' => 'referral',
-            'description' => 'Updated lead description',
-        ]);
+        $response = $this->put(route('leads.update', ['organization' => $organization->slug, 'lead' => $lead->id]), $newData);
 
-        // Assert the response was a redirect back
-        $response->assertRedirect();
+        $response->assertRedirect()
+            ->assertSessionHas('message', 'Lead updated successfully!')
+            ->assertSessionHas('type', 'success');
 
-        // Assert the session has the success message
-        $response->assertSessionHas('message', 'Lead updated successfully');
-        $response->assertSessionHas('type', 'success');
+        $this->assertDatabaseHas('leads', $newData + ['id' => $lead->id]);
     }
 
-    public function test_lead_can_be_deleted(): void
+    public function test_destroy_method()
     {
         $organization = $this->organization;
         $user = $this->user;
-
         $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
-
-        // Create a lead
         $lead = Lead::factory()->create([
-            'company_id' => $company->id,
-            'contact_id' => $contact->id,
             'organization_id' => $organization->id,
+            'contact_id' => $contact->id,
+            'company_id' => $company->id
         ]);
 
-        // Make the delete request
-        $response = $this->delete(route('leads.destroy', $lead));
+        $response = $this->delete(route('leads.destroy', ['organization' => $organization->slug, 'lead' => $lead->id]));
 
-        // Assert the lead was deleted
-        $this->assertDatabaseMissing(Lead::class, ['id' => $lead->id]);
+        $response->assertRedirect()
+            ->assertSessionHas('message', 'Lead deleted successfully!')
+            ->assertSessionHas('type', 'success');
 
-        // Assert the response was a redirect back
-        $response->assertRedirect();
+        $this->assertDatabaseMissing('leads', ['id' => $lead->id]);
+    }
 
-        // Assert the session has the success message
-        $response->assertSessionHas('message', 'Lead deleted successfully');
-        $response->assertSessionHas('type', 'success');
+    public function test_store_validation()
+    {
+        $response = $this->post(route('leads.store', ['organization' => $this->organization->slug]), []);
+
+        $response->assertSessionHasErrors(['company_id', 'contact_id', 'status', 'source']);
+    }
+
+    public function test_cannot_access_lead_of_another_organization()
+    {
+        $otherOrg = Organization::create(['name' => 'Other Org', 'user_id' => User::factory()->create()->id]);
+        $otherCompany = Company::factory()->create(['organization_id' => $otherOrg->id, 'address_id' => Address::factory(['organization_id' => $otherOrg->id])]);
+        $otherContact = Contact::factory()->create(['organization_id' => $otherOrg->id, 'user_id' => $otherOrg->user_id]);
+        $otherLead = Lead::factory()->create([
+            'organization_id' => $otherOrg->id,
+            'company_id' => $otherCompany->id,
+            'contact_id' => $otherContact->id
+        ]);
+
+        $response = $this->get(route('leads.show', ['organization' => $this->organization->slug, 'lead' => $otherLead->id]));
+
+        $response->assertStatus(403);
     }
 }

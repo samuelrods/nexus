@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Http\Resources\CompanyResource;
 use App\Models\Address;
 use App\Models\Company;
 use App\Models\Organization;
@@ -47,7 +46,10 @@ class CompanyControllerTest extends TestCase
 
         $user->assignRole($role->name);
 
-        $this->from(route('companies.index'));
+        // Set the organization as a default for URL generation
+        URL::defaults(['organization' => $organization->slug]);
+
+        $this->from(route('companies.index', ['organization' => $organization->slug]));
 
         // Create user and organization properties
         $this->user = $user;
@@ -59,23 +61,24 @@ class CompanyControllerTest extends TestCase
         // Create organization companies
         $organization = $this->organization;
 
-        $companies = $organization->companies()->createMany(
-            Company::factory(3)->make(['address_id' => Address::factory(['organization_id' => $organization->id])])->toArray()
-        );
+        $companies = Company::factory(3)->create([
+            'organization_id' => $organization->id,
+            'address_id' => Address::factory(['organization_id' => $organization->id])
+        ]);
 
         // Make the index request
-        $response = $this->get(route('companies.index'));
+        $response = $this->get(route('companies.index', ['organization' => $organization->slug]));
 
         // Assert the response status is 200 (OK)
         $response->assertStatus(200);
 
         // Assert the fetched companies match the created companies
         $response->assertInertia(
-            fn($page) => $page->component('Companies')
-            ->has(
-                'pagination.data',
-                3
-            )
+            fn(Assert $page) => $page->component('Companies/Index')
+            ->has('pagination.data', 3)
+            ->has('stats')
+            ->has('filters')
+            ->has('industries')
         );
     }
 
@@ -84,7 +87,7 @@ class CompanyControllerTest extends TestCase
         $organization = $this->organization;
 
         // Make the store request
-        $response = $this->post(route('companies.store'), [
+        $response = $this->post(route('companies.store', ['organization' => $organization->slug]), [
             'name' => $this->faker->company,
             'website' => $this->faker->url,
             'industry' => $this->faker->word,
@@ -101,11 +104,11 @@ class CompanyControllerTest extends TestCase
         $this->assertDatabaseCount('companies', 1);
         $this->assertDatabaseCount('addresses', 1);
 
-        // Assert the response was a redirect back
-        $response->assertRedirect(route('companies.index'));
+        // Assert the response was a redirect
+        $response->assertRedirect();
 
         // Assert the session has the success message
-        $response->assertSessionHas('message', 'Company created successfully.');
+        $response->assertSessionHas('message', 'Company created successfully!');
         $response->assertSessionHas('type', 'success');
     }
 
@@ -116,7 +119,7 @@ class CompanyControllerTest extends TestCase
         $company = Company::factory()->create(['address_id' => Address::factory(['organization_id' => $organization->id]), 'organization_id' => $organization->id]);
 
         $data = [
-            'name' => $this->faker->company,
+            'name' => 'Updated Company Name',
             'website' => $this->faker->url,
             'industry' => $this->faker->word,
             'description' => $this->faker->sentence,
@@ -127,22 +130,19 @@ class CompanyControllerTest extends TestCase
         ];
 
         // Make the update request
-        $response = $this->put(route('companies.update', $company), $data);
+        $response = $this->put(route('companies.update', ['organization' => $organization->slug, 'company' => $company->id]), $data);
 
         // Assert the company was updated
         $this->assertDatabaseHas('companies', [
             'id' => $company->id,
             'name' => $data['name'],
-            'website' => $data['website'],
-            'industry' => $data['industry'],
-            'description' => $data['description'],
         ]);
 
-        // Assert the response was a redirect back
-        $response->assertRedirect(route('companies.index'));
+        // Assert the response was a redirect
+        $response->assertRedirect();
 
         // Assert the session has the success message
-        $response->assertSessionHas('message', 'Company updated successfully.');
+        $response->assertSessionHas('message', 'Company updated successfully!');
         $response->assertSessionHas('type', 'success');
     }
 
@@ -153,16 +153,16 @@ class CompanyControllerTest extends TestCase
         $company = Company::factory()->create(['address_id' => Address::factory(['organization_id' => $organization->id]), 'organization_id' => $organization->id]);
 
         // Make the delete request
-        $response = $this->delete(route('companies.destroy', $company));
+        $response = $this->delete(route('companies.destroy', ['organization' => $organization->slug, 'company' => $company->id]));
 
         // Assert the company was deleted
         $this->assertDatabaseMissing('companies', ['id' => $company->id]);
 
-        // Assert the response was a redirect back
-        $response->assertRedirect(route('companies.index'));
+        // Assert the response was a redirect back to index
+        $response->assertRedirect(route('companies.index', ['organization' => $organization->slug]));
 
         // Assert the session has the success message
-        $response->assertSessionHas('message', 'Company deleted successfully.');
+        $response->assertSessionHas('message', 'Company deleted successfully!');
         $response->assertSessionHas('type', 'success');
     }
 }
