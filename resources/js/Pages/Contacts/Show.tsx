@@ -47,7 +47,7 @@ const Show = ({ contact }) => {
                     </Link>
                 </Button>
                 <div className="flex gap-2">
-                    <Button variant="outline" asChild>
+                    <Button variant="outline" asChild data-testid="contact-edit-btn">
                         <Link href={route("contacts.edit", { organization: organizationSlug, contact: contact.data.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
@@ -56,7 +56,7 @@ const Show = ({ contact }) => {
                     
                     <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
                         <DialogTrigger asChild>
-                            <Button variant="destructive">
+                            <Button variant="destructive" data-testid="contact-delete-btn">
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete
                             </Button>
@@ -78,6 +78,7 @@ const Show = ({ contact }) => {
                                     variant="destructive"
                                     disabled={isDeleting}
                                     onClick={handleDelete}
+                                    data-testid="contact-delete-confirm"
                                 >
                                     {isDeleting ? "Deleting..." : "Yes, I'm sure"}
                                 </Button>
@@ -102,7 +103,7 @@ const Show = ({ contact }) => {
                                     <User className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-foreground">{contact.data.full_name}</h1>
+                                    <h1 className="text-3xl font-bold text-foreground" data-testid="contact-full-name">{contact.data.full_name}</h1>
                                     <p className="text-muted-foreground flex items-center mt-1">
                                         <Briefcase className="h-4 w-4 mr-1" />
                                         {contact.data.job_title} at {contact.data.organization_name}

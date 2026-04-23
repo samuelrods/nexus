@@ -112,7 +112,7 @@ const ActivityForm = ({
                     onValueChange={(val) => setData("type", val)}
                     value={data.type || ""}
                 >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="activity-type-trigger">
                         <SelectValue placeholder="Select Type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -136,6 +136,7 @@ const ActivityForm = ({
                                     "w-full justify-start text-left font-normal bg-card",
                                     !activityDate && "text-muted-foreground"
                                 )}
+                                data-testid="activity-date-trigger"
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
                                 {activityDate ? format(activityDate, "PPP") : <span>Pick a date</span>}
@@ -165,6 +166,7 @@ const ActivityForm = ({
                         }}
                         required
                         step={300} // 5 minutes
+                        data-testid="activity-time"
                     />
                     <InputError message={errors.time} />
                 </div>
@@ -179,6 +181,7 @@ const ActivityForm = ({
                     required
                     rows={4}
                     value={data.description || ""}
+                    data-testid="activity-description"
                 />
                 <InputError message={errors.description} />
             </div>
@@ -188,6 +191,7 @@ const ActivityForm = ({
                     type="submit"
                     disabled={processing ?? false}
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
+                    data-testid="activity-submit"
                 >
                     {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {processing

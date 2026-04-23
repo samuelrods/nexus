@@ -58,7 +58,7 @@ const Show = ({ activity }) => {
                     </Link>
                 </Button>
                 <div className="flex gap-2">
-                    <Button variant="outline" asChild>
+                    <Button variant="outline" asChild data-testid="activity-edit-btn">
                         <Link href={route("activities.edit", { organization: organizationSlug, activity: activity.data.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
@@ -67,7 +67,7 @@ const Show = ({ activity }) => {
                     
                     <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
                         <DialogTrigger asChild>
-                            <Button variant="destructive">
+                            <Button variant="destructive" data-testid="activity-delete-btn">
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete
                             </Button>
@@ -89,6 +89,7 @@ const Show = ({ activity }) => {
                                     variant="destructive"
                                     disabled={isDeleting}
                                     onClick={handleDelete}
+                                    data-testid="activity-delete-confirm"
                                 >
                                     {isDeleting ? "Deleting..." : "Yes, I'm sure"}
                                 </Button>
@@ -113,7 +114,7 @@ const Show = ({ activity }) => {
                                     <TypeIcon type={activity.data.type} />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-foreground capitalize">{activity.data.type} Activity</h1>
+                                    <h1 className="text-3xl font-bold text-foreground capitalize" data-testid="activity-heading">{activity.data.type} Activity</h1>
                                     <div className="flex items-center gap-4 mt-1 text-muted-foreground">
                                         <div className="flex items-center">
                                             <Calendar className="h-4 w-4 mr-1" />
@@ -182,7 +183,7 @@ const Show = ({ activity }) => {
                         <dl className="space-y-4">
                             <div>
                                 <dt className="text-sm font-medium text-muted-foreground">Type</dt>
-                                <dd className="text-base font-semibold text-foreground mt-1 capitalize">{activity.data.type}</dd>
+                                <dd className="text-base font-semibold text-foreground mt-1 capitalize" data-testid="activity-type-label">{activity.data.type}</dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-muted-foreground">Date</dt>

@@ -165,6 +165,7 @@ function DeleteButton({ resourceRoute }) {
                         variant="destructive"
                         disabled={processing}
                         onClick={handleDelete}
+                        data-testid="delete-confirm"
                     >
                         Yes, I'm sure
                     </Button>
@@ -285,6 +286,7 @@ const Table = ({
                         data.map((item) => (
                             <TableRow
                                 key={resourceName + "-" + item.id}
+                                data-testid={`table-row-${item.id}`}
                                 className={cn(
                                     "bg-card border-b border-border hover:bg-muted/50 transition-colors",
                                     canClickRow && "cursor-pointer"
@@ -353,7 +355,7 @@ const Table = ({
                             </TableRow>
                         ))
                     ) : (
-                        <TableRow>
+                        <TableRow data-testid="table-empty">
                             <TableCell colSpan={columns.length + 1} className="py-20 text-center">
                                 <div className="flex flex-col items-center justify-center">
                                     <Inbox className="h-12 w-12 text-muted-foreground mb-4" />

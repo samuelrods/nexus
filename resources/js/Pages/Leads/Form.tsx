@@ -93,7 +93,7 @@ const LeadForm = ({
                     onValueChange={(val) => setData("source", val)}
                     value={data.source || ""}
                 >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="lead-source-trigger">
                         <SelectValue placeholder="Select Source" />
                     </SelectTrigger>
                     <SelectContent>
@@ -111,7 +111,7 @@ const LeadForm = ({
                     onValueChange={(val) => setData("status", val)}
                     value={data.status || ""}
                 >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="lead-status-trigger">
                         <SelectValue placeholder="Select Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -131,6 +131,7 @@ const LeadForm = ({
                     required
                     rows={4}
                     value={data.description || ""}
+                    data-testid="lead-description"
                 />
                 <InputError message={errors.description} />
             </div>
@@ -139,6 +140,7 @@ const LeadForm = ({
                     type="submit"
                     disabled={processing ?? false}
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
+                    data-testid="lead-submit"
                 >
                     {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {processing ? "Saving..." : updating ? "Update Lead" : "Add Lead"}

@@ -90,6 +90,7 @@ const TableActions = ({
                         className="pl-10 bg-muted/50 border-border focus:ring-primary focus:border-primary block w-full text-foreground rounded-xl transition-all duration-200"
                         value={searchValue}
                         onChange={(e: any) => setSearchValue(e.target.value)}
+                        data-testid="table-search"
                     />
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -112,7 +113,7 @@ const TableActions = ({
                             formData={formData}
                         />
                     ) : createRoute ? (
-                        <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95">
+                        <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95" data-testid="create-resource-link">
                             <Link href={createRouteUrl || "#"}>
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add {singularize(resourceType)}

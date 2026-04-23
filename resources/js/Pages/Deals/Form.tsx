@@ -61,6 +61,7 @@ const DealForm = ({
                     onChange={(e) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
+                    data-testid="deal-name"
                 />
                 <InputError message={errors.name} />
             </div>
@@ -74,6 +75,7 @@ const DealForm = ({
                     value={data.value || ""}
                     onChange={(e) => setData("value", e.target.value)}
                     required
+                    data-testid="deal-value"
                 />
                 <InputError message={errors.value} />
             </div>
@@ -87,6 +89,7 @@ const DealForm = ({
                                 "w-full justify-start text-left font-normal bg-card",
                                 !closeDate && "text-muted-foreground"
                             )}
+                            data-testid="deal-close-date-trigger"
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {closeDate ? format(closeDate, "PPP") : <span>Pick a date</span>}
@@ -109,7 +112,7 @@ const DealForm = ({
                     onValueChange={(val) => setData("status", val)}
                     value={data.status || ""}
                 >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="deal-status-trigger">
                         <SelectValue placeholder="Select Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -215,6 +218,7 @@ const DealForm = ({
                     required
                     rows={3}
                     value={data.description || ""}
+                    data-testid="deal-description"
                 />
                 <InputError message={errors.description} />
             </div>
@@ -224,6 +228,7 @@ const DealForm = ({
                     type="submit"
                     disabled={processing ?? false}
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
+                    data-testid="deal-submit"
                 >
                     {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {processing

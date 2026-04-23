@@ -28,6 +28,7 @@ const CompanyForm = ({
                     required
                     autoComplete="off"
                     className="bg-card"
+                    data-testid="company-name"
                 />
                 <InputError message={errors.name} />
             </div>
@@ -41,6 +42,7 @@ const CompanyForm = ({
                     required
                     autoComplete="off"
                     className="bg-card"
+                    data-testid="company-industry"
                 />
                 <InputError message={errors.industry} />
             </div>
@@ -54,6 +56,7 @@ const CompanyForm = ({
                     required
                     autoComplete="off"
                     className="bg-card"
+                    data-testid="company-website"
                 />
                 <InputError message={errors.website} />
             </div>
@@ -67,6 +70,7 @@ const CompanyForm = ({
                     required
                     rows={4}
                     className="bg-card"
+                    data-testid="company-description"
                 />
                 <InputError message={errors.description} />
             </div>
@@ -84,6 +88,7 @@ const CompanyForm = ({
                         }
                         required
                         className="bg-card"
+                        data-testid="company-street-address"
                     />
                     <InputError message={errors.street_address} />
                 </div>
@@ -97,6 +102,7 @@ const CompanyForm = ({
                             onChange={(e) => setData("city", e.target.value)}
                             required
                             className="bg-card"
+                            data-testid="company-city"
                         />
                         <InputError message={errors.city} />
                     </div>
@@ -109,6 +115,7 @@ const CompanyForm = ({
                             onChange={(e) => setData("state", e.target.value)}
                             required
                             className="bg-card"
+                            data-testid="company-state"
                         />
                         <InputError message={errors.state} />
                     </div>
@@ -121,6 +128,7 @@ const CompanyForm = ({
                             onChange={(e) => setData("zip_code", e.target.value)}
                             required
                             className="bg-card"
+                            data-testid="company-zip-code"
                         />
                         <InputError message={errors.zip_code} />
                     </div>
@@ -132,6 +140,7 @@ const CompanyForm = ({
                     type="submit"
                     disabled={processing ?? false}
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
+                    data-testid="company-submit"
                 >
                     {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {processing

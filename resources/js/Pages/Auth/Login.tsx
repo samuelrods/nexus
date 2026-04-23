@@ -42,8 +42,9 @@ const Login = ({ status, canResetPassword }) => {
                             autoComplete="username"
                             autoFocus
                             onChange={(e) => setData("email", e.target.value)}
+                            data-testid="login-email"
                         />
-                        <InputError message={errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-2" data-testid="login-error-email" />
                     </div>
 
                     <div className="mt-4">
@@ -59,8 +60,9 @@ const Login = ({ status, canResetPassword }) => {
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
+                            data-testid="login-password"
                         />
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError message={errors.password} className="mt-2" data-testid="login-error-password" />
                     </div>
 
                     <div className="block mt-4">
@@ -89,7 +91,7 @@ const Login = ({ status, canResetPassword }) => {
                             </Link>
                         )}
 
-                        <Button type="submit" className="ml-4" disabled={processing}>
+                        <Button type="submit" className="ml-4" disabled={processing} data-testid="login-submit">
                             Log in
                         </Button>
                     </div>

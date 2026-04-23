@@ -33,6 +33,7 @@ const ContactForm = ({
                         onChange={(e) => setData("first_name", e.target.value)}
                         required
                         className="bg-card"
+                        data-testid="contact-first-name"
                     />
                     <InputError message={errors.first_name} />
                 </div>
@@ -45,6 +46,7 @@ const ContactForm = ({
                         onChange={(e) => setData("last_name", e.target.value)}
                         required
                         className="bg-card"
+                        data-testid="contact-last-name"
                     />
                     <InputError message={errors.last_name} />
                 </div>
@@ -60,6 +62,7 @@ const ContactForm = ({
                     onChange={(e) => setData("email", e.target.value)}
                     required
                     className="bg-card"
+                    data-testid="contact-email"
                 />
                 <InputError message={errors.email} />
             </div>
@@ -73,6 +76,7 @@ const ContactForm = ({
                     onChange={(e) => setData("phone_number", e.target.value)}
                     required
                     className="bg-card"
+                    data-testid="contact-phone"
                 />
                 <InputError message={errors.phone_number} />
             </div>
@@ -116,6 +120,7 @@ const ContactForm = ({
                     onChange={(e) => setData("job_title", e.target.value)}
                     required
                     className="bg-card"
+                    data-testid="contact-job-title"
                 />
                 <InputError message={errors.job_title} />
             </div>
@@ -130,6 +135,7 @@ const ContactForm = ({
                     required
                     rows={4}
                     className="bg-card"
+                    data-testid="contact-description"
                 />
                 <InputError message={errors.description} />
             </div>
@@ -139,6 +145,7 @@ const ContactForm = ({
                     type="submit"
                     disabled={processing ?? false}
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
+                    data-testid="contact-submit"
                 >
                     {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {processing

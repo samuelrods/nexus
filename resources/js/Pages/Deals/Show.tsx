@@ -64,7 +64,7 @@ const Show = ({ deal }) => {
                     </Link>
                 </Button>
                 <div className="flex gap-2">
-                    <Button variant="outline" asChild>
+                    <Button variant="outline" asChild data-testid="deal-edit-btn">
                         <Link href={route("deals.edit", { organization: organizationSlug, deal: deal.data.id })}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
@@ -119,11 +119,11 @@ const Show = ({ deal }) => {
                                     <Handshake className="h-8 w-8 text-green-600 dark:text-green-300" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-foreground">{deal.data.name}</h1>
+                                    <h1 className="text-3xl font-bold text-foreground" data-testid="deal-name">{deal.data.name}</h1>
                                     <div className="flex items-center gap-3 mt-1">
                                         <StatusBadge status={deal.data.status} />
                                         <span className="text-gray-400">|</span>
-                                        <span className="text-2xl font-semibold text-green-600 dark:text-green-400">
+                                        <span className="text-2xl font-semibold text-green-600 dark:text-green-400" data-testid="deal-value">
                                             {formatCurrency(deal.data.value, deal.data.currency)}
                                         </span>
                                     </div>

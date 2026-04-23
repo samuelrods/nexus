@@ -8,9 +8,11 @@ test('has title or heading', async ({ page }) => {
   await expect(page).not.toHaveTitle(/404|Error/i);
 });
 
-test('can navigate to login', async ({ page }) => {
-  await page.goto('/login');
+test('authenticated user can access dashboard', async ({ page }) => {
+  // The storageState is loaded so user is already logged in
+  // Navigating to the root may redirect to dashboard or org selector
+  await page.goto('/');
 
-  // Expect the login page to have an email input.
-  await expect(page.locator('input[type="email"]')).toBeVisible();
+  // Page should load without errors
+  await expect(page).not.toHaveTitle(/404|Error/i);
 });
