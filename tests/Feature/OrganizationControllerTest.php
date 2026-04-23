@@ -136,6 +136,20 @@ class OrganizationControllerTest extends TestCase
         setPermissionsTeamId($organization->id);
         $this->user->assignRole($role->name);
 
+        $address = \App\Models\Address::create([
+            'street_address' => '123 Test St',
+            'city' => 'Test City',
+            'state' => 'Test State',
+            'zip_code' => '12345',
+            'organization_id' => $organization->id,
+        ]);
+
+        \App\Models\Company::create([
+            'name' => 'Test Company',
+            'address_id' => $address->id,
+            'organization_id' => $organization->id,
+        ]);
+
         $response = $this->delete(route('organizations.destroy', ['organization' => $organization->slug]));
 
         $response->assertRedirect(route('organizations.index'));
@@ -143,5 +157,7 @@ class OrganizationControllerTest extends TestCase
 
         $this->assertDatabaseMissing('organizations', ['id' => $organization->id]);
         $this->assertDatabaseMissing('roles', ['organization_id' => $organization->id]);
+        $this->assertDatabaseMissing('addresses', ['id' => $address->id]);
+        $this->assertDatabaseMissing('companies', ['name' => 'Test Company']);
     }
 }
