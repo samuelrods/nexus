@@ -15,7 +15,6 @@ use App\Http\Resources\RoleResource;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class RoleController extends Controller
@@ -154,32 +153,31 @@ class RoleController extends Controller
 
     private function getPermissions()
     {
-        return Cache::remember('permissions_v2', 60 * 60 * 24, function () {
-            $permissionTypes = [
-                'roles' => RolePermissions::class,
-                'members' => MemberPermissions::class,
-                'contacts' => ContactPermissions::class,
-                'companies' => CompanyPermissions::class,
-                'leads' => LeadPermissions::class,
-                'deals' => DealPermissions::class,
-                'activities' => ActivityPermissions::class,
-            ];
+        $permissionTypes = [
+            'roles' => RolePermissions::class,
+            'members' => MemberPermissions::class,
+            'contacts' => ContactPermissions::class,
+            'companies' => CompanyPermissions::class,
+            'leads' => LeadPermissions::class,
+            'deals' => DealPermissions::class,
+            'activities' => ActivityPermissions::class,
+            'organizations' => \App\Enums\OrganizationPermissions::class,
+        ];
 
-            $allPermissions = Permission::all();
+        $allPermissions = Permission::all();
 
-            $permissions = [];
+        $permissions = [];
 
-            foreach ($permissionTypes as $type => $class) {
-                // Filter the permissions in memory
-                $permissions[$type] = $allPermissions->whereIn('name', $class::toArray())->values()->map(function ($permission) use ($class) {
-                    return [
-                        'value' => $permission->id,
-                        'label' => $class::from($permission->name)->label(),
-                    ];
-                });
-            }
+        foreach ($permissionTypes as $type => $class) {
+            // Filter the permissions in memory
+            $permissions[$type] = $allPermissions->whereIn('name', $class::toArray())->values()->map(function ($permission) use ($class) {
+                return [
+                    'value' => $permission->id,
+                    'label' => $class::from($permission->name)->label(),
+                ];
+            });
+        }
 
-            return $permissions;
-        });
+        return $permissions;
     }
 }

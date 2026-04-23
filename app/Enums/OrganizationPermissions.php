@@ -8,8 +8,12 @@ enum OrganizationPermissions: string
 {
     use ToArrayEnum;
 
-    case READ = 'read-organizations';
-    case CREATE = 'create-organizations';
-    case UPDATE = 'update-organizations';
-    case DELETE = 'delete-organizations';
+    case UPDATE = 'update-organization';
+
+    public function label(): string
+    {
+        return match ($this) {
+            static::UPDATE => 'Update Organization',
+        };
+    }
 }

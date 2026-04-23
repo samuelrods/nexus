@@ -14,7 +14,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can(OrganizationPermissions::READ->value);
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization): bool
     {
-        return $user->can(OrganizationPermissions::READ->value) && $user->organizations->contains($organization->id);
+        return $user->organizations->contains($organization->id);
     }
 
     /**
@@ -30,7 +30,7 @@ class OrganizationPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can(OrganizationPermissions::CREATE->value);
+        return true;
     }
 
     /**
@@ -38,7 +38,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization): bool
     {
-        return $user->can(OrganizationPermissions::UPDATE->value) && $organization->user_id === $user->id;
+        return $user->can(OrganizationPermissions::UPDATE->value) && $user->organizations->contains($organization->id);
     }
 
     /**
@@ -46,7 +46,7 @@ class OrganizationPolicy
      */
     public function delete(User $user, Organization $organization): bool
     {
-        return $user->can(OrganizationPermissions::DELETE->value) && $organization->user_id === $user->id;
+        return $user->hasRole('owner') && $user->organizations->contains($organization->id);
     }
 
     /**

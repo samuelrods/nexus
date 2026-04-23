@@ -22,6 +22,7 @@ use App\Enums\ContactPermissions;
 use App\Enums\DealPermissions;
 use App\Enums\LeadPermissions;
 use App\Enums\MemberPermissions;
+use App\Enums\OrganizationPermissions;
 use App\Enums\RolePermissions;
 
 class UserSeeder extends Seeder
@@ -91,6 +92,7 @@ class UserSeeder extends Seeder
             DealPermissions::toArray(),
             LeadPermissions::toArray(),
             MemberPermissions::toArray(),
+            OrganizationPermissions::toArray(),
             RolePermissions::toArray()
         );
         $ownerRole->syncPermissions($allPermissions);

@@ -131,6 +131,7 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, Organization $organization)
     {
+        setPermissionsTeamId($organization->id);
         $this->authorize('update', $organization);
 
         $request->validate([
@@ -148,6 +149,7 @@ class OrganizationController extends Controller
      */
     public function destroy(Organization $organization)
     {
+        setPermissionsTeamId($organization->id);
         $this->authorize('delete', $organization);
 
         $organization->roles->each(function ($role) {
