@@ -2,8 +2,6 @@
 
 A Customer Relationship Management (CRM) application built with Laravel, React, and Inertia.js. This full-stack application helps businesses manage customer data, contacts, interactions, and user permissions efficiently.
 
-![Dashboard Screenshot](./public/images/dashboard_screen.png)
-
 ## **Key Features**
 
 ### Core CRM Functionality
