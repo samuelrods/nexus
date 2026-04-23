@@ -67,6 +67,8 @@ services:
     volumes:
       - ./:/var/www:z
     working_dir: /var/www
+    ports:
+      - "8060:8060"
     networks:
       - nexus-network
     depends_on:
