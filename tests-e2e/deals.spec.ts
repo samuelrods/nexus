@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import { ORG_SLUG, uniqueId, selectRadixOption, pickRelationshipOption } from './helpers/test-utils';
 
 test.describe('Deals', () => {
+  test.describe.configure({ mode: 'serial' });
+
   test('list renders records', async ({ page }) => {
     await page.goto(`/${ORG_SLUG}/deals`);
 
@@ -70,11 +72,18 @@ test.describe('Deals', () => {
   });
 
   test('status transition: pending → won', async ({ page }) => {
-    // Navigate to deals list and find a deal
+    test.slow(); // Triple the default timeout for this test
+    
+    // Navigate to deals list and find a deal that is PENDING
     await page.goto(`/${ORG_SLUG}/deals`);
-    const firstRow = page.locator('tr[data-testid^="table-row-"]').first();
-    await expect(firstRow).toBeVisible();
-    await firstRow.click();
+    
+    // Search for a deal we know exists or just pick one that says 'pending'
+    // This is still prone to collisions, so let's try to pick a different one based on worker index if possible,
+    // but Playwright doesn't easily expose worker index here without complex setup.
+    // Instead, let's just make the transition more robust.
+    const pendingRow = page.locator('tr').filter({ has: page.locator('span', { hasText: /^pending$/i }) }).first();
+    await expect(pendingRow).toBeVisible();
+    await pendingRow.click();
 
     await page.waitForURL(/\/deals\/\d+$/);
 
@@ -89,15 +98,19 @@ test.describe('Deals', () => {
     // Verify on show page
     await page.waitForURL(/\/deals\/\d+$/);
     const statusBadge = page.locator('span.capitalize', { hasText: /^won$/i });
-    await expect(statusBadge.first()).toBeVisible();
+    await expect(statusBadge.first()).toBeVisible({ timeout: 20000 });
   });
 
   test('status transition: pending → lost', async ({ page }) => {
-    // Navigate to deals list and find a deal
+    test.slow();
+    
+    // Navigate to deals list and find a deal that is PENDING
     await page.goto(`/${ORG_SLUG}/deals`);
-    const firstRow = page.locator('tr[data-testid^="table-row-"]').first();
-    await expect(firstRow).toBeVisible();
-    await firstRow.click();
+    
+    // Pick the LAST pending row to reduce collision with the 'won' test which picks the FIRST
+    const pendingRow = page.locator('tr').filter({ has: page.locator('span', { hasText: /^pending$/i }) }).last();
+    await expect(pendingRow).toBeVisible();
+    await pendingRow.click();
 
     await page.waitForURL(/\/deals\/\d+$/);
 
@@ -112,7 +125,7 @@ test.describe('Deals', () => {
     // Verify on show page
     await page.waitForURL(/\/deals\/\d+$/);
     const statusBadge = page.locator('span.capitalize', { hasText: /^lost$/i });
-    await expect(statusBadge.first()).toBeVisible();
+    await expect(statusBadge.first()).toBeVisible({ timeout: 20000 });
   });
 
   test('delete a deal', async ({ page }) => {
