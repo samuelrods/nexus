@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers;
+namespace Tests\Feature;
 
 use App\Models\Organization;
 use App\Models\OrganizationMember;
