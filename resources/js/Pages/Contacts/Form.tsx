@@ -81,12 +81,12 @@ const ContactForm = ({
                 <Label htmlFor="company_id">Company</Label>
                 <RelationshipSelector
                     value={data.company_id}
-                    label={data.company_name}
+                    label={data.organization_name}
                     onChange={(val, lab) => {
                         setData((prev) => ({
                             ...prev,
                             company_id: val,
-                            company_name: lab,
+                            organization_name: lab,
                         }));
                     }}
                     resourceName="companies"
@@ -104,7 +104,7 @@ const ContactForm = ({
                     ]}
                     placeholder="Search or create company..."
                 />
-                <InputError message={errors.company_id} />
+                <InputError message={errors.organization_name} />
             </div>
 
             <div className="w-full space-y-1">

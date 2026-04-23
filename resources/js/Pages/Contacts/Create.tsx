@@ -13,7 +13,7 @@ const Create = ({ companies }) => {
         phone_number: "",
         job_title: "",
         company_id: null,
-        company_name: "",
+        organization_name: "",
         description: "",
     });
 

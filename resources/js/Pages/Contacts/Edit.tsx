@@ -13,7 +13,7 @@ const Edit = ({ contact, companies }) => {
         phone_number: contact.data.phone_number || "",
         job_title: contact.data.job_title || "",
         company_id: contact.data.company_id || null,
-        company_name: contact.data.company_name || "",
+        organization_name: contact.data.organization_name || "",
         description: contact.data.description || "",
     });
 
