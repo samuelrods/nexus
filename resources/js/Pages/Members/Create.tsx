@@ -40,6 +40,7 @@ const Create = () => {
                     <Label htmlFor="memberInfo">Username or Email</Label>
                     <Input
                         id="memberInfo"
+                        data-testid="invitation-member-info"
                         placeholder="Enter username or email address"
                         value={data.memberInfo}
                         onChange={(e) => setData("memberInfo", e.target.value)}
@@ -57,6 +58,7 @@ const Create = () => {
                     <Button
                         type="submit"
                         disabled={processing}
+                        data-testid="invitation-submit"
                         className="bg-blue-600 hover:bg-blue-700 min-w-[150px]"
                     >
                         {processing ? (

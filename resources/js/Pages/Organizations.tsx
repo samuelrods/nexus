@@ -110,6 +110,7 @@ const OrganizationCard = ({ membership }) => {
                         className="flex-1 bg-blue-600 hover:bg-blue-700 transition-colors"
                         onClick={handleSelect}
                         disabled={isSelected}
+                        data-testid={`enter-org-${organization.slug}`}
                     >
                         {isSelected ? "Current" : "Enter"}
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -155,6 +156,7 @@ const InvitationItem = ({ invitation }) => {
                         size="sm" 
                         className="bg-blue-600 hover:bg-blue-700 h-8"
                         onClick={() => handleInvitation(true)}
+                        data-testid={`invitation-accept-${invitation.id}`}
                     >
                         Accept
                     </Button>
@@ -163,6 +165,7 @@ const InvitationItem = ({ invitation }) => {
                         variant="outline" 
                         className="h-8"
                         onClick={() => handleInvitation(false)}
+                        data-testid={`invitation-decline-${invitation.id}`}
                     >
                         Decline
                     </Button>
@@ -198,7 +201,17 @@ const Organizations = ({ memberships, invitations }) => {
                             Choose an organization to start managing your deals and contacts.
                         </p>
                     </div>
-                    <CreateOrganizationModal />
+                    <div className="flex gap-4">
+                        <Button 
+                            variant="outline" 
+                            onClick={() => router.post("/logout")}
+                            data-testid="logout-button"
+                        >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Sign out
+                        </Button>
+                        <CreateOrganizationModal />
+                    </div>
                 </div>
 
                 {invitations.length > 0 && (

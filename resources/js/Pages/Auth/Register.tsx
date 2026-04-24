@@ -30,6 +30,7 @@ const Register = () => {
                         </div>
                         <Input
                             id="username"
+                            data-testid="register-username"
                             value={data.username}
                             onChange={(e) =>
                                 setData("username", e.target.value)
@@ -51,6 +52,7 @@ const Register = () => {
                             </div>
                             <Input
                                 id="first_name"
+                                data-testid="register-first-name"
                                 value={data.first_name}
                                 onChange={(e) =>
                                     setData("first_name", e.target.value)
@@ -67,6 +69,7 @@ const Register = () => {
                             </div>
                             <Input
                                 id="last_name"
+                                data-testid="register-last-name"
                                 value={data.last_name}
                                 onChange={(e) =>
                                     setData("last_name", e.target.value)
@@ -84,6 +87,7 @@ const Register = () => {
                         </div>
                         <Input
                             id="email"
+                            data-testid="register-email"
                             value={data.email}
                             onChange={(e) => setData("email", e.target.value)}
                             type="email"
@@ -98,6 +102,7 @@ const Register = () => {
                         </div>
                         <Input
                             value={data.password}
+                            data-testid="register-password"
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
@@ -118,6 +123,7 @@ const Register = () => {
                         </div>
                         <Input
                             id="password_confirmation"
+                            data-testid="register-password-confirmation"
                             value={data.password_confirmation}
                             onChange={(e) =>
                                 setData("password_confirmation", e.target.value)
@@ -138,6 +144,7 @@ const Register = () => {
                         <Button
                             disabled={processing}
                             type="submit"
+                            data-testid="register-submit"
                         >
                             Submit
                         </Button>

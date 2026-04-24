@@ -160,6 +160,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                                 variant="ghost"
                                 size="icon"
                                 className="rounded-full"
+                                data-testid="user-profile-button"
                             >
                                 <UserCircle className="h-8 w-8 text-muted-foreground" />
                             </Button>
