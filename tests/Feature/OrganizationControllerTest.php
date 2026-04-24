@@ -2,7 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
+use App\Models\Address;
+use App\Models\Company;
+use App\Models\Contact;
+use App\Models\Deal;
+use App\Models\Lead;
 use App\Models\Organization;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
@@ -97,10 +104,10 @@ class OrganizationControllerTest extends TestCase
         $organization->memberships()->create(['user_id' => $this->user->id]);
 
         $role = Role::create(['name' => 'owner', 'organization_id' => $organization->id]);
-        $role->syncPermissions(\App\Models\Permission::all());
+        $role->syncPermissions(Permission::all());
         setPermissionsTeamId($organization->id);
         $this->user->assignRole($role->name);
-        \Illuminate\Support\Facades\URL::defaults(['organization' => $organization->slug]);
+        URL::defaults(['organization' => $organization->slug]);
 
         $data = ['name' => 'Updated Name', 'currency' => 'EUR'];
 
@@ -131,27 +138,27 @@ class OrganizationControllerTest extends TestCase
         $organization->memberships()->create(['user_id' => $this->user->id]);
 
         $role = Role::create(['name' => 'owner', 'organization_id' => $organization->id]);
-        $role->syncPermissions(\App\Models\Permission::all());
+        $role->syncPermissions(Permission::all());
         setPermissionsTeamId($organization->id);
         $this->user->assignRole($role->name);
 
-        $address = \App\Models\Address::factory()->create(['organization_id' => $organization->id]);
-        $company = \App\Models\Company::factory()->create([
+        $address = Address::factory()->create(['organization_id' => $organization->id]);
+        $company = Company::factory()->create([
             'organization_id' => $organization->id,
             'address_id' => $address->id,
         ]);
-        $contact = \App\Models\Contact::factory()->create([
+        $contact = Contact::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->user->id,
         ]);
 
-        $lead = \App\Models\Lead::factory()->create([
+        $lead = Lead::factory()->create([
             'organization_id' => $organization->id,
             'contact_id' => $contact->id,
             'company_id' => $company->id,
         ]);
 
-        $deal = \App\Models\Deal::factory()->create([
+        $deal = Deal::factory()->create([
             'organization_id' => $organization->id,
             'lead_id' => $lead->id,
             'contact_id' => $contact->id,
@@ -159,7 +166,7 @@ class OrganizationControllerTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $activity = \App\Models\Activity::factory()->create([
+        $activity = Activity::factory()->create([
             'organization_id' => $organization->id,
             'user_id' => $this->user->id,
             'contact_id' => $contact->id,

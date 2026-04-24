@@ -8,6 +8,7 @@ use App\Http\Resources\CompanyDataResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Address;
 use App\Models\Company;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,7 +17,7 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, \App\Models\Organization $organization)
+    public function index(Request $request, Organization $organization)
     {
         $this->authorize('viewAny', Company::class);
 
@@ -80,7 +81,7 @@ class CompanyController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(\App\Models\Organization $organization)
+    public function create(Organization $organization)
     {
         $this->authorize('create', Company::class);
 
@@ -90,7 +91,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCompanyRequest $request, \App\Models\Organization $organization)
+    public function store(StoreCompanyRequest $request, Organization $organization)
     {
         $this->authorize('create', Company::class);
 
@@ -124,7 +125,7 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(\App\Models\Organization $organization, Company $company)
+    public function show(Organization $organization, Company $company)
     {
         $this->authorize('view', $company);
 
@@ -136,7 +137,7 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(\App\Models\Organization $organization, Company $company)
+    public function edit(Organization $organization, Company $company)
     {
         $this->authorize('update', $company);
 
@@ -148,7 +149,7 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCompanyRequest $request, \App\Models\Organization $organization, Company $company)
+    public function update(UpdateCompanyRequest $request, Organization $organization, Company $company)
     {
         $this->authorize('update', $company);
 
@@ -171,7 +172,7 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(\App\Models\Organization $organization, Company $company)
+    public function destroy(Organization $organization, Company $company)
     {
         $this->authorize('delete', $company);
 
@@ -180,7 +181,7 @@ class CompanyController extends Controller
         return redirect()->route('companies.index')->with(['message' => 'Company deleted successfully!', 'type' => 'success']);
     }
 
-    public function getCompaniesOptions(Request $request, \App\Models\Organization $organization)
+    public function getCompaniesOptions(Request $request, Organization $organization)
     {
         $organizationId = $organization->id;
 

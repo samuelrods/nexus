@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AcceptInvitationRequest;
 use App\Http\Requests\StoreInvitationRequest;
+use App\Models\Organization;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 
 class InvitationController extends Controller
 {
-    public function store(StoreInvitationRequest $request, \App\Models\Organization $organization)
+    public function store(StoreInvitationRequest $request, Organization $organization)
     {
         $validated = $request->validated();
 

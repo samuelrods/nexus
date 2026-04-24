@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\OrganizationMember;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,8 +16,8 @@ class MemberResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user = $this->resource instanceof \App\Models\User ? $this->resource : $this->user;
-        $membership = $this->resource instanceof \App\Models\OrganizationMember ? $this->resource : $this->memberships()->where('organization_id', session('organization_id'))->first();
+        $user = $this->resource instanceof User ? $this->resource : $this->user;
+        $membership = $this->resource instanceof OrganizationMember ? $this->resource : $this->memberships()->where('organization_id', session('organization_id'))->first();
 
         return [
             'id' => $membership->id,

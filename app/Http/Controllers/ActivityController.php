@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateActivityRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
 use App\Models\Contact;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,7 @@ class ActivityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, \App\Models\Organization $organization)
+    public function index(Request $request, Organization $organization)
     {
         $this->authorize('viewAny', Activity::class);
 
@@ -61,7 +62,7 @@ class ActivityController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(\App\Models\Organization $organization)
+    public function create(Organization $organization)
     {
         $this->authorize('create', Activity::class);
 
@@ -71,7 +72,7 @@ class ActivityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityRequest $request, \App\Models\Organization $organization)
+    public function store(StoreActivityRequest $request, Organization $organization)
     {
         $this->authorize('create', Activity::class);
 
@@ -91,7 +92,7 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(\App\Models\Organization $organization, Activity $activity)
+    public function show(Organization $organization, Activity $activity)
     {
         $this->authorize('view', $activity);
 
@@ -103,7 +104,7 @@ class ActivityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(\App\Models\Organization $organization, Activity $activity)
+    public function edit(Organization $organization, Activity $activity)
     {
         $this->authorize('update', $activity);
 
@@ -115,7 +116,7 @@ class ActivityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateActivityRequest $request, \App\Models\Organization $organization, Activity $activity)
+    public function update(UpdateActivityRequest $request, Organization $organization, Activity $activity)
     {
         $this->authorize('update', $activity);
 
@@ -127,7 +128,7 @@ class ActivityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(\App\Models\Organization $organization, Activity $activity)
+    public function destroy(Organization $organization, Activity $activity)
     {
         $this->authorize('delete', $activity);
 

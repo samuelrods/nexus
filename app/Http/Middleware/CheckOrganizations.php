@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Organization;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckOrganizations
@@ -11,7 +13,7 @@ class CheckOrganizations
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -19,7 +21,7 @@ class CheckOrganizations
         $slug = $request->route('organization');
         $organization = null;
 
-        if ($slug instanceof \App\Models\Organization) {
+        if ($slug instanceof Organization) {
             // Verify the user actually belongs to this organization
             if ($request->user()->organizations->contains($slug->id)) {
                 $organization = $slug;
@@ -69,7 +71,7 @@ class CheckOrganizations
         setPermissionsTeamId($organization->id);
 
         // Set global default for the 'organization' route parameter
-        \Illuminate\Support\Facades\URL::defaults(['organization' => $organization->slug]);
+        URL::defaults(['organization' => $organization->slug]);
 
         return $next($request);
     }

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\ContactDataResource;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,7 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, \App\Models\Organization $organization)
+    public function index(Request $request, Organization $organization)
     {
         $this->authorize('viewAny', Contact::class);
 
@@ -68,7 +69,7 @@ class ContactController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(\App\Models\Organization $organization)
+    public function create(Organization $organization)
     {
         $this->authorize('create', Contact::class);
 
@@ -78,7 +79,7 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreContactRequest $request, \App\Models\Organization $organization)
+    public function store(StoreContactRequest $request, Organization $organization)
     {
         $this->authorize('create', Contact::class);
 
@@ -98,7 +99,7 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(\App\Models\Organization $organization, Contact $contact)
+    public function show(Organization $organization, Contact $contact)
     {
         $this->authorize('view', $contact);
 
@@ -110,7 +111,7 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(\App\Models\Organization $organization, Contact $contact)
+    public function edit(Organization $organization, Contact $contact)
     {
         $this->authorize('update', $contact);
 
@@ -122,7 +123,7 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContactRequest $request, \App\Models\Organization $organization, Contact $contact)
+    public function update(UpdateContactRequest $request, Organization $organization, Contact $contact)
     {
         $this->authorize('update', $contact);
 
@@ -134,7 +135,7 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(\App\Models\Organization $organization, Contact $contact)
+    public function destroy(Organization $organization, Contact $contact)
     {
         $this->authorize('delete', $contact);
 
@@ -148,7 +149,7 @@ class ContactController extends Controller
         return redirect()->route('contacts.index')->with(['message' => 'Contact deleted successfully!', 'type' => 'success']);
     }
 
-    public function getContactsOptions(Request $request, \App\Models\Organization $organization)
+    public function getContactsOptions(Request $request, Organization $organization)
     {
         $organizationId = $organization->id;
 

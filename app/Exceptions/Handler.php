@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
     /**
      * Prepare exception for rendering.
      *
-     * @return \Throwable
+     * @return Throwable
      */
     public function render($request, Throwable $e)
     {

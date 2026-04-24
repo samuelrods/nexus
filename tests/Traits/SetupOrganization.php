@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Support\Facades\URL;
+use Spatie\Permission\PermissionRegistrar;
 
 trait SetupOrganization
 {
@@ -54,7 +55,7 @@ trait SetupOrganization
         URL::defaults(['organization' => $organization->slug]);
 
         // Clear the cached permissions
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        $this->app->make(PermissionRegistrar::class)->forgetCachedPermissions();
 
         // Assign properties
         $this->user = $user;

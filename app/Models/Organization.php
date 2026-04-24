@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
 class Organization extends Model
@@ -21,7 +22,7 @@ class Organization extends Model
     {
         static::creating(function ($organization) {
             if (! $organization->slug) {
-                $organization->slug = \Illuminate\Support\Str::slug($organization->name);
+                $organization->slug = Str::slug($organization->name);
 
                 // Ensure uniqueness
                 $originalSlug = $organization->slug;
@@ -38,7 +39,7 @@ class Organization extends Model
      *
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      */
     public function resolveRouteBinding($value, $field = null)
     {

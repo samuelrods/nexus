@@ -8,10 +8,12 @@ use App\Enums\ContactPermissions;
 use App\Enums\DealPermissions;
 use App\Enums\LeadPermissions;
 use App\Enums\MemberPermissions;
+use App\Enums\OrganizationPermissions;
 use App\Enums\RolePermissions;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
+use App\Models\Organization;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, \App\Models\Organization $organization)
+    public function index(Request $request, Organization $organization)
     {
         $this->authorize('viewAny', Role::class);
 
@@ -57,7 +59,7 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(\App\Models\Organization $organization)
+    public function create(Organization $organization)
     {
         $this->authorize('create', Role::class);
 
@@ -69,7 +71,7 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request, \App\Models\Organization $organization)
+    public function store(StoreRoleRequest $request, Organization $organization)
     {
         $this->authorize('create', Role::class);
 
@@ -89,7 +91,7 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(\App\Models\Organization $organization, Role $role)
+    public function show(Organization $organization, Role $role)
     {
         $this->authorize('view', $role);
 
@@ -101,7 +103,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(\App\Models\Organization $organization, Role $role)
+    public function edit(Organization $organization, Role $role)
     {
         $this->authorize('update', $role);
 
@@ -114,7 +116,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, \App\Models\Organization $organization, Role $role)
+    public function update(UpdateRoleRequest $request, Organization $organization, Role $role)
     {
         $this->authorize('update', $role);
 
@@ -138,7 +140,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(\App\Models\Organization $organization, Role $role)
+    public function destroy(Organization $organization, Role $role)
     {
         $this->authorize('delete', $role);
 
@@ -161,7 +163,7 @@ class RoleController extends Controller
             'leads' => LeadPermissions::class,
             'deals' => DealPermissions::class,
             'activities' => ActivityPermissions::class,
-            'organizations' => \App\Enums\OrganizationPermissions::class,
+            'organizations' => OrganizationPermissions::class,
         ];
 
         $allPermissions = Permission::all();
