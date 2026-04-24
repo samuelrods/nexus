@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\OrganizationMemberPermissions;
+use App\Enums\MemberPermissions;
 use App\Models\OrganizationMember;
 use App\Models\User;
 
@@ -13,7 +13,7 @@ class OrganizationMemberPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can(OrganizationMemberPermissions::READ->value);
+        return $user->can(MemberPermissions::READ->value);
     }
 
     /**
@@ -21,7 +21,7 @@ class OrganizationMemberPolicy
      */
     public function view(User $user, OrganizationMember $organizationMember): bool
     {
-        return $user->can(OrganizationMemberPermissions::READ->value) && $user->organizations->contains($organizationMember->organization_id);
+        return $user->can(MemberPermissions::READ->value) && $user->organizations->contains($organizationMember->organization_id);
     }
 
     /**
@@ -29,7 +29,7 @@ class OrganizationMemberPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can(OrganizationMemberPermissions::CREATE->value);
+        return $user->can(MemberPermissions::CREATE->value);
     }
 
     /**
@@ -37,7 +37,7 @@ class OrganizationMemberPolicy
      */
     public function update(User $user, OrganizationMember $organizationMember): bool
     {
-        return $user->can(OrganizationMemberPermissions::UPDATE->value) && $user->organizations->contains($organizationMember->organization_id);
+        return $user->can(MemberPermissions::UPDATE->value) && $user->organizations->contains($organizationMember->organization_id);
     }
 
     /**
@@ -46,9 +46,8 @@ class OrganizationMemberPolicy
     public function delete(User $user, OrganizationMember $organizationMember): bool
     {
         return
-            $user->can(OrganizationMemberPermissions::DELETE->value) &&
-            $user->organizations->contains($organizationMember->organization_id) ||
-            $organizationMember->user_id === $user->id && $organizationMember->organization->user_id === $organizationMember->user_id;
+            $user->can(MemberPermissions::DELETE->value) &&
+            $user->organizations->contains($organizationMember->organization_id);
     }
 
     /**
@@ -60,7 +59,7 @@ class OrganizationMemberPolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can force delete the model.
      */
     public function forceDelete(User $user, OrganizationMember $organizationMember): bool
     {
