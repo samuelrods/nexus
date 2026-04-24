@@ -103,6 +103,12 @@ jobs:
           echo "=== Generated .env.testing ==="
           cat .env.testing
 
+      - name: Generate Ziggy Routes
+        run: |
+          # Create the directory if it doesn't exist
+          mkdir -p resources/js
+          php artisan ziggy:generate resources/js/ziggy.js
+
       - name: Build Frontend (Host)
         run: npm run build
 
