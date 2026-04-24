@@ -100,17 +100,15 @@ jobs:
           echo "MEILISEARCH_HOST=http://meilisearch_test:7700" >> .env.testing
           echo "MEILISEARCH_KEY=masterKey" >> .env.testing
           echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env.testing
-          echo "=== Generated .env.testing ==="
-          cat .env.testing
-
-      - name: Generate Ziggy Routes
-        run: |
-          # Create the directory if it doesn't exist
-          mkdir -p resources/js
-          php artisan ziggy:generate resources/js/ziggy.js
+          # Sync to .env for Vite build
+          cp .env.testing .env
 
       - name: Build Frontend (Host)
-        run: npm run build
+        run: |
+          rm -f public/hot
+          mkdir -p resources/js
+          php artisan ziggy:generate resources/js/ziggy.js
+          npm run build
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
