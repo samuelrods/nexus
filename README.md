@@ -299,24 +299,30 @@ The application features a sophisticated multi-tenant database architecture with
 
 ## **Testing**
 
-The project includes unit and feature tests to ensure code quality and reliability.
+The project includes a comprehensive testing suite comprising PHPUnit (Unit/Feature) and Playwright (E2E) tests, all executed within a dedicated Docker environment.
 
-To run tests:
+To run the tests:
 
-1. Set up the testing environment:
+1. **Ensure the test environment file exists**:
 ```sh
 cp .env.testing.example .env.testing
 ```
 
-2. Build assets:
+2. **Run tests using NPM commands** (these orchestrate the Docker containers automatically):
 ```sh
-npm run build
-```
+# Run the entire suite (PHPUnit + Playwright)
+npm run test:all
 
-3. Run the test suite:
-```sh
-php artisan test
+# Run backend tests only (PHPUnit)
+npm run test:unit
+
+# Run E2E tests only (Playwright)
+npm run test:e2e
+
+# Run Playwright in UI mode for debugging
+npm run test:e2e:ui
 ```
+*Note: These commands handle container startup, database migrations/seeding, and cleanup.*
 
 ## **Project Structure**
 ```

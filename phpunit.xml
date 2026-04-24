@@ -22,13 +22,18 @@
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_CONNECTION" value="mysql"/>
-        <env name="DB_HOST" value="db"/>
+        <env name="DB_HOST" value="db_test"/>
+        <env name="DB_PORT" value="3306"/>
         <env name="DB_DATABASE" value="nexus_test"/>
-        <env name="DB_USERNAME" value="nexus"/>
-        <env name="DB_PASSWORD" value="secret"/>
+        <env name="DB_USERNAME" value="nexus_user"/>
+        <env name="DB_PASSWORD" value="nexus_password"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="SCOUT_DRIVER" value="meilisearch"/>
+        <env name="SCOUT_QUEUE" value="false"/>
+        <env name="MEILISEARCH_HOST" value="http://meilisearch_test:7700"/>
+        <env name="MEILISEARCH_KEY" value="masterKey"/>
     </php>
 </phpunit>
