@@ -205,15 +205,7 @@ const Companies = ({ pagination, stats, filters, industries = [] }) => {
                     ]}
                 />
                 <Table
-                    data={pagination.data.map((company) => {
-                        return {
-                            ...company,
-                            street_address: company.address.street_address,
-                            city: company.address.city,
-                            state: company.address.state,
-                            zip_code: company.address.zip_code,
-                        };
-                    })}
+                    data={pagination.data}
                     columns={[
                         { header: "Name", key: "name", sortKey: "name" },
                         { header: "Website", key: "website", sortKey: "website" },

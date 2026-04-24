@@ -6,7 +6,6 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyDataResource;
 use App\Http\Resources\CompanyResource;
-use App\Models\Address;
 use App\Models\Company;
 use App\Models\Organization;
 use Illuminate\Http\Request;
@@ -98,20 +97,8 @@ class CompanyController extends Controller
         $validated = $request->validated();
         $organizationId = $organization->id;
 
-        $address = Address::create([
-            'street_address' => $validated['street_address'],
-            'city' => $validated['city'],
-            'state' => $validated['state'],
-            'zip_code' => $validated['zip_code'],
-            'organization_id' => $organizationId,
-        ]);
-
         $company = Company::create([
-            'name' => $validated['name'],
-            'website' => $validated['website'],
-            'industry' => $validated['industry'],
-            'description' => $validated['description'],
-            'address_id' => $address->id,
+            ...$validated,
             'organization_id' => $organizationId,
         ]);
 
@@ -153,18 +140,7 @@ class CompanyController extends Controller
     {
         $this->authorize('update', $company);
 
-        $validated = $request->validated();
-
-        $addressFields = array_intersect_key($validated, array_flip(['street_address', 'city', 'state', 'zip_code']));
-        $companyFields = array_intersect_key($validated, array_flip(['name', 'website', 'industry', 'description']));
-
-        if (! empty($addressFields)) {
-            Address::find($company->address_id)->update($addressFields);
-        }
-
-        if (! empty($companyFields)) {
-            $company->update($companyFields);
-        }
+        $company->update($request->validated());
 
         return redirect()->route('companies.show', $company->id)->with(['message' => 'Company updated successfully!', 'type' => 'success']);
     }

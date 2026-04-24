@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Company;
+use App\Models\Organization;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CompanyFactory extends Factory
 {
+    protected $model = Company::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,10 +21,15 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->company(),
+            'name' => fake()->company(),
             'website' => fake()->url(),
-            'industry' => fake()->words(2, true),
-            'description' => fake()->text(),
+            'industry' => fake()->randomElement(['Technology', 'Finance', 'Healthcare', 'Manufacturing', 'Retail']),
+            'street_address' => fake()->streetAddress(),
+            'city' => fake()->city(),
+            'state' => fake()->stateAbbr(),
+            'zip_code' => fake()->postcode(),
+            'description' => fake()->paragraph(),
+            'organization_id' => Organization::factory(),
         ];
     }
 }

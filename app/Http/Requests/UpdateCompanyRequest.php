@@ -26,7 +26,6 @@ class UpdateCompanyRequest extends FormRequest
             'name' => 'sometimes|required|string',
             'website' => 'sometimes|string',
             'industry' => 'sometimes|string',
-            'address_id' => 'sometimes|integer',
             'description' => 'sometimes|string',
             'street_address' => 'sometimes|string',
             'city' => 'sometimes|string',

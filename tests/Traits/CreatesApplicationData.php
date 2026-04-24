@@ -3,7 +3,6 @@
 namespace Tests\Traits;
 
 use App\Models\Activity;
-use App\Models\Address;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
@@ -15,7 +14,6 @@ trait CreatesApplicationData
     {
         $companies = Company::factory($num)->create([
             'organization_id' => $organization->id,
-            'address_id' => Address::factory(['organization_id' => $organization->id]),
         ]);
 
         $contacts = Contact::factory($num)->create([

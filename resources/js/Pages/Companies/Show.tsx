@@ -137,8 +137,8 @@ const Show = ({ company }) => {
                                     <p className="text-muted-foreground flex items-start">
                                         <MapPin className="h-4 w-4 mr-2 mt-1 shrink-0" />
                                         <span>
-                                            {company.data.address.street_address}<br />
-                                            {company.data.address.city}, {company.data.address.state} {company.data.address.zip_code}
+                                            {company.data.street_address}<br />
+                                            {company.data.city}, {company.data.state} {company.data.zip_code}
                                         </span>
                                     </p>
                                 </div>

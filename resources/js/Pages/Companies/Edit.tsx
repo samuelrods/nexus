@@ -11,10 +11,10 @@ const Edit = ({ company }) => {
         website: company.data.website || "",
         industry: company.data.industry || "",
         description: company.data.description || "",
-        street_address: company.data.address.street_address || "",
-        city: company.data.address.city || "",
-        state: company.data.address.state || "",
-        zip_code: company.data.address.zip_code || "",
+        street_address: company.data.street_address || "",
+        city: company.data.city || "",
+        state: company.data.state || "",
+        zip_code: company.data.zip_code || "",
     });
 
     const onSubmit = (e) => {

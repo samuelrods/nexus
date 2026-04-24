@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Address;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Lead;
@@ -32,7 +31,7 @@ class LeadControllerTest extends TestCase
         $organization = $this->organization;
         $user = $this->user;
 
-        $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
+        $company = Company::factory()->create(['organization_id' => $organization->id]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
         $leads = Lead::factory(3)->create([
             'organization_id' => $organization->id,
@@ -55,7 +54,7 @@ class LeadControllerTest extends TestCase
     {
         $organization = $this->organization;
         $user = $this->user;
-        $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
+        $company = Company::factory()->create(['organization_id' => $organization->id]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
 
         $data = [
@@ -79,7 +78,7 @@ class LeadControllerTest extends TestCase
     {
         $organization = $this->organization;
         $user = $this->user;
-        $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
+        $company = Company::factory()->create(['organization_id' => $organization->id]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
         $lead = Lead::factory()->create([
             'organization_id' => $organization->id,
@@ -105,7 +104,7 @@ class LeadControllerTest extends TestCase
     {
         $organization = $this->organization;
         $user = $this->user;
-        $company = Company::factory()->create(['organization_id' => $organization->id, 'address_id' => Address::factory(['organization_id' => $organization->id])]);
+        $company = Company::factory()->create(['organization_id' => $organization->id]);
         $contact = Contact::factory()->create(['organization_id' => $organization->id, 'user_id' => $user->id]);
         $lead = Lead::factory()->create([
             'organization_id' => $organization->id,
@@ -132,7 +131,7 @@ class LeadControllerTest extends TestCase
     public function test_cannot_access_lead_of_another_organization()
     {
         $otherOrg = Organization::create(['name' => 'Other Org', 'user_id' => User::factory()->create()->id]);
-        $otherCompany = Company::factory()->create(['organization_id' => $otherOrg->id, 'address_id' => Address::factory(['organization_id' => $otherOrg->id])]);
+        $otherCompany = Company::factory()->create(['organization_id' => $otherOrg->id]);
         $otherContact = Contact::factory()->create(['organization_id' => $otherOrg->id, 'user_id' => $otherOrg->user_id]);
         $otherLead = Lead::factory()->create([
             'organization_id' => $otherOrg->id,

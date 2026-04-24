@@ -12,7 +12,6 @@ use App\Enums\OrganizationPermissions;
 use App\Enums\RolePermissions;
 use App\Enums\RolesEnum;
 use App\Models\Activity;
-use App\Models\Address;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
@@ -122,7 +121,6 @@ class UserSeeder extends Seeder
         // Create Companies
         $companies = Company::factory(fake()->numberBetween(15, 20))->create([
             'organization_id' => $org->id,
-            'address_id' => Address::factory(['organization_id' => $org->id]),
         ]);
 
         foreach ($companies as $company) {

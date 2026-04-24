@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Address;
 use App\Models\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,9 +26,8 @@ class CompanyControllerTest extends TestCase
     {
         $organization = $this->organization;
 
-        $companies = Company::factory(3)->create([
+        Company::factory(3)->create([
             'organization_id' => $organization->id,
-            'address_id' => Address::factory(['organization_id' => $organization->id]),
         ]);
 
         $response = $this->get(route('companies.index', ['organization' => $organization->slug]));
@@ -63,7 +61,6 @@ class CompanyControllerTest extends TestCase
         $response->assertStatus(302);
 
         $this->assertDatabaseCount('companies', 1);
-        $this->assertDatabaseCount('addresses', 1);
 
         $response->assertRedirect();
         $response->assertSessionHas('message', 'Company created successfully!');
@@ -73,7 +70,7 @@ class CompanyControllerTest extends TestCase
     public function test_company_can_be_updated(): void
     {
         $organization = $this->organization;
-        $company = Company::factory()->create(['address_id' => Address::factory(['organization_id' => $organization->id]), 'organization_id' => $organization->id]);
+        $company = Company::factory()->create(['organization_id' => $organization->id]);
 
         $data = [
             'name' => 'Updated Company Name',
@@ -91,6 +88,7 @@ class CompanyControllerTest extends TestCase
         $this->assertDatabaseHas('companies', [
             'id' => $company->id,
             'name' => $data['name'],
+            'street_address' => $data['street_address'],
         ]);
 
         $response->assertRedirect();
@@ -101,7 +99,7 @@ class CompanyControllerTest extends TestCase
     public function test_company_can_be_deleted(): void
     {
         $organization = $this->organization;
-        $company = Company::factory()->create(['address_id' => Address::factory(['organization_id' => $organization->id]), 'organization_id' => $organization->id]);
+        $company = Company::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->delete(route('companies.destroy', ['organization' => $organization->slug, 'company' => $company->id]));
 

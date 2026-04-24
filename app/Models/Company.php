@@ -14,17 +14,15 @@ class Company extends Model
         'name',
         'website',
         'industry',
-        'address_id',
+        'street_address',
+        'city',
+        'state',
+        'zip_code',
         'description',
         'organization_id',
     ];
 
     public $timestamps = true;
-
-    public function address()
-    {
-        return $this->belongsTo(Address::class);
-    }
 
     public function organization()
     {
@@ -42,6 +40,9 @@ class Company extends Model
             'id' => (int) $this->id,
             'organization_id' => (int) $this->organization_id,
             'name' => $this->name,
+            'industry' => $this->industry,
+            'city' => $this->city,
+            'state' => $this->state,
         ];
     }
 }

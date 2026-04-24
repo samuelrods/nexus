@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Activity;
-use App\Models\Address;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
@@ -142,10 +141,8 @@ class OrganizationControllerTest extends TestCase
         setPermissionsTeamId($organization->id);
         $this->user->assignRole($role->name);
 
-        $address = Address::factory()->create(['organization_id' => $organization->id]);
         $company = Company::factory()->create([
             'organization_id' => $organization->id,
-            'address_id' => $address->id,
         ]);
         $contact = Contact::factory()->create([
             'organization_id' => $organization->id,
@@ -179,7 +176,6 @@ class OrganizationControllerTest extends TestCase
         $response->assertSessionHas('message', 'Organization deleted successfully!');
 
         $this->assertDatabaseMissing('organizations', ['id' => $organization->id]);
-        $this->assertDatabaseMissing('addresses', ['id' => $address->id]);
         $this->assertDatabaseMissing('companies', ['id' => $company->id]);
         $this->assertDatabaseMissing('contacts', ['id' => $contact->id]);
         $this->assertDatabaseMissing('leads', ['id' => $lead->id]);
