@@ -88,7 +88,11 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
       - name: Create .env.testing
+
         run: |
           cp .env.testing.example .env.testing
           sed -i 's/DB_HOST=127.0.0.1/DB_HOST=db_test/' .env.testing

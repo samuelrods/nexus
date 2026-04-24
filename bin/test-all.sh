@@ -12,7 +12,7 @@ echo "🔍 Verifying assets in container..."
 $COMPOSE exec app_test ls -la public/build/manifest.json || (echo "❌ Vite manifest not found in container" && exit 1)
 
 echo "🔍 Checking connectivity to Nginx..."
-$COMPOSE run --rm --network host playwright curl -v --fail http://localhost:8080/login || (echo "❌ Cannot reach Nginx via localhost:8080" && exit 1)
+curl -v --fail http://localhost:8080/login || (echo "❌ Cannot reach Nginx via localhost:8080" && exit 1)
 
 echo "🧪 Running PHPUnit (unit + feature)..."
 $COMPOSE exec app_test php artisan test --env=testing
@@ -21,4 +21,8 @@ echo "🌱 Re-seeding database for E2E tests..."
 $COMPOSE exec app_test php artisan migrate:fresh --seed --env=testing
 
 echo "🎭 Running Playwright E2E tests..."
-$COMPOSE run --rm --network host -e CI=true playwright npx playwright test --reporter=list
+if [ "${CI:-false}" = "true" ]; then
+    BASE_URL=http://localhost:8080 npx playwright test --reporter=list
+else
+    $COMPOSE run --rm -e CI=true playwright npx playwright test --reporter=list
+fi

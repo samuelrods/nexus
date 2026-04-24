@@ -88,13 +88,8 @@ services:
     volumes:
       - ./:/var/www
     working_dir: /var/www
-    ports:
-      - "8060:8060"
     networks:
       - nexus-test-network
-    depends_on:
-      nginx_test:
-        condition: service_healthy
 
 networks:
   nexus-test-network:
