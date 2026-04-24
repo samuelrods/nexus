@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Models\Organization;
@@ -12,8 +13,8 @@ use Tests\Traits\SetupOrganization;
 class DashboardTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     public function test_dashboard_can_be_rendered(): void
     {

@@ -35,7 +35,7 @@ class MemberController extends Controller
         $query = $organization->members();
 
         if ($request->filled('query')) {
-            $searchTerm = '%' . $request->input('query') . '%';
+            $searchTerm = '%'.$request->input('query').'%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('first_name', 'like', $searchTerm)
                     ->orWhere('last_name', 'like', $searchTerm)

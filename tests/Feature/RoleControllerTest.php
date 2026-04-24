@@ -15,8 +15,8 @@ use Tests\Traits\SetupOrganization;
 class RoleControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -39,7 +39,7 @@ class RoleControllerTest extends TestCase
         $response->assertStatus(200);
 
         // Assert the fetched roles match the created roles (3 created + 1 owner)
-        $response->assertInertia(fn(Assert $page) => $page->component('Roles/Index')
+        $response->assertInertia(fn (Assert $page) => $page->component('Roles/Index')
             ->has('pagination.data', 4)
             ->has('permissions')
         );
@@ -171,7 +171,7 @@ class RoleControllerTest extends TestCase
 
         $response = $this->put(route('roles.update', ['organization' => $this->organization->slug, 'role' => $role]), [
             'name' => 'Hacker Role',
-            'permissions' => [Permission::first()->id]
+            'permissions' => [Permission::first()->id],
         ]);
 
         $response->assertStatus(403);

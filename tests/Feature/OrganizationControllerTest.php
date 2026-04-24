@@ -3,15 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\Organization;
-use App\Models\OrganizationMember;
 use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\URL;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
-use Illuminate\Support\Facades\URL;
 
 class OrganizationControllerTest extends TestCase
 {
@@ -43,10 +42,10 @@ class OrganizationControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn(Assert $page) => $page
-            ->component('Organizations')
-            ->has('memberships', 1)
-            ->has('invitations')
+            fn (Assert $page) => $page
+                ->component('Organizations')
+                ->has('memberships', 1)
+                ->has('invitations')
         );
     }
 
@@ -62,7 +61,7 @@ class OrganizationControllerTest extends TestCase
         $response->assertSessionHas('message', 'Organization created successfully!');
 
         $this->assertDatabaseHas('organizations', ['name' => 'New Organization', 'user_id' => $this->user->id]);
-        
+
         // Check if default roles were created
         $this->assertEquals(4, Role::where('organization_id', $organization->id)->count());
         $this->assertTrue($this->user->hasRole('owner'));
@@ -79,16 +78,16 @@ class OrganizationControllerTest extends TestCase
     {
         $organization = Organization::create(['name' => 'Org 1', 'user_id' => $this->user->id, 'created_at' => now()]);
         $organization->memberships()->create(['user_id' => $this->user->id]);
-        
+
         URL::defaults(['organization' => $organization->slug]);
 
         $response = $this->get(route('organizations.settings', ['organization' => $organization->slug]));
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn(Assert $page) => $page
-            ->component('Organizations/Settings')
-            ->has('organization')
+            fn (Assert $page) => $page
+                ->component('Organizations/Settings')
+                ->has('organization')
         );
     }
 
@@ -96,7 +95,7 @@ class OrganizationControllerTest extends TestCase
     {
         $organization = Organization::create(['name' => 'Org 1', 'user_id' => $this->user->id, 'created_at' => now()]);
         $organization->memberships()->create(['user_id' => $this->user->id]);
-        
+
         $role = Role::create(['name' => 'owner', 'organization_id' => $organization->id]);
         $role->syncPermissions(\App\Models\Permission::all());
         setPermissionsTeamId($organization->id);
@@ -117,10 +116,10 @@ class OrganizationControllerTest extends TestCase
     {
         $otherUser = User::factory()->create();
         $organization = Organization::create(['name' => 'Org 1', 'user_id' => $otherUser->id, 'created_at' => now()]);
-        
+
         $response = $this->put(route('organizations.update', ['organization' => $organization->slug]), [
             'name' => 'Hack Attempt',
-            'currency' => 'USD'
+            'currency' => 'USD',
         ]);
 
         $response->assertStatus(403);
@@ -130,7 +129,7 @@ class OrganizationControllerTest extends TestCase
     {
         $organization = Organization::create(['name' => 'Full Data Org', 'user_id' => $this->user->id, 'created_at' => now()]);
         $organization->memberships()->create(['user_id' => $this->user->id]);
-        
+
         $role = Role::create(['name' => 'owner', 'organization_id' => $organization->id]);
         $role->syncPermissions(\App\Models\Permission::all());
         setPermissionsTeamId($organization->id);
@@ -139,13 +138,13 @@ class OrganizationControllerTest extends TestCase
         $address = \App\Models\Address::factory()->create(['organization_id' => $organization->id]);
         $company = \App\Models\Company::factory()->create([
             'organization_id' => $organization->id,
-            'address_id' => $address->id
+            'address_id' => $address->id,
         ]);
         $contact = \App\Models\Contact::factory()->create([
             'organization_id' => $organization->id,
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
-        
+
         $lead = \App\Models\Lead::factory()->create([
             'organization_id' => $organization->id,
             'contact_id' => $contact->id,

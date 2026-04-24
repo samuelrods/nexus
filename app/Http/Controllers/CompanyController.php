@@ -43,7 +43,9 @@ class CompanyController extends Controller
                 ->where('organization_id', $organizationId)
                 ->query(function ($q) use ($sortBy, $sortDir, $industry) {
                     $q->orderBy($sortBy, $sortDir);
-                    if ($industry) $q->where('industry', $industry);
+                    if ($industry) {
+                        $q->where('industry', $industry);
+                    }
                 })
                 ->paginate(10)->withQueryString();
 
@@ -56,7 +58,7 @@ class CompanyController extends Controller
         }
 
         $companiesPagination = Company::where('organization_id', $organizationId)
-            ->when($industry, fn($q) => $q->where('industry', $industry))
+            ->when($industry, fn ($q) => $q->where('industry', $industry))
             ->orderBy($sortBy, $sortDir)
             ->paginate(10)->withQueryString();
 
@@ -112,7 +114,7 @@ class CompanyController extends Controller
             'organization_id' => $organizationId,
         ]);
 
-        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+        if (($request->wantsJson() || $request->ajax()) && ! $request->header('X-Inertia')) {
             return new CompanyResource($company);
         }
 
@@ -155,11 +157,11 @@ class CompanyController extends Controller
         $addressFields = array_intersect_key($validated, array_flip(['street_address', 'city', 'state', 'zip_code']));
         $companyFields = array_intersect_key($validated, array_flip(['name', 'website', 'industry', 'description']));
 
-        if (!empty($addressFields)) {
+        if (! empty($addressFields)) {
             Address::find($company->address_id)->update($addressFields);
         }
 
-        if (!empty($companyFields)) {
+        if (! empty($companyFields)) {
             $company->update($companyFields);
         }
 
@@ -185,7 +187,7 @@ class CompanyController extends Controller
         $query = Company::where('organization_id', $organizationId);
 
         if ($request->filled('query')) {
-            $query->where('name', 'like', '%' . $request->input('query') . '%');
+            $query->where('name', 'like', '%'.$request->input('query').'%');
         }
 
         $companies = $query->orderBy('name')->take(10)->get();

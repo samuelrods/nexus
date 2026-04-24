@@ -17,8 +17,8 @@ use Tests\Traits\SetupOrganization;
 class LeadControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -37,17 +37,17 @@ class LeadControllerTest extends TestCase
         $leads = Lead::factory(3)->create([
             'organization_id' => $organization->id,
             'contact_id' => $contact->id,
-            'company_id' => $company->id
+            'company_id' => $company->id,
         ]);
 
         $response = $this->get(route('leads.index', ['organization' => $organization->slug]));
 
         $response->assertStatus(200)
             ->assertInertia(
-                fn(Assert $page) => $page
-                ->component('Leads/Index')
-                ->has('pagination.data', 3)
-                ->has('filters')
+                fn (Assert $page) => $page
+                    ->component('Leads/Index')
+                    ->has('pagination.data', 3)
+                    ->has('filters')
             );
     }
 
@@ -84,7 +84,7 @@ class LeadControllerTest extends TestCase
         $lead = Lead::factory()->create([
             'organization_id' => $organization->id,
             'contact_id' => $contact->id,
-            'company_id' => $company->id
+            'company_id' => $company->id,
         ]);
 
         $newData = [
@@ -110,7 +110,7 @@ class LeadControllerTest extends TestCase
         $lead = Lead::factory()->create([
             'organization_id' => $organization->id,
             'contact_id' => $contact->id,
-            'company_id' => $company->id
+            'company_id' => $company->id,
         ]);
 
         $response = $this->delete(route('leads.destroy', ['organization' => $organization->slug, 'lead' => $lead->id]));
@@ -137,7 +137,7 @@ class LeadControllerTest extends TestCase
         $otherLead = Lead::factory()->create([
             'organization_id' => $otherOrg->id,
             'company_id' => $otherCompany->id,
-            'contact_id' => $otherContact->id
+            'contact_id' => $otherContact->id,
         ]);
 
         $response = $this->get(route('leads.show', ['organization' => $this->organization->slug, 'lead' => $otherLead->id]));

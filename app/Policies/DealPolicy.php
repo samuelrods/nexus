@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\DealPermissions;
 use App\Models\Deal;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class DealPolicy
 {

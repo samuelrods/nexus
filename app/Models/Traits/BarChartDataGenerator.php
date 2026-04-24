@@ -21,7 +21,7 @@ trait BarChartDataGenerator
             $totalNew = self::whereDate('created_at', $date)->count();
 
             return [
-                $formattedDate => compact('totalDay', 'totalNew')
+                $formattedDate => compact('totalDay', 'totalNew'),
             ];
         })->all();
 

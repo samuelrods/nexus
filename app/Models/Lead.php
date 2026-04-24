@@ -18,7 +18,7 @@ class Lead extends Model
         'created_at',
         'status',
         'description',
-        'organization_id'
+        'organization_id',
     ];
 
     public $timestamps = true;

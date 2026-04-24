@@ -16,10 +16,10 @@ enum LeadPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Leads',
-            static::CREATE => 'Create Leads',
-            static::UPDATE => 'Update Leads',
-            static::DELETE => 'Delete Leads',
+            self::READ => 'Read Leads',
+            self::CREATE => 'Create Leads',
+            self::UPDATE => 'Update Leads',
+            self::DELETE => 'Delete Leads',
         };
     }
 }

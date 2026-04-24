@@ -16,10 +16,10 @@ enum DealPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Deals',
-            static::CREATE => 'Create Deals',
-            static::UPDATE => 'Update Deals',
-            static::DELETE => 'Delete Deals',
+            self::READ => 'Read Deals',
+            self::CREATE => 'Create Deals',
+            self::UPDATE => 'Update Deals',
+            self::DELETE => 'Delete Deals',
         };
     }
 }

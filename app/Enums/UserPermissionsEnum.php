@@ -8,7 +8,7 @@ enum UserPermissionsEnum: string
 {
     use ToArrayEnum;
 
-    case READ_USERS= 'read-users';
+    case READ_USERS = 'read-users';
     case CREATE_USERS = 'create-users';
     case UPDATE_USERS = 'update-users';
     case DELETE_USERS = 'delete-users';

@@ -37,7 +37,7 @@ class UpdateRoleRequest extends FormRequest
                 },
             ],
             'permissions' => ['required', 'array'],
-            'permissions.*' => Rule::in(Permission::get()->pluck('id'))
+            'permissions.*' => Rule::in(Permission::get()->pluck('id')),
         ];
     }
 }

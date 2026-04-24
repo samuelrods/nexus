@@ -53,7 +53,7 @@ class TaskController extends Controller
         $this->authorize('view', $task);
 
         return view('tasks.show', [
-            'task' => $task
+            'task' => $task,
         ]);
     }
 

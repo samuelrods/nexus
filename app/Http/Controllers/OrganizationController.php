@@ -17,21 +17,21 @@ class OrganizationController extends Controller
     public function index()
     {
         $memberships = auth()->user()->memberships()
-            ->with(['organization' => function($query) {
+            ->with(['organization' => function ($query) {
                 $query->withCount(['members', 'deals'])->with('user');
             }])
             ->get();
-            
+
         $invitations = auth()->user()->invitations()
             ->where('status', 'pending')
-            ->with(['organization' => function($query) {
+            ->with(['organization' => function ($query) {
                 $query->withCount(['members', 'deals'])->with('user');
             }])
             ->get();
 
         return Inertia::render('Organizations', [
             'memberships' => $memberships,
-            'invitations' => $invitations
+            'invitations' => $invitations,
         ]);
     }
 
@@ -97,8 +97,8 @@ class OrganizationController extends Controller
             'guard_name' => 'web',
             'organization_id' => $organization->id,
         ]);
-        $manager->syncPermissions($allPermissions->filter(function($p) {
-            return !str_contains($p->name, 'roles');
+        $manager->syncPermissions($allPermissions->filter(function ($p) {
+            return ! str_contains($p->name, 'roles');
         }));
 
         // 4. Member - Basic Access
@@ -107,10 +107,10 @@ class OrganizationController extends Controller
             'guard_name' => 'web',
             'organization_id' => $organization->id,
         ]);
-        $member->syncPermissions($allPermissions->filter(function($p) {
-            return str_starts_with($p->name, 'read-') || 
+        $member->syncPermissions($allPermissions->filter(function ($p) {
+            return str_starts_with($p->name, 'read-') ||
                    str_starts_with($p->name, 'create-') ||
-                   (str_starts_with($p->name, 'update-') && !str_contains($p->name, 'members') && !str_contains($p->name, 'roles'));
+                   (str_starts_with($p->name, 'update-') && ! str_contains($p->name, 'members') && ! str_contains($p->name, 'roles'));
         }));
     }
 
@@ -122,7 +122,7 @@ class OrganizationController extends Controller
         $organization->loadCount(['members', 'deals']);
 
         return Inertia::render('Organizations/Settings', [
-            'organization' => $organization
+            'organization' => $organization,
         ]);
     }
 

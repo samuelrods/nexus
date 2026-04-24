@@ -6,7 +6,6 @@ use App\Http\Requests\AcceptInvitationRequest;
 use App\Http\Requests\StoreInvitationRequest;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class InvitationController extends Controller
 {
@@ -19,7 +18,7 @@ class InvitationController extends Controller
             ->first();
 
         // If the user does not exist, return an error.
-        if (!$user) {
+        if (! $user) {
             return back()->withErrors([
                 'memberInfo' => 'The user you are trying to add does not exist.',
             ]);
@@ -63,7 +62,7 @@ class InvitationController extends Controller
             $invitation->update(['status' => 'accepted']);
 
             $invitation->organization->memberships()->create([
-                'user_id' => $invitation->user_id
+                'user_id' => $invitation->user_id,
             ]);
 
             // Assign default 'member' role

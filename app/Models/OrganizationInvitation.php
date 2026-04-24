@@ -13,7 +13,7 @@ class OrganizationInvitation extends Model
     protected $fillable = [
         'user_id',
         'organization_id',
-        'status'
+        'status',
     ];
 
     public function organization(): BelongsTo

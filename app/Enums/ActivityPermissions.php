@@ -16,10 +16,10 @@ enum ActivityPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Activities',
-            static::CREATE => 'Create Activities',
-            static::UPDATE => 'Update Activities',
-            static::DELETE => 'Delete Activities',
+            self::READ => 'Read Activities',
+            self::CREATE => 'Create Activities',
+            self::UPDATE => 'Update Activities',
+            self::DELETE => 'Delete Activities',
         };
     }
 }

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Client;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,11 +23,11 @@ class ProjectFactory extends Factory
             'deadline' => fake()->dateTimeBetween('now', '+30 days')->format('Y-m-d'),
             'client_id' => Client::factory(),
             'status' => fake()->randomElement([
-                "In Process",
-                "Completed",
-                "On Hold",
-                "Cancelled",
-                "Pending Approval",
+                'In Process',
+                'Completed',
+                'On Hold',
+                'Cancelled',
+                'Pending Approval',
             ]),
         ];
     }

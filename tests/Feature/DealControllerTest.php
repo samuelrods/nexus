@@ -12,10 +12,10 @@ use Tests\Traits\SetupOrganization;
 
 class DealControllerTest extends TestCase
 {
-    use RefreshDatabase;
-    use WithFaker;
-    use SetupOrganization;
     use CreatesApplicationData;
+    use RefreshDatabase;
+    use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -37,11 +37,11 @@ class DealControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertInertia(
-                fn(Assert $page) => $page
-                ->component('Deals/Index')
-                ->has('pagination.data', $data['deals']->count())
-                ->has('stats')
-                ->has('filters')
+                fn (Assert $page) => $page
+                    ->component('Deals/Index')
+                    ->has('pagination.data', $data['deals']->count())
+                    ->has('stats')
+                    ->has('filters')
             );
     }
 

@@ -2,20 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Activity;
-use App\Models\Address;
-use App\Models\Company;
-use App\Models\Contact;
-use App\Models\Deal;
-use App\Models\Lead;
-use App\Models\Organization;
-use App\Models\OrganizationInvitation;
-use App\Models\OrganizationMember;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use App\Enums\RolesEnum;
 use App\Enums\ActivityPermissions;
 use App\Enums\CompanyPermissions;
 use App\Enums\ContactPermissions;
@@ -24,6 +10,19 @@ use App\Enums\LeadPermissions;
 use App\Enums\MemberPermissions;
 use App\Enums\OrganizationPermissions;
 use App\Enums\RolePermissions;
+use App\Enums\RolesEnum;
+use App\Models\Activity;
+use App\Models\Address;
+use App\Models\Company;
+use App\Models\Contact;
+use App\Models\Deal;
+use App\Models\Lead;
+use App\Models\Organization;
+use App\Models\OrganizationInvitation;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -65,7 +64,7 @@ class UserSeeder extends Seeder
         OrganizationInvitation::create([
             'user_id' => $admin->id,
             'organization_id' => $globex->id,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         // 4. Set up Nexus Corp (Primary Testing Org)
@@ -83,7 +82,7 @@ class UserSeeder extends Seeder
         $ownerRole = Role::create(['name' => 'owner', 'organization_id' => $org->id]);
         $adminRole = Role::create(['name' => RolesEnum::ADMINISTRATOR->value, 'organization_id' => $org->id]);
         $salesRole = Role::create(['name' => RolesEnum::SALES->value, 'organization_id' => $org->id]);
-        
+
         // Assign all permissions to owner and admin roles
         $allPermissions = array_merge(
             ActivityPermissions::toArray(),
@@ -123,7 +122,7 @@ class UserSeeder extends Seeder
         // Create Companies
         $companies = Company::factory(fake()->numberBetween(15, 20))->create([
             'organization_id' => $org->id,
-            'address_id' => Address::factory(['organization_id' => $org->id])
+            'address_id' => Address::factory(['organization_id' => $org->id]),
         ]);
 
         foreach ($companies as $company) {

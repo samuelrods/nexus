@@ -13,8 +13,8 @@ use Tests\Traits\SetupOrganization;
 class InvitationControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -27,7 +27,7 @@ class InvitationControllerTest extends TestCase
         $invitee = User::factory()->create();
 
         $response = $this->post(route('invitations.store', ['organization' => $this->organization->slug]), [
-            'memberInfo' => $invitee->email
+            'memberInfo' => $invitee->email,
         ]);
 
         $response->assertRedirect();
@@ -36,14 +36,14 @@ class InvitationControllerTest extends TestCase
         $this->assertDatabaseHas('organization_invitations', [
             'user_id' => $invitee->id,
             'organization_id' => $this->organization->id,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
     }
 
     public function test_cannot_invite_non_existent_user()
     {
         $response = $this->post(route('invitations.store', ['organization' => $this->organization->slug]), [
-            'memberInfo' => 'nonexistent@example.com'
+            'memberInfo' => 'nonexistent@example.com',
         ]);
 
         $response->assertSessionHasErrors('memberInfo');
@@ -56,7 +56,7 @@ class InvitationControllerTest extends TestCase
         $this->organization->memberships()->create(['user_id' => $existingMember->id]);
 
         $response = $this->post(route('invitations.store', ['organization' => $this->organization->slug]), [
-            'memberInfo' => $existingMember->email
+            'memberInfo' => $existingMember->email,
         ]);
 
         $response->assertSessionHasErrors('memberInfo');
@@ -68,11 +68,11 @@ class InvitationControllerTest extends TestCase
         OrganizationInvitation::create([
             'user_id' => $invitee->id,
             'organization_id' => $this->organization->id,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $response = $this->post(route('invitations.store', ['organization' => $this->organization->slug]), [
-            'memberInfo' => $invitee->email
+            'memberInfo' => $invitee->email,
         ]);
 
         $response->assertSessionHasErrors('memberInfo');
@@ -84,14 +84,14 @@ class InvitationControllerTest extends TestCase
         $invitation = OrganizationInvitation::create([
             'user_id' => $invitee->id,
             'organization_id' => $this->organization->id,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         // Create 'member' role for the organization
         Role::create(['name' => 'member', 'organization_id' => $this->organization->id]);
 
         $response = $this->actingAs($invitee)->put(route('invitations.update', $invitation), [
-            'status' => true
+            'status' => true,
         ]);
 
         $response->assertRedirect();
@@ -99,7 +99,7 @@ class InvitationControllerTest extends TestCase
 
         $this->assertEquals('accepted', $invitation->fresh()->status);
         $this->assertTrue($this->organization->members()->where('user_id', $invitee->id)->exists());
-        
+
         setPermissionsTeamId($this->organization->id);
         $this->assertTrue($invitee->hasRole('member'));
     }
@@ -110,11 +110,11 @@ class InvitationControllerTest extends TestCase
         $invitation = OrganizationInvitation::create([
             'user_id' => $invitee->id,
             'organization_id' => $this->organization->id,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $response = $this->actingAs($invitee)->put(route('invitations.update', $invitation), [
-            'status' => false
+            'status' => false,
         ]);
 
         $response->assertRedirect();

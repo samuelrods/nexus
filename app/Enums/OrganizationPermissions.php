@@ -13,7 +13,7 @@ enum OrganizationPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::UPDATE => 'Update Organization',
+            self::UPDATE => 'Update Organization',
         };
     }
 }

@@ -58,7 +58,7 @@ class UserController extends Controller
         $this->authorize('view', $user);
 
         return view('users.show', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -70,7 +70,7 @@ class UserController extends Controller
         $this->authorize('update', $user);
 
         return view('users.edit', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -128,6 +128,7 @@ class UserController extends Controller
         if ($organization) {
             session(['organization_id' => $organizationId]);
             setPermissionsTeamId($organizationId);
+
             return redirect()->route('dashboard', ['organization' => $organization->slug]);
         }
 

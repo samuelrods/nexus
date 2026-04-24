@@ -18,7 +18,7 @@ class PasswordResetTest extends TestCase
         $response = $this->get('/forgot-password');
 
         $response->assertStatus(200);
-        $response->assertInertia(fn(Assert $page) => $page->component('Auth/ForgotPassword'));
+        $response->assertInertia(fn (Assert $page) => $page->component('Auth/ForgotPassword'));
     }
 
     public function test_reset_password_link_can_be_requested(): void
@@ -44,7 +44,7 @@ class PasswordResetTest extends TestCase
             $response = $this->get('/reset-password/'.$notification->token);
 
             $response->assertStatus(200);
-            $response->assertInertia(fn(Assert $page) => $page->component('Auth/ResetPassword'));
+            $response->assertInertia(fn (Assert $page) => $page->component('Auth/ResetPassword'));
 
             return true;
         });

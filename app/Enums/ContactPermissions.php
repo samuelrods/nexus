@@ -16,10 +16,10 @@ enum ContactPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Contacts',
-            static::CREATE => 'Create Contacts',
-            static::UPDATE => 'Update Contacts',
-            static::DELETE => 'Delete Contacts',
+            self::READ => 'Read Contacts',
+            self::CREATE => 'Create Contacts',
+            self::UPDATE => 'Update Contacts',
+            self::DELETE => 'Delete Contacts',
         };
     }
 }

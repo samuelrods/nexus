@@ -21,7 +21,7 @@ class StoreActivityRequest extends FormRequest
     {
         if ($this->time && strlen($this->time) === 5) {
             $this->merge([
-                'time' => $this->time . ':00',
+                'time' => $this->time.':00',
             ]);
         }
     }

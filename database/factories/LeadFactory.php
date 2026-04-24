@@ -18,16 +18,16 @@ class LeadFactory extends Factory
     {
         return [
             'source' => fake()->randomElement([
-                "website",
-                "referral",
-                "social_media",
-                "other",
+                'website',
+                'referral',
+                'social_media',
+                'other',
             ]),
             'created_at' => fake()->dateTimeBetween('-30 days', 'now')->format('Y-m-d'),
             'status' => fake()->randomElement([
-                "open",
-                "closed",
-                "converted",
+                'open',
+                'closed',
+                'converted',
             ]),
             'description' => fake()->text(),
         ];

@@ -13,8 +13,8 @@ use Tests\Traits\SetupOrganization;
 class CompanyControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -29,7 +29,7 @@ class CompanyControllerTest extends TestCase
 
         $companies = Company::factory(3)->create([
             'organization_id' => $organization->id,
-            'address_id' => Address::factory(['organization_id' => $organization->id])
+            'address_id' => Address::factory(['organization_id' => $organization->id]),
         ]);
 
         $response = $this->get(route('companies.index', ['organization' => $organization->slug]));
@@ -37,11 +37,11 @@ class CompanyControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertInertia(
-            fn(Assert $page) => $page->component('Companies/Index')
-            ->has('pagination.data', 3)
-            ->has('stats')
-            ->has('filters')
-            ->has('industries')
+            fn (Assert $page) => $page->component('Companies/Index')
+                ->has('pagination.data', 3)
+                ->has('stats')
+                ->has('filters')
+                ->has('industries')
         );
     }
 

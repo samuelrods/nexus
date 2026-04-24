@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDealRequest;
 use App\Http\Requests\UpdateDealRequest;
 use App\Http\Resources\DealResource;
-use App\Models\Deal;
-use App\Models\Organization;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Deal;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -46,7 +46,9 @@ class DealController extends Controller
                 ->where('organization_id', $organizationId)
                 ->query(function ($q) use ($sortQuery, $sortDir, $status) {
                     $q->orderBy($sortQuery, $sortDir);
-                    if ($status) $q->where('status', $status);
+                    if ($status) {
+                        $q->where('status', $status);
+                    }
                 })
                 ->paginate(10)->withQueryString();
 
@@ -58,7 +60,7 @@ class DealController extends Controller
         }
 
         $dealsPagination = Deal::where('organization_id', $organizationId)
-            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($status, fn ($q) => $q->where('status', $status))
             ->orderBy($sortQuery, $sortDir)
             ->paginate(10)->withQueryString();
 
@@ -92,7 +94,7 @@ class DealController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+        if (($request->wantsJson() || $request->ajax()) && ! $request->header('X-Inertia')) {
             return new DealResource($deal);
         }
 

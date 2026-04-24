@@ -10,10 +10,8 @@ use App\Enums\LeadPermissions;
 use App\Enums\MemberPermissions;
 use App\Enums\OrganizationPermissions;
 use App\Enums\RolePermissions;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionsSeeder extends Seeder
 {

@@ -16,7 +16,7 @@ class Company extends Model
         'industry',
         'address_id',
         'description',
-        'organization_id'
+        'organization_id',
     ];
 
     public $timestamps = true;

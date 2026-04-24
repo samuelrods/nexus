@@ -66,7 +66,7 @@ class ClientController extends Controller
     public function show(Client $client)
     {
         return view('clients.show', [
-            'client' => $client
+            'client' => $client,
         ]);
     }
 
@@ -76,7 +76,7 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         return view('clients.edit', [
-            'client' => $client
+            'client' => $client,
         ]);
     }
 
@@ -90,11 +90,11 @@ class ClientController extends Controller
         $addressFields = array_intersect_key($validated, array_flip(['street_address', 'city', 'state', 'zip_code']));
         $clientFields = array_intersect_key($validated, array_flip(['company', 'vat']));
 
-        if (!empty($addressFields)) {
+        if (! empty($addressFields)) {
             $client->address->update($addressFields);
         }
 
-        if (!empty($clientFields)) {
+        if (! empty($clientFields)) {
             $client->update($clientFields);
         }
 

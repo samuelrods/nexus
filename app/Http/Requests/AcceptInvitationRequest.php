@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\OrganizationInvitation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AcceptInvitationRequest extends FormRequest
@@ -18,7 +17,7 @@ class AcceptInvitationRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => ['required', 'boolean']
+            'status' => ['required', 'boolean'],
         ];
     }
 

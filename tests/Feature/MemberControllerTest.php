@@ -14,8 +14,8 @@ use Tests\Traits\SetupOrganization;
 class MemberControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -29,20 +29,20 @@ class MemberControllerTest extends TestCase
         $organization = $this->organization;
 
         $members = User::factory()->count(3)->create();
-        $members->each(fn($member) => $organization->members()->attach($member->id));
+        $members->each(fn ($member) => $organization->members()->attach($member->id));
 
         $response = $this->get(route('members.index'));
 
         $response->assertStatus(200);
 
         $response->assertInertia(
-            fn(Assert $page) => $page->component('Members/Index')
-            ->has(
-                'pagination.data',
-                4 // 3 members + 1 owner
-            )
-            ->has('rolesData')
-            ->has('filters')
+            fn (Assert $page) => $page->component('Members/Index')
+                ->has(
+                    'pagination.data',
+                    4 // 3 members + 1 owner
+                )
+                ->has('rolesData')
+                ->has('filters')
         );
     }
 

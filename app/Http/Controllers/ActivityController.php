@@ -35,7 +35,9 @@ class ActivityController extends Controller
                 ->where('organization_id', $organizationId)
                 ->query(function ($q) use ($sortQuery, $sortDir, $type) {
                     $q->orderBy($sortQuery, $sortDir);
-                    if ($type) $q->where('type', $type);
+                    if ($type) {
+                        $q->where('type', $type);
+                    }
                 })
                 ->paginate(10)->withQueryString();
 
@@ -46,7 +48,7 @@ class ActivityController extends Controller
         }
 
         $activitiesPagination = Activity::where('organization_id', $organizationId)
-            ->when($type, fn($q) => $q->where('type', $type))
+            ->when($type, fn ($q) => $q->where('type', $type))
             ->orderBy($sortQuery, $sortDir)
             ->paginate(10)->withQueryString();
 
@@ -79,7 +81,7 @@ class ActivityController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+        if (($request->wantsJson() || $request->ajax()) && ! $request->header('X-Inertia')) {
             return new ActivityResource($activity);
         }
 

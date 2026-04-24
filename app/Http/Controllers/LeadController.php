@@ -6,9 +6,9 @@ use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
 use App\Http\Resources\LeadDataResource;
 use App\Http\Resources\LeadResource;
-use App\Models\Lead;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Lead;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -40,8 +40,12 @@ class LeadController extends Controller
                 ->where('organization_id', $organizationId)
                 ->query(function ($q) use ($sortQuery, $sortDir, $status, $source) {
                     $q->orderBy($sortQuery, $sortDir);
-                    if ($status) $q->where('status', $status);
-                    if ($source) $q->where('source', $source);
+                    if ($status) {
+                        $q->where('status', $status);
+                    }
+                    if ($source) {
+                        $q->where('source', $source);
+                    }
                 })
                 ->paginate(10)->withQueryString();
 
@@ -52,8 +56,8 @@ class LeadController extends Controller
         }
 
         $leadsPagination = Lead::where('organization_id', $organizationId)
-            ->when($status, fn($q) => $q->where('status', $status))
-            ->when($source, fn($q) => $q->where('source', $source))
+            ->when($status, fn ($q) => $q->where('status', $status))
+            ->when($source, fn ($q) => $q->where('source', $source))
             ->orderBy($sortQuery, $sortDir)
             ->paginate(10)->withQueryString();
 
@@ -85,7 +89,7 @@ class LeadController extends Controller
             'organization_id' => $organization->id,
         ]);
 
-        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+        if (($request->wantsJson() || $request->ajax()) && ! $request->header('X-Inertia')) {
             return new LeadResource($lead);
         }
 
@@ -147,7 +151,7 @@ class LeadController extends Controller
         $query = Lead::where('organization_id', $organizationId);
 
         if ($request->filled('query')) {
-            $searchTerm = '%' . $request->input('query') . '%';
+            $searchTerm = '%'.$request->input('query').'%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('description', 'like', $searchTerm)
                     ->orWhereHas('company', function ($q) use ($searchTerm) {

@@ -16,10 +16,10 @@ enum MemberPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Members',
-            static::CREATE => 'Create Members',
-            static::UPDATE => 'Update Members',
-            static::DELETE => 'Delete Members',
+            self::READ => 'Read Members',
+            self::CREATE => 'Create Members',
+            self::UPDATE => 'Update Members',
+            self::DELETE => 'Delete Members',
         };
     }
 }

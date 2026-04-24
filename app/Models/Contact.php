@@ -23,7 +23,7 @@ class Contact extends Model
         'organization_name',
         'job_title',
         'description',
-        'organization_id'
+        'organization_id',
     ];
 
     public $timestamps = true;
@@ -50,7 +50,7 @@ class Contact extends Model
 
     protected function fullName(): Attribute
     {
-        return Attribute::make(get: fn() => "{$this->first_name} {$this->last_name}");
+        return Attribute::make(get: fn () => "{$this->first_name} {$this->last_name}");
     }
 
     public function toSearchableArray()

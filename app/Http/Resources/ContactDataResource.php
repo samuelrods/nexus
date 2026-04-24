@@ -17,7 +17,7 @@ class ContactDataResource extends JsonResource
         return [
             'value' => $this->id,
             'label' => $this->full_name,
-            'description' => $this->email . ' - ' . $this->phone_number . ' - ' . $this->organization_name ?? '',
+            'description' => $this->email.' - '.$this->phone_number.' - '.$this->organization_name ?? '',
         ];
     }
 }

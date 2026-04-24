@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\OrganizationMemberPermissions;
 use App\Models\OrganizationMember;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class OrganizationMemberPolicy
 {
@@ -46,11 +45,10 @@ class OrganizationMemberPolicy
      */
     public function delete(User $user, OrganizationMember $organizationMember): bool
     {
-        return (
+        return
             $user->can(OrganizationMemberPermissions::DELETE->value) &&
             $user->organizations->contains($organizationMember->organization_id) ||
-            $organizationMember->user_id === $user->id && $organizationMember->organization->user_id === $organizationMember->user_id
-        );
+            $organizationMember->user_id === $user->id && $organizationMember->organization->user_id === $organizationMember->user_id;
     }
 
     /**

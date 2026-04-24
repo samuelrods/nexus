@@ -20,7 +20,7 @@ class Role extends SpatieRole
             'name' => $this->name,
             'permissions' => $this->permissions->pluck('id'),
             'created_at' => $this->created_at->diffForHumans(),
-            'updated_at' => $this->updated_at->diffForHumans()
+            'updated_at' => $this->updated_at->diffForHumans(),
         ];
     }
 

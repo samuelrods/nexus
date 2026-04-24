@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\OrganizationPermissions;
 use App\Models\Organization;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class OrganizationPolicy
 {

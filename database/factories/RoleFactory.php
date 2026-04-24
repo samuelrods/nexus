@@ -18,7 +18,7 @@ class RoleFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->word,
-            'organization_id' => session('organization_id')
+            'organization_id' => session('organization_id'),
         ];
     }
 }

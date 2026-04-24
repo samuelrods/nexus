@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\AddressPermissionsEnum;
 use App\Models\Address;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class AddressPolicy
 {

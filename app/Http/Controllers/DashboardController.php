@@ -22,9 +22,9 @@ class DashboardController extends Controller
         $range = $request->input('range', 30);
 
         return Inertia::render('Dashboard', [
-            'dealAreaChartData' => fn() => $this->getDealAreaChartData($organization, $range),
-            'dealPieChartData' => fn() => $this->getDealPieChartData($organization, $range),
-            'activityPieChartData' => fn() => $this->getActivityPieChartData($organization, $range),
+            'dealAreaChartData' => fn () => $this->getDealAreaChartData($organization, $range),
+            'dealPieChartData' => fn () => $this->getDealPieChartData($organization, $range),
+            'activityPieChartData' => fn () => $this->getActivityPieChartData($organization, $range),
             'range' => $range,
             'teamMemberCount' => $organization->members()->count(),
             'totalLeads' => $organization->leads()->count(),
@@ -71,7 +71,6 @@ class DashboardController extends Controller
             ->where('close_date', '>=', $daysAgo->copy()->subDays($range))
             ->where('close_date', '<', $daysAgo)
             ->sum('value');
-
 
         $percentage = $previousRange ? (($totalValueRange - $previousRange) / $previousRange) * 100 : 0;
 

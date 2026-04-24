@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Laravel\Scout\Searchable;
 
 class Organization extends Model
@@ -21,14 +20,14 @@ class Organization extends Model
     protected static function booted()
     {
         static::creating(function ($organization) {
-            if (!$organization->slug) {
+            if (! $organization->slug) {
                 $organization->slug = \Illuminate\Support\Str::slug($organization->name);
-                
+
                 // Ensure uniqueness
                 $originalSlug = $organization->slug;
                 $count = 1;
                 while (static::where('slug', $organization->slug)->exists()) {
-                    $organization->slug = $originalSlug . '-' . $count++;
+                    $organization->slug = $originalSlug.'-'.$count++;
                 }
             }
         });

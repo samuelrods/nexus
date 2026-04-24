@@ -21,9 +21,9 @@ class DealFactory extends Factory
             'value' => fake()->numberBetween(1000, 100000),
             'close_date' => fake()->dateTimeBetween('-90 days', 'now')->format('Y-m-d'),
             'status' => fake()->randomElement([
-                "pending",
-                "won",
-                "lost",
+                'pending',
+                'won',
+                'lost',
             ]),
             'description' => fake()->text(),
         ];

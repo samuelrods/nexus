@@ -18,8 +18,8 @@ use Tests\Traits\SetupOrganization;
 class ContactControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithFaker;
     use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -39,7 +39,7 @@ class ContactControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertInertia(fn(Assert $page) => $page->component('Contacts/Index')
+        $response->assertInertia(fn (Assert $page) => $page->component('Contacts/Index')
             ->has('pagination.data', 10)
             ->has('stats')
             ->has('filters')
@@ -63,7 +63,7 @@ class ContactControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertInertia(fn(Assert $page) => $page->component('Contacts/Index')
+        $response->assertInertia(fn (Assert $page) => $page->component('Contacts/Index')
             ->has('pagination.data', 10)
             ->has('stats')
             ->has('filters')
@@ -359,13 +359,13 @@ class ContactControllerTest extends TestCase
 
         $company = Company::factory()->create([
             'address_id' => Address::factory(['organization_id' => $organization->id]),
-            'organization_id' => $organization->id
+            'organization_id' => $organization->id,
         ]);
 
         $lead = Lead::factory()->create([
             'organization_id' => $organization->id,
             'contact_id' => $contact->id,
-            'company_id' => $company->id
+            'company_id' => $company->id,
         ]);
 
         $response = $this->delete(route('contacts.destroy', ['organization' => $organization->slug, 'contact' => $contact->id]));

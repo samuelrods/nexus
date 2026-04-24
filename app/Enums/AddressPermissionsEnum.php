@@ -16,10 +16,10 @@ enum AddressPermissionsEnum: string
     public function label(): string
     {
         return match ($this) {
-            static::READ_ADDRESSES => 'Read Addresses',
-            static::CREATE_ADDRESSES => 'Create Addresses',
-            static::UPDATE_ADDRESSES => 'Update Addresses',
-            static::DELETE_ADDRESSES => 'Delete Addresses',
+            self::READ_ADDRESSES => 'Read Addresses',
+            self::CREATE_ADDRESSES => 'Create Addresses',
+            self::UPDATE_ADDRESSES => 'Update Addresses',
+            self::DELETE_ADDRESSES => 'Delete Addresses',
         };
     }
 }

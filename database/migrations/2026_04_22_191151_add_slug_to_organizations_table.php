@@ -19,14 +19,14 @@ return new class extends Migration
         $organizations = \App\Models\Organization::all();
         foreach ($organizations as $organization) {
             $organization->slug = \Illuminate\Support\Str::slug($organization->name);
-            
+
             // Ensure uniqueness if multiple orgs have the same name
             $originalSlug = $organization->slug;
             $count = 1;
             while (\App\Models\Organization::where('slug', $organization->slug)->where('id', '!=', $organization->id)->exists()) {
-                $organization->slug = $originalSlug . '-' . $count++;
+                $organization->slug = $originalSlug.'-'.$count++;
             }
-            
+
             $organization->save();
         }
     }

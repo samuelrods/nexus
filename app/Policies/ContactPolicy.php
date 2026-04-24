@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\ContactPermissions;
 use App\Models\Contact;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ContactPolicy
 {
@@ -40,7 +39,7 @@ class ContactPolicy
     {
         $hasPermission = $user->can(ContactPermissions::UPDATE->value) && $user->organizations->contains($contact->organization_id);
 
-        return  $hasPermission;
+        return $hasPermission;
     }
 
     /**

@@ -16,10 +16,10 @@ enum CompanyPermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Companies',
-            static::CREATE => 'Create Companies',
-            static::UPDATE => 'Update Companies',
-            static::DELETE => 'Delete Companies',
+            self::READ => 'Read Companies',
+            self::CREATE => 'Create Companies',
+            self::UPDATE => 'Update Companies',
+            self::DELETE => 'Delete Companies',
         };
     }
 }

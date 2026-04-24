@@ -26,7 +26,7 @@ class CheckOrganizations
             }
         } elseif (is_string($slug)) {
             $organization = $request->user()->organizations()->where('slug', $slug)->first();
-            
+
             // If found, replace the string parameter with the model for controllers
             if ($organization) {
                 $request->route()->setParameter('organization', $organization);
@@ -34,19 +34,19 @@ class CheckOrganizations
         }
 
         // If no organization found from route, fallback to session
-        if (!$organization) {
+        if (! $organization) {
             $organizationId = session('organization_id');
             $organization = $organizationId ? $request->user()->organizations()->find($organizationId) : null;
-            
+
             // If we found it from session but were on a route that expects an organization,
             // we should probably redirect to the correct slug
             if ($organization && is_string($slug) && $slug !== $organization->slug) {
-                 return redirect()->route($request->route()->getName() ?: 'dashboard', ['organization' => $organization->slug]);
+                return redirect()->route($request->route()->getName() ?: 'dashboard', ['organization' => $organization->slug]);
             }
         }
 
         // If still no organization, handle selection/auto-selection
-        if (!$organization) {
+        if (! $organization) {
             $memberships = $request->user()->memberships;
             $invitationsCount = $request->user()->invitations()->where('status', 'pending')->count();
 
@@ -54,7 +54,7 @@ class CheckOrganizations
                 $organization = $memberships->first()->organization;
                 session(['organization_id' => $organization->id]);
                 setPermissionsTeamId($organization->id);
-                
+
                 return redirect()->route($request->route()->getName() ?: 'dashboard', ['organization' => $organization->slug]);
             }
 
@@ -65,9 +65,9 @@ class CheckOrganizations
         if (session('organization_id') !== $organization->id) {
             session(['organization_id' => $organization->id]);
         }
-        
+
         setPermissionsTeamId($organization->id);
-        
+
         // Set global default for the 'organization' route parameter
         \Illuminate\Support\Facades\URL::defaults(['organization' => $organization->slug]);
 

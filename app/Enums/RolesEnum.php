@@ -18,12 +18,12 @@ enum RolesEnum: string
     public function label(): string
     {
         return match ($this) {
-            static::SUPER => 'Super Administrators',
-            static::ADMINISTRATOR => 'Administrators',
-            static::SALES => 'Sales Representatives',
-            static::SUPPORT => 'Customer Supports',
-            static::MARKETING => 'Marketing Professionals',
-            static::ANALYST => 'Analysts',
+            self::SUPER => 'Super Administrators',
+            self::ADMINISTRATOR => 'Administrators',
+            self::SALES => 'Sales Representatives',
+            self::SUPPORT => 'Customer Supports',
+            self::MARKETING => 'Marketing Professionals',
+            self::ANALYST => 'Analysts',
         };
     }
 }

@@ -16,10 +16,10 @@ enum RolePermissions: string
     public function label(): string
     {
         return match ($this) {
-            static::READ => 'Read Roles',
-            static::CREATE => 'Create Roles',
-            static::UPDATE => 'Update Roles',
-            static::DELETE => 'Delete Roles',
+            self::READ => 'Read Roles',
+            self::CREATE => 'Create Roles',
+            self::UPDATE => 'Update Roles',
+            self::DELETE => 'Delete Roles',
         };
     }
 }

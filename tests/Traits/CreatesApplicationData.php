@@ -2,12 +2,12 @@
 
 namespace Tests\Traits;
 
+use App\Models\Activity;
 use App\Models\Address;
 use App\Models\Company;
 use App\Models\Contact;
-use App\Models\Lead;
-use App\Models\Activity;
 use App\Models\Deal;
+use App\Models\Lead;
 
 trait CreatesApplicationData
 {
@@ -15,14 +15,14 @@ trait CreatesApplicationData
     {
         $companies = Company::factory($num)->create([
             'organization_id' => $organization->id,
-            'address_id' => Address::factory(['organization_id' => $organization->id])
+            'address_id' => Address::factory(['organization_id' => $organization->id]),
         ]);
-        
+
         $contacts = Contact::factory($num)->create([
             'organization_id' => $organization->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
-        
+
         $leads = collect();
 
         $companies->each(function (Company $company, $index) use ($organization, $contacts, $leads) {

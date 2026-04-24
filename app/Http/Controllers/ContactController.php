@@ -36,7 +36,7 @@ class ContactController extends Controller
 
         $sortQuery = $sortBy;
         if ($sortBy === 'full_name') {
-            $sortQuery = "first_name"; // or use raw concat if needed for sorting by full name
+            $sortQuery = 'first_name'; // or use raw concat if needed for sorting by full name
         }
 
         if ($request->filled('query')) {
@@ -88,7 +88,7 @@ class ContactController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        if (($request->wantsJson() || $request->ajax()) && !$request->header('X-Inertia')) {
+        if (($request->wantsJson() || $request->ajax()) && ! $request->header('X-Inertia')) {
             return new ContactResource($contact);
         }
 
@@ -155,7 +155,7 @@ class ContactController extends Controller
         $query = Contact::where('organization_id', $organizationId);
 
         if ($request->filled('query')) {
-            $searchTerm = '%' . $request->input('query') . '%';
+            $searchTerm = '%'.$request->input('query').'%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('first_name', 'like', $searchTerm)
                     ->orWhere('last_name', 'like', $searchTerm)

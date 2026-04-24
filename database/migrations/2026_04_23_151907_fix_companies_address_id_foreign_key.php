@@ -8,22 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table("companies", function (Blueprint $table) {
-            $table->dropForeign(["address_id"]);
-            $table->foreign("address_id")
-                ->references("id")
-                ->on("addresses")
+        Schema::table('companies', function (Blueprint $table) {
+            $table->dropForeign(['address_id']);
+            $table->foreign('address_id')
+                ->references('id')
+                ->on('addresses')
                 ->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::table("companies", function (Blueprint $table) {
-            $table->dropForeign(["address_id"]);
-            $table->foreign("address_id")
-                ->references("id")
-                ->on("addresses");
+        Schema::table('companies', function (Blueprint $table) {
+            $table->dropForeign(['address_id']);
+            $table->foreign('address_id')
+                ->references('id')
+                ->on('addresses');
         });
     }
 };

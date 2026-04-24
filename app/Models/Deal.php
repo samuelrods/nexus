@@ -21,7 +21,7 @@ class Deal extends Model
         'close_date',
         'status',
         'description',
-        'organization_id'
+        'organization_id',
     ];
 
     public $timestamps = true;

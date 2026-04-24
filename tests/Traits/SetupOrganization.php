@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\URL;
 trait SetupOrganization
 {
     protected $user;
+
     protected $organization;
+
     protected $ownerRole;
 
     protected function setupOrganization()
@@ -22,15 +24,15 @@ trait SetupOrganization
         $organization = Organization::create([
             'name' => $this->faker->unique()->company,
             'user_id' => $user->id,
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $organization->memberships()->create(['user_id' => $user->id]);
-        
+
         $role = Role::create([
             'name' => 'owner',
             'organization_id' => $organization->id,
-            'guard_name' => 'web'
+            'guard_name' => 'web',
         ]);
 
         // seed permissions

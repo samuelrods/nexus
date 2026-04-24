@@ -26,10 +26,11 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         $user = $this->route('user');
+
         return [
             'name' => [Rule::excludeIf($this->name === $user->name), 'required', 'string', 'max:255'],
             'email' => [Rule::excludeIf($this->email === $user->email), 'required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => [Rule::excludeIf(!$this->filled('password')), 'confirmed', Rules\Password::defaults()],
+            'password' => [Rule::excludeIf(! $this->filled('password')), 'confirmed', Rules\Password::defaults()],
             'role' => [Rule::enum(RolesEnum::class), [Rule::excludeIf($this->role === ($user->roles->first()->name ?? null))], 'required'],
         ];
     }

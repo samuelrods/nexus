@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\LeadPermissions;
 use App\Models\Lead;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class LeadPolicy
 {
@@ -64,5 +63,4 @@ class LeadPolicy
     {
         return false;
     }
-
 }

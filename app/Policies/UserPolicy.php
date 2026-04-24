@@ -5,15 +5,14 @@ namespace App\Policies;
 use App\Enums\RolesEnum;
 use App\Enums\UserPermissionsEnum;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
     /**
      * Determine whether the user can view any models.
-     * @param \App\Models\User|null $User
-     * @param \App\Post $post
-     * @return bool
+     *
+     * @param  \App\Models\User|null  $User
+     * @param  \App\Post  $post
      */
     public function viewAny(User $user): bool
     {

@@ -19,7 +19,7 @@ class Activity extends Model
         'date',
         'time',
         'description',
-        'organization_id'
+        'organization_id',
     ];
 
     public $timestamps = false;

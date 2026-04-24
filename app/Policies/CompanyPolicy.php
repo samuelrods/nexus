@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\CompanyPermissions;
 use App\Models\Company;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CompanyPolicy
 {

@@ -2,11 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Activity;
-use App\Models\Address;
-use App\Models\Company;
-use App\Models\Contact;
-use App\Models\Lead;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -16,10 +11,10 @@ use Tests\Traits\SetupOrganization;
 
 class ActivityControllerTest extends TestCase
 {
-    use RefreshDatabase;
-    use WithFaker;
-    use SetupOrganization;
     use CreatesApplicationData;
+    use RefreshDatabase;
+    use SetupOrganization;
+    use WithFaker;
 
     protected function setUp(): void
     {
@@ -40,9 +35,9 @@ class ActivityControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn(Assert $page) => $page->component('Activities/Index')
-            ->has('pagination.data', $activities->count())
-            ->has('filters')
+            fn (Assert $page) => $page->component('Activities/Index')
+                ->has('pagination.data', $activities->count())
+                ->has('filters')
         );
     }
 
