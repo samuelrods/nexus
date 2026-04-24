@@ -9,7 +9,14 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Button } from "@/Components/ui/button";
-import { Menu, UserCircle, LogOut, LayoutDashboard, Building, Plus } from "lucide-react";
+import {
+    Menu,
+    UserCircle,
+    LogOut,
+    LayoutDashboard,
+    Building,
+    Plus,
+} from "lucide-react";
 import { ModeToggle } from "@/Components/ModeToggle";
 import CreateOrganizationModal from "@/Components/CreateOrganizationModal";
 import { cn } from "@/lib/utils";
@@ -66,42 +73,59 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                             >
                                 <Building className="h-4 w-4" />
                                 <span>
-                                    {auth.organization?.name && auth.organization.name.length > 15
-                                        ? auth.organization.name.substring(0, 15) + "..."
-                                        : auth.organization?.name || "Select Organization"}
+                                    {auth.organization?.name &&
+                                    auth.organization.name.length > 15
+                                        ? auth.organization.name.substring(
+                                              0,
+                                              15,
+                                          ) + "..."
+                                        : auth.organization?.name ||
+                                          "Select Organization"}
                                 </span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuLabel>Switch Organization</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                                Switch Organization
+                            </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <div className="max-h-[300px] overflow-y-auto">
-                                {auth.user?.memberships?.map((membership: any) => (
-                                    <DropdownMenuItem
-                                        key={"navbar-" + membership.organization.id}
-                                        onClick={() =>
-                                            handleOrganizationSelection(
+                                {auth.user?.memberships?.map(
+                                    (membership: any) => (
+                                        <DropdownMenuItem
+                                            key={
+                                                "navbar-" +
                                                 membership.organization.id
-                                            )
-                                        }
-                                        className="cursor-pointer"
-                                    >
-                                        <div className="flex items-center gap-2 w-full">
-                                            <div
-                                                className={cn(
-                                                    "w-2 h-2 rounded-full",
-                                                    auth.organization?.id ===
-                                                        membership.organization.id
-                                                        ? "bg-blue-600"
-                                                        : "bg-transparent"
-                                                )}
-                                            />
-                                            <span className="truncate">
-                                                {membership.organization.name}
-                                            </span>
-                                        </div>
-                                    </DropdownMenuItem>
-                                ))}
+                                            }
+                                            onClick={() =>
+                                                handleOrganizationSelection(
+                                                    membership.organization.id,
+                                                )
+                                            }
+                                            className="cursor-pointer"
+                                        >
+                                            <div className="flex items-center gap-2 w-full">
+                                                <div
+                                                    className={cn(
+                                                        "w-2 h-2 rounded-full",
+                                                        auth.organization
+                                                            ?.id ===
+                                                            membership
+                                                                .organization.id
+                                                            ? "bg-blue-600"
+                                                            : "bg-transparent",
+                                                    )}
+                                                />
+                                                <span className="truncate">
+                                                    {
+                                                        membership.organization
+                                                            .name
+                                                    }
+                                                </span>
+                                            </div>
+                                        </DropdownMenuItem>
+                                    ),
+                                )}
                             </div>
                             <DropdownMenuSeparator />
                             <CreateOrganizationModal
@@ -116,7 +140,10 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                                 }
                             />
                             <DropdownMenuItem asChild>
-                                <Link href="/organizations" className="cursor-pointer">
+                                <Link
+                                    href="/organizations"
+                                    className="cursor-pointer"
+                                >
                                     <Menu className="h-4 w-4 mr-2" />
                                     <span>Manage Organizations</span>
                                 </Link>
@@ -154,7 +181,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                                     href={
                                         auth.organization
                                             ? route("dashboard", {
-                                                  organization: auth.organization.slug,
+                                                  organization:
+                                                      auth.organization.slug,
                                               })
                                             : route("organizations.index")
                                     }
@@ -162,6 +190,15 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                                 >
                                     <LayoutDashboard className="h-4 w-4 mr-2" />
                                     Dashboard
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link
+                                    href={route("profile.edit")}
+                                    className="cursor-pointer flex items-center"
+                                >
+                                    <UserCircle className="h-4 w-4 mr-2" />
+                                    Profile
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />

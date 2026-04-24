@@ -9,9 +9,9 @@ use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,40 +30,44 @@ Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
 
-Route::middleware(['auth', 'check_organization'])->group(function () {
-    Route::get('/dashboard', function () {
-        return redirect()->route('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::middleware('check_organization')->group(function () {
+        Route::get('/dashboard', function () {
+            return redirect()->route('dashboard');
+        });
+
+        Route::prefix('{organization:slug}')->group(function () {
+            Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+            Route::get('/organizations/settings', [OrganizationController::class, 'settings'])->name('organizations.settings');
+
+            Route::resource('members', MemberController::class);
+            Route::resource('roles', RoleController::class);
+            Route::resource('contacts', ContactController::class);
+            Route::resource('companies', CompanyController::class);
+            Route::resource('leads', LeadController::class);
+            Route::resource('deals', DealController::class);
+            Route::resource('activities', ActivityController::class);
+
+            Route::get('/api/companies-options', [CompanyController::class, 'getCompaniesOptions'])->name('companies.options');
+            Route::get('/api/contacts-options', [ContactController::class, 'getContactsOptions'])->name('contacts.options');
+            Route::get('/api/leads-options', [LeadController::class, 'getLeadsOptions'])->name('leads.options');
+
+            Route::post('/invitations', [InvitationController::class, 'store'])->name('invitations.store');
+        });
     });
 
-    Route::prefix('{organization:slug}')->group(function () {
-        Route::get('/dashboard', DashboardController::class)->name('dashboard');
-
-        Route::get('/organizations/settings', [OrganizationController::class, 'settings'])->name('organizations.settings');
-
-        Route::resource('members', MemberController::class);
-        Route::resource('roles', RoleController::class);
-        Route::resource('contacts', ContactController::class);
-        Route::resource('companies', CompanyController::class);
-        Route::resource('leads', LeadController::class);
-        Route::resource('deals', DealController::class);
-        Route::resource('activities', ActivityController::class);
-
-        Route::get('/api/companies-options', [CompanyController::class, 'getCompaniesOptions'])->name('companies.options');
-        Route::get('/api/contacts-options', [ContactController::class, 'getContactsOptions'])->name('contacts.options');
-        Route::get('/api/leads-options', [LeadController::class, 'getLeadsOptions'])->name('leads.options');
-        
-        Route::post('/invitations', [InvitationController::class, 'store'])->name('invitations.store');
-    });
-
-    Route::apiResource('organizations', OrganizationController::class)->withoutMiddleware('check_organization');
+    Route::apiResource('organizations', OrganizationController::class);
 
     Route::put('/invitations/{invitation}', [InvitationController::class, 'update'])
-        ->name('invitations.update')
-        ->withoutMiddleware('check_organization');
+        ->name('invitations.update');
 
     Route::put('/users/organization', [UserController::class, 'setOrganization'])
-        ->name('users.organization')
-        ->withoutMiddleware('check_organization');
+        ->name('users.organization');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
