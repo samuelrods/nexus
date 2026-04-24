@@ -95,15 +95,22 @@ jobs:
           sed -i 's/DB_DATABASE=test/DB_DATABASE=nexus_test/' .env.testing
           sed -i 's/DB_USERNAME=root/DB_USERNAME=nexus_user/' .env.testing
           sed -i 's/DB_PASSWORD=/DB_PASSWORD=nexus_password/' .env.testing
+          sed -i 's/SCOUT_DRIVER=database/SCOUT_DRIVER=meilisearch/' .env.testing
           echo "MEILISEARCH_HOST=http://meilisearch_test:7700" >> .env.testing
-          echo "MEILI_MASTER_KEY=masterKey" >> .env.testing
+          echo "MEILISEARCH_KEY=masterKey" >> .env.testing
           echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env.testing
+          echo "=== Generated .env.testing ==="
+          cat .env.testing
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Build and Run Tests
         run: bash bin/test-all.sh
+
+      - name: Show Docker Logs on Failure
+        if: failure()
+        run: docker compose -f docker-compose.test.yml logs
 
       - name: Verify Frontend Build
         run: |

@@ -23,6 +23,14 @@ echo "  db_test is ready."
 echo "Running fresh migrations + seeds on nexus_test..."
 php artisan migrate:fresh --env=testing --force --no-interaction --seed
 
+# Wait for Meilisearch to be ready
+echo "Waiting for meilisearch_test..."
+until curl -s http://meilisearch_test:7700/health | grep '"status":"available"' > /dev/null 2>&1; do
+  echo "  meilisearch_test is unavailable — retrying in 2s"
+  sleep 2
+done
+echo "  meilisearch_test is ready."
+
 # Sync Scout index settings against the test Meilisearch instance
 echo "Syncing Scout index settings (test)..."
 php artisan scout:sync-index-settings --env=testing
