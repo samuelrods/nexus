@@ -1,0 +1,135 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# Cancel any in-progress run for the same branch/PR so pushes don't queue up.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # 1. CODE QUALITY
+  #    Runs entirely on the bare runner — no Docker required.
+  #    • Laravel Pint   — PHP style enforcement  (vendor/bin/pint --test)
+  #    • Prettier       — JS/TS/CSS formatting   (prettier --check)
+  #    • TypeScript     — strict type checking   (tsc --noEmit)
+  #    • Vite build     — bundling smoke-test    (npm run build)
+  # ────────────────────────────────────────────────────────────────────────────
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── PHP ──────────────────────────────────────────────────────────────────
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, pdo_mysql, bcmath, gd, pcntl, exif
+          coverage: none
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      # --no-scripts avoids running `artisan package:discover`, which needs a
+      # bootstrapped app + DB. Pint only needs the source files in vendor/.
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+      # ── Node ─────────────────────────────────────────────────────────────────
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      # ── Checks ───────────────────────────────────────────────────────────────
+      - name: PHP linting (Laravel Pint)
+        run: vendor/bin/pint --test
+
+      - name: JS / TS formatting check (Prettier)
+        run: npx prettier --check .
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+      - name: Frontend build (Vite)
+        run: npm run build
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 2. UNIT & FEATURE TESTS  (PHPUnit via Docker Compose)
+  #    Brings up: app_test · db_test · meilisearch_test
+  #    The app_test entrypoint installs deps, migrates, seeds, then PHPUnit runs.
+  # ────────────────────────────────────────────────────────────────────────────
+  unit-tests:
+    name: Unit & Feature Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # .env.testing is gitignored, but .env.testing.example is committed and
+      # contains the real Docker-internal test credentials (non-sensitive).
+      - name: Create .env.testing
+        run: cp .env.testing.example .env.testing
+
+      - name: Run PHPUnit (unit + feature) via Docker Compose
+        run: bash bin/test-unit.sh
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 3. E2E TESTS  (Playwright via Docker Compose)
+  #    Brings up: app_test · nginx_test · db_test · meilisearch_test
+  #    Playwright runs inside the mcr.microsoft.com/playwright container on the
+  #    same Docker network so it can reach http://nginx_test.
+  #    Reports and traces are uploaded as artifacts for later inspection.
+  # ────────────────────────────────────────────────────────────────────────────
+  e2e-tests:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .env.testing
+        run: cp .env.testing.example .env.testing
+
+      - name: Run Playwright E2E tests via Docker Compose
+        run: bash bin/test-e2e.sh
+
+      # Upload the HTML report on every run so passing runs can be reviewed too.
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      # Upload traces only on failure — they are most useful for debugging flaky
+      # or broken tests and are large, so we don't retain them for long.
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
