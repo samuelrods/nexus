@@ -96,7 +96,7 @@ jobs:
           sed -i 's/DB_USERNAME=root/DB_USERNAME=nexus_user/' .env.testing
           sed -i 's/DB_PASSWORD=/DB_PASSWORD=nexus_password/' .env.testing
           sed -i 's/SCOUT_DRIVER=database/SCOUT_DRIVER=meilisearch/' .env.testing
-          sed -i 's|APP_URL=http://localhost|APP_URL=http://nginx_test|' .env.testing
+          sed -i 's|APP_URL=http://localhost|APP_URL=http://localhost:8080|' .env.testing
           echo "MEILISEARCH_HOST=http://meilisearch_test:7700" >> .env.testing
           echo "MEILISEARCH_KEY=masterKey" >> .env.testing
           echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env.testing
