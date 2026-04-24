@@ -156,6 +156,7 @@ class UserSeeder extends Seeder
                             'company_id' => $company->id,
                             'contact_id' => $contact->id,
                             'user_id' => $allMembers->random()->id,
+                            'status' => 'pending', // Ensure we have enough pending deals for E2E tests
                         ]);
                     }
 
