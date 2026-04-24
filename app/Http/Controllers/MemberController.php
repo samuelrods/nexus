@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInvitationRequest;
 use App\Http\Requests\UpdateMemberRequest;
 use App\Http\Resources\MemberResource;
 use App\Http\Resources\MemberRolesResource;
@@ -66,13 +67,13 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Organization $organization)
+    public function store(StoreInvitationRequest $request, Organization $organization)
     {
         $this->authorize('create', OrganizationMember::class);
 
         // This logic is mostly in InvitationController@store, but we can call it here or redirect.
         // For consistency with other resources, we'll keep the invitation logic.
-        return app(InvitationController::class)->store($request);
+        return app(InvitationController::class)->store($request, $organization);
     }
 
     /**
