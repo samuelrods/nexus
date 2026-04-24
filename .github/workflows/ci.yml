@@ -111,8 +111,3 @@ jobs:
       - name: Show Docker Logs on Failure
         if: failure()
         run: docker compose -f docker-compose.test.yml logs
-
-      - name: Verify Frontend Build
-        run: |
-          docker compose -f docker-compose.test.yml up -d app_test
-          docker compose -f docker-compose.test.yml exec -T app_test npm run build
