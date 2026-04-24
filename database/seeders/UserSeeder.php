@@ -81,6 +81,7 @@ class UserSeeder extends Seeder
         $ownerRole = Role::create(['name' => 'owner', 'organization_id' => $org->id]);
         $adminRole = Role::create(['name' => RolesEnum::ADMINISTRATOR->value, 'organization_id' => $org->id]);
         $salesRole = Role::create(['name' => RolesEnum::SALES->value, 'organization_id' => $org->id]);
+        $memberRole = Role::create(['name' => 'member', 'organization_id' => $org->id]);
 
         // Assign all permissions to owner and admin roles
         $allPermissions = array_merge(
@@ -97,16 +98,24 @@ class UserSeeder extends Seeder
         $adminRole->syncPermissions($allPermissions);
 
         // Sales only gets some
-        $salesRole->syncPermissions(array_merge(
+        $salesPermissions = array_merge(
             [ActivityPermissions::READ->value, ActivityPermissions::CREATE->value, ActivityPermissions::UPDATE->value],
             [CompanyPermissions::READ->value, CompanyPermissions::CREATE->value, CompanyPermissions::UPDATE->value],
             [ContactPermissions::READ->value, ContactPermissions::CREATE->value, ContactPermissions::UPDATE->value],
             [DealPermissions::READ->value, DealPermissions::CREATE->value, DealPermissions::UPDATE->value],
             [LeadPermissions::READ->value, LeadPermissions::CREATE->value, LeadPermissions::UPDATE->value]
-        ));
+        );
+        $salesRole->syncPermissions($salesPermissions);
+        $memberRole->syncPermissions($salesPermissions);
 
         // Assign owner role to owner
         $owner->assignRole($ownerRole);
+
+        // Assign admin role to main admin if they are a member but not the owner
+        $mainAdmin = User::where('username', 'admin')->first();
+        if ($mainAdmin && $org->memberships()->where('user_id', $mainAdmin->id)->exists() && $mainAdmin->id !== $owner->id) {
+            $mainAdmin->assignRole($adminRole);
+        }
 
         // Create members
         $members = User::factory(fake()->numberBetween(5, 10))->create();
