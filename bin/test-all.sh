@@ -8,8 +8,8 @@ trap "$COMPOSE down" EXIT INT TERM
 echo "🚀 Starting test stack..."
 $COMPOSE up -d --wait --remove-orphans app_test nginx_test db_test meilisearch_test
 
-echo "📦 Building frontend assets..."
-$COMPOSE exec app_test npm run build
+echo "🔍 Checking connectivity to Nginx..."
+$COMPOSE run --rm playwright curl -v http://nginx_test/login || (echo "❌ Cannot reach Nginx" && exit 1)
 
 echo "🧪 Running PHPUnit (unit + feature)..."
 $COMPOSE exec app_test php artisan test --env=testing

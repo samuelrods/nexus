@@ -11,7 +11,7 @@ services:
     env_file:
       - .env.testing
     volumes:
-      - ./:/var/www:z
+      - ./:/var/www
     networks:
       - nexus-test-network
     depends_on:
@@ -35,7 +35,7 @@ services:
     ports:
       - "8001:80"
     volumes:
-      - ./:/var/www:z
+      - ./:/var/www
       - ./docker/nginx/test.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       app_test:
@@ -81,7 +81,7 @@ services:
     image: mcr.microsoft.com/playwright:v1.59.1-jammy
     container_name: nexus_playwright_test
     volumes:
-      - ./:/var/www:z
+      - ./:/var/www
     working_dir: /var/www
     ports:
       - "8060:8060"
