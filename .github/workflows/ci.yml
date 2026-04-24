@@ -86,8 +86,13 @@ jobs:
 
       # .env.testing is gitignored, but .env.testing.example is committed and
       # contains the real Docker-internal test credentials (non-sensitive).
+      # APP_KEY may be intentionally left blank in the example file; generate
+      # one at runtime so every php artisan call inside the container succeeds.
       - name: Create .env.testing
-        run: cp .env.testing.example .env.testing
+        run: |
+          cp .env.testing.example .env.testing
+          grep -q '^APP_KEY=.\+' .env.testing || \
+            echo "APP_KEY=base64:$(head -c 32 /dev/urandom | base64 -w 0 | tr -d '\n')" >> .env.testing
 
       - name: Run PHPUnit (unit + feature) via Docker Compose
         run: bash bin/test-unit.sh
@@ -108,7 +113,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env.testing
-        run: cp .env.testing.example .env.testing
+        run: |
+          cp .env.testing.example .env.testing
+          grep -q '^APP_KEY=.\+' .env.testing || \
+            echo "APP_KEY=base64:$(head -c 32 /dev/urandom | base64 -w 0 | tr -d '\n')" >> .env.testing
 
       - name: Run Playwright E2E tests via Docker Compose
         run: bash bin/test-e2e.sh
