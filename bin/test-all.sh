@@ -14,6 +14,10 @@ $COMPOSE exec app_test ls -la public/build/manifest.json || (echo "❌ Vite mani
 echo "🔍 Checking connectivity to Nginx..."
 curl -v --fail http://localhost:8080/login || (echo "❌ Cannot reach Nginx via localhost:8080" && exit 1)
 
+echo "🔍 Diagnostic: Inspecting login page content..."
+curl -s http://localhost:8080/login | head -n 50
+curl -s http://localhost:8080/login | grep -o 'login-email' || echo "⚠️ login-email testid not found in response"
+
 echo "🧪 Running PHPUnit (unit + feature)..."
 $COMPOSE exec app_test php artisan test --env=testing
 

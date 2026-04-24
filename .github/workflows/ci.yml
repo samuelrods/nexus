@@ -92,7 +92,6 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Create .env.testing
-
         run: |
           cp .env.testing.example .env.testing
           sed -i 's/DB_HOST=127.0.0.1/DB_HOST=db_test/' .env.testing
@@ -105,6 +104,10 @@ jobs:
           echo "MEILISEARCH_KEY=masterKey" >> .env.testing
           echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env.testing
           # Sync to .env for Vite build
+          cp .env.testing .env
+          # Fix permissions for Laravel
+          chmod -R 777 storage bootstrap/cache
+
           cp .env.testing .env
 
       - name: Build Frontend (Host)
