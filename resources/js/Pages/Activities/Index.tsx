@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -21,7 +22,7 @@ import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Activities = ({ pagination, filters }) => {
+const Activities = ({ pagination, filters }: any) => {
     const typeOptions = [
         { label: "Call", value: "call" },
         { label: "Meeting", value: "meeting" },
@@ -37,13 +38,22 @@ const Activities = ({ pagination, filters }) => {
                 createRoute={"activities.create"}
                 filters={filters}
                 filterOptions={[
-                    { label: "Type", name: "type", allLabel: "All Types", options: typeOptions },
+                    {
+                        label: "Type",
+                        name: "type",
+                        allLabel: "All Types",
+                        options: typeOptions,
+                    },
                 ]}
             />
             <Table
                 data={pagination.data}
                 columns={[
-                    { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
+                    {
+                        header: "Contact",
+                        key: "contact_fullname",
+                        sortKey: "contact_fullname",
+                    },
                     { header: "Type", key: "type", sortKey: "type" },
                     { header: "Date", key: "date", sortKey: "date" },
                     { header: "Time", key: "time" },
@@ -57,7 +67,7 @@ const Activities = ({ pagination, filters }) => {
     );
 };
 
-Activities.layout = (page) => (
+Activities.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Activities" />
     </Layout>

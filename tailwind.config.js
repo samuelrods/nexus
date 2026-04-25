@@ -1,13 +1,13 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-import animate from 'tailwindcss-animate';
+import defaultTheme from "tailwindcss/defaultTheme";
+import forms from "@tailwindcss/forms";
+import animate from "tailwindcss-animate";
 
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
+        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+        "./storage/framework/views/*.php",
         "./resources/**/*.blade.php",
         "./resources/**/*.{js,jsx,ts,tsx}",
         "./resources/**/*.vue",
@@ -23,7 +23,7 @@ export default {
         },
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -82,8 +82,5 @@ export default {
         },
     },
 
-    plugins: [
-        forms,
-        animate,
-    ],
+    plugins: [forms, animate],
 };

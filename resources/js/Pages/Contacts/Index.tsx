@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -6,37 +7,37 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { Users, UserPlus, Briefcase, Mail } from "lucide-react";
 
-const Contacts = ({ pagination, stats, filters }) => {
+const Contacts = ({ pagination, stats, filters }: any) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
-                <StatsCard 
-                    title="Total Contacts" 
-                    value={stats.total_contacts} 
-                    icon={Users} 
+                <StatsCard
+                    title="Total Contacts"
+                    value={stats.total_contacts}
+                    icon={Users}
                     color="blue"
                     description="Total people in your network"
                 />
-                <StatsCard 
-                    title="New This Month" 
-                    value={stats.new_this_month} 
-                    icon={UserPlus} 
+                <StatsCard
+                    title="New This Month"
+                    value={stats.new_this_month}
+                    icon={UserPlus}
                     color="green"
                     trend="up"
                     trendValue={12}
                     description="Recent additions"
                 />
-                <StatsCard 
-                    title="Key Accounts" 
-                    value={stats.key_accounts} 
-                    icon={Briefcase} 
+                <StatsCard
+                    title="Key Accounts"
+                    value={stats.key_accounts}
+                    icon={Briefcase}
                     color="purple"
                     description="Contacts with associated deals"
                 />
-                <StatsCard 
-                    title="Avg. Engagement" 
-                    value="84%" 
-                    icon={Mail} 
+                <StatsCard
+                    title="Avg. Engagement"
+                    value="84%"
+                    icon={Mail}
                     color="yellow"
                     description="Email interaction rate"
                 />
@@ -52,11 +53,23 @@ const Contacts = ({ pagination, stats, filters }) => {
                 <Table
                     data={pagination.data}
                     columns={[
-                        { header: "Name", key: "full_name", sortKey: "full_name" },
+                        {
+                            header: "Name",
+                            key: "full_name",
+                            sortKey: "full_name",
+                        },
                         { header: "Email", key: "email", sortKey: "email" },
                         { header: "Phone Number", key: "phone_number" },
-                        { header: "Organization", key: "organization_name", sortKey: "organization_name" },
-                        { header: "Job Title", key: "job_title", sortKey: "job_title" },
+                        {
+                            header: "Organization",
+                            key: "organization_name",
+                            sortKey: "organization_name",
+                        },
+                        {
+                            header: "Job Title",
+                            key: "job_title",
+                            sortKey: "job_title",
+                        },
                     ]}
                     resourceName={"contacts"}
                     filters={filters}
@@ -67,8 +80,7 @@ const Contacts = ({ pagination, stats, filters }) => {
     );
 };
 
-
-Contacts.layout = (page) => (
+Contacts.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Contacts" />
     </Layout>

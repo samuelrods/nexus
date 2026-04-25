@@ -15,7 +15,7 @@ const AddResourceModal = ({
     storeRoute,
     ResourceForm,
     formData,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
@@ -29,7 +29,7 @@ const AddResourceModal = ({
         reset();
     }
 
-    function submit(e) {
+    function submit(e: any) {
         e.preventDefault();
         post(route(storeRoute, { organization: organizationSlug }), {
             onSuccess: () => {

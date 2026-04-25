@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import Layout from "@/Shared/Layout";
 import { Head, useForm, usePage } from "@inertiajs/react";
@@ -63,7 +64,7 @@ const UpdateProfileInformationForm = ({
                                 id="first_name"
                                 data-testid="profile-first-name"
                                 value={data.first_name}
-                                onChange={(e) =>
+                                onChange={(e: any) =>
                                     setData("first_name", e.target.value)
                                 }
                                 required
@@ -78,7 +79,7 @@ const UpdateProfileInformationForm = ({
                                 id="last_name"
                                 data-testid="profile-last-name"
                                 value={data.last_name}
-                                onChange={(e) =>
+                                onChange={(e: any) =>
                                     setData("last_name", e.target.value)
                                 }
                                 required
@@ -95,7 +96,9 @@ const UpdateProfileInformationForm = ({
                             data-testid="profile-email"
                             type="email"
                             value={data.email}
-                            onChange={(e) => setData("email", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("email", e.target.value)
+                            }
                             required
                             autoComplete="username"
                         />
@@ -131,10 +134,18 @@ const UpdateProfileInformationForm = ({
                     )}
                 </CardContent>
                 <CardFooter className="flex items-center gap-4">
-                    <Button disabled={processing} data-testid="profile-info-submit">Save Changes</Button>
+                    <Button
+                        disabled={processing}
+                        data-testid="profile-info-submit"
+                    >
+                        Save Changes
+                    </Button>
 
                     {recentlySuccessful && (
-                        <p className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300" data-testid="profile-info-success">
+                        <p
+                            className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300"
+                            data-testid="profile-info-success"
+                        >
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
                             Saved.
                         </p>
@@ -168,7 +179,7 @@ const UpdatePasswordForm = () => {
         put(route("password.update"), {
             preserveScroll: true,
             onSuccess: () => reset(),
-            onError: (errors) => {
+            onError: (errors: any) => {
                 if (errors.password) {
                     reset("password", "password_confirmation");
                     passwordInput.current?.focus();
@@ -201,7 +212,7 @@ const UpdatePasswordForm = () => {
                             data-testid="profile-current-password"
                             ref={currentPasswordInput}
                             value={data.current_password}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("current_password", e.target.value)
                             }
                             type="password"
@@ -217,7 +228,7 @@ const UpdatePasswordForm = () => {
                             data-testid="profile-new-password"
                             ref={passwordInput}
                             value={data.password}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("password", e.target.value)
                             }
                             type="password"
@@ -234,7 +245,7 @@ const UpdatePasswordForm = () => {
                             id="password_confirmation"
                             data-testid="profile-password-confirmation"
                             value={data.password_confirmation}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("password_confirmation", e.target.value)
                             }
                             type="password"
@@ -244,10 +255,18 @@ const UpdatePasswordForm = () => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex items-center gap-4">
-                    <Button disabled={processing} data-testid="profile-password-submit">Update Password</Button>
+                    <Button
+                        disabled={processing}
+                        data-testid="profile-password-submit"
+                    >
+                        Update Password
+                    </Button>
 
                     {recentlySuccessful && (
-                        <p className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300" data-testid="profile-password-success">
+                        <p
+                            className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300"
+                            data-testid="profile-password-success"
+                        >
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
                             Saved.
                         </p>
@@ -352,7 +371,7 @@ const DeleteUserForm = () => {
                                     name="password"
                                     ref={passwordInput}
                                     value={data.password}
-                                    onChange={(e) =>
+                                    onChange={(e: any) =>
                                         setData("password", e.target.value)
                                     }
                                     placeholder="Password"

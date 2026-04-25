@@ -1,7 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 
-const TablePagination = ({ pagination }) => {
+const TablePagination = ({ pagination }: any) => {
     if (!pagination) return null;
 
     return (
@@ -9,7 +9,9 @@ const TablePagination = ({ pagination }) => {
             <div className="inline-flex mt-2 xs:mt-0 gap-2 mx-1">
                 <Button
                     variant="outline"
-                    className={!pagination.prev ? "pointer-events-none opacity-50" : ""}
+                    className={
+                        !pagination.prev ? "pointer-events-none opacity-50" : ""
+                    }
                     asChild
                     disabled={!pagination.prev}
                 >
@@ -23,7 +25,9 @@ const TablePagination = ({ pagination }) => {
                 </Button>
                 <Button
                     variant="outline"
-                    className={!pagination.next ? "pointer-events-none opacity-50" : ""}
+                    className={
+                        !pagination.next ? "pointer-events-none opacity-50" : ""
+                    }
                     asChild
                     disabled={!pagination.next}
                 >

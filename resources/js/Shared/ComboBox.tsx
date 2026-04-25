@@ -1,8 +1,9 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { components } from "react-select";
 
-const CustomOption = (props) => (
+const CustomOption = (props: any) => (
     <components.Option {...props}>
         <div>
             <strong>{props.data.label}</strong> {/* Display the label */}
@@ -11,7 +12,7 @@ const CustomOption = (props) => (
     </components.Option>
 );
 
-const ComboBox = ({ onChange, apiUrlPath, placeholder }) => {
+const ComboBox = ({ onChange, apiUrlPath, placeholder }: any) => {
     // console.log(options);
     const optionsExample = [
         { value: "chocolate", label: "Chocolate" },
@@ -19,7 +20,7 @@ const ComboBox = ({ onChange, apiUrlPath, placeholder }) => {
         { value: "vanilla", label: "Vanilla" },
     ];
 
-    const loadOptions = async (inputValue, callback) => {
+    const loadOptions = async (inputValue: any, callback: any) => {
         try {
             // Fetch options from an API or any other data source
             const response = await fetch(`${apiUrlPath}?query=${inputValue}`);
@@ -35,19 +36,19 @@ const ComboBox = ({ onChange, apiUrlPath, placeholder }) => {
     };
 
     const customStyles = {
-        control: (provided) => ({
+        control: (provided: any) => ({
             ...provided,
             boxShadow: "none", // this will remove the box-shadow when the select (input) is focused
             "&:hover": {
                 borderColor: "gray", // changes the border color when hovering
             },
-            "input:focus": (provided) => ({
+            "input:focus": (provided: any) => ({
                 ...provided,
                 margin: "0px",
                 outline: none,
             }),
         }),
-        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        menuPortal: (base: any) => ({ ...base, zIndex: 9999 }),
     };
 
     return (

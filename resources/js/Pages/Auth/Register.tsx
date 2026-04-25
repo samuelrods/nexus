@@ -15,7 +15,7 @@ const Register = () => {
         remember: false,
     });
 
-    function submit(e) {
+    function submit(e: any) {
         e.preventDefault();
         post(route("register"));
     }
@@ -32,36 +32,38 @@ const Register = () => {
                             id="username"
                             data-testid="register-username"
                             value={data.username}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("username", e.target.value)
                             }
                             type="text"
                             placeholder="cskiles"
                             required
                         />
-                        <InputError message={errors.username} className="mt-2" />
+                        <InputError
+                            message={errors.username}
+                            className="mt-2"
+                        />
                     </div>
                     <div className="flex gap-2">
                         <div className="w-full">
                             <div className="mb-2 block">
-                                <Label
-                                    htmlFor="first_name"
-                                >
-                                    First name
-                                </Label>
+                                <Label htmlFor="first_name">First name</Label>
                             </div>
                             <Input
                                 id="first_name"
                                 data-testid="register-first-name"
                                 value={data.first_name}
-                                onChange={(e) =>
+                                onChange={(e: any) =>
                                     setData("first_name", e.target.value)
                                 }
                                 type="text"
                                 placeholder="Oren"
                                 required
                             />
-                            <InputError message={errors.first_name} className="mt-2" />
+                            <InputError
+                                message={errors.first_name}
+                                className="mt-2"
+                            />
                         </div>
                         <div className="w-full">
                             <div className="mb-2 block">
@@ -71,14 +73,17 @@ const Register = () => {
                                 id="last_name"
                                 data-testid="register-last-name"
                                 value={data.last_name}
-                                onChange={(e) =>
+                                onChange={(e: any) =>
                                     setData("last_name", e.target.value)
                                 }
                                 type="text"
                                 placeholder="Emmerich"
                                 required
                             />
-                            <InputError message={errors.last_name} className="mt-2" />
+                            <InputError
+                                message={errors.last_name}
+                                className="mt-2"
+                            />
                         </div>
                     </div>
                     <div>
@@ -89,7 +94,9 @@ const Register = () => {
                             id="email"
                             data-testid="register-email"
                             value={data.email}
-                            onChange={(e) => setData("email", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("email", e.target.value)
+                            }
                             type="email"
                             placeholder="name@example.com"
                             required
@@ -103,7 +110,7 @@ const Register = () => {
                         <Input
                             value={data.password}
                             data-testid="register-password"
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("password", e.target.value)
                             }
                             id="password"
@@ -111,13 +118,14 @@ const Register = () => {
                             placeholder="********"
                             required
                         />
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError
+                            message={errors.password}
+                            className="mt-2"
+                        />
                     </div>
                     <div>
                         <div className="mb-2 block">
-                            <Label
-                                htmlFor="password_confirmation"
-                            >
+                            <Label htmlFor="password_confirmation">
                                 Confirmation Password
                             </Label>
                         </div>
@@ -125,14 +133,17 @@ const Register = () => {
                             id="password_confirmation"
                             data-testid="register-password-confirmation"
                             value={data.password_confirmation}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("password_confirmation", e.target.value)
                             }
                             type="password"
                             placeholder="********"
                             required
                         />
-                        <InputError message={errors.password_confirmation} className="mt-2" />
+                        <InputError
+                            message={errors.password_confirmation}
+                            className="mt-2"
+                        />
                     </div>
                     <div className="flex w-full justify-end items-center gap-3">
                         <Link

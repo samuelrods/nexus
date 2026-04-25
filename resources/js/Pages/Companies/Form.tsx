@@ -12,19 +12,16 @@ const CompanyForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label htmlFor="name">Company Name</Label>
                 <Input
                     id="name"
                     placeholder="Enter company name"
                     value={data.name || ""}
-                    onChange={(e) => setData("name", e.target.value)}
+                    onChange={(e: any) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
                     className="bg-card"
@@ -38,7 +35,7 @@ const CompanyForm = ({
                     id="industry"
                     placeholder="e.g. Technology, Finance"
                     value={data.industry || ""}
-                    onChange={(e) => setData("industry", e.target.value)}
+                    onChange={(e: any) => setData("industry", e.target.value)}
                     required
                     autoComplete="off"
                     className="bg-card"
@@ -52,7 +49,7 @@ const CompanyForm = ({
                     id="website"
                     placeholder="https://example.com"
                     value={data.website || ""}
-                    onChange={(e) => setData("website", e.target.value)}
+                    onChange={(e: any) => setData("website", e.target.value)}
                     required
                     autoComplete="off"
                     className="bg-card"
@@ -66,7 +63,9 @@ const CompanyForm = ({
                     id="description"
                     placeholder="Company overview, notes, etc."
                     value={data.description || ""}
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     required
                     rows={4}
                     className="bg-card"
@@ -74,16 +73,18 @@ const CompanyForm = ({
                 />
                 <InputError message={errors.description} />
             </div>
-            
+
             <div className="w-full space-y-4 pt-2">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">Address Information</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">
+                    Address Information
+                </h3>
                 <div className="space-y-1">
                     <Label htmlFor="street_address">Street Address</Label>
                     <Input
                         id="street_address"
                         placeholder="123 Main St"
                         value={data.street_address || ""}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                             setData("street_address", e.target.value)
                         }
                         required
@@ -99,7 +100,9 @@ const CompanyForm = ({
                             id="city"
                             placeholder="City"
                             value={data.city || ""}
-                            onChange={(e) => setData("city", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("city", e.target.value)
+                            }
                             required
                             className="bg-card"
                             data-testid="company-city"
@@ -112,7 +115,9 @@ const CompanyForm = ({
                             id="state"
                             placeholder="State"
                             value={data.state || ""}
-                            onChange={(e) => setData("state", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("state", e.target.value)
+                            }
                             required
                             className="bg-card"
                             data-testid="company-state"
@@ -125,7 +130,9 @@ const CompanyForm = ({
                             id="zip_code"
                             placeholder="Zip"
                             value={data.zip_code || ""}
-                            onChange={(e) => setData("zip_code", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("zip_code", e.target.value)
+                            }
                             required
                             className="bg-card"
                             data-testid="company-zip-code"
@@ -134,7 +141,7 @@ const CompanyForm = ({
                     </div>
                 </div>
             </div>
-            
+
             <div className="pt-6">
                 <Button
                     type="submit"
@@ -142,7 +149,9 @@ const CompanyForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="company-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

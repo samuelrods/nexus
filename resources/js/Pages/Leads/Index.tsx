@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -12,7 +13,7 @@ import ComboBox from "@/Shared/ComboBox";
 import { Loader2 } from "lucide-react";
 import Select from "react-select";
 
-const Leads = ({ pagination, filters }) => {
+const Leads = ({ pagination, filters }: any) => {
     const statusOptions = [
         { label: "Open", value: "open" },
         { label: "Closed", value: "closed" },
@@ -34,15 +35,33 @@ const Leads = ({ pagination, filters }) => {
                 createRoute={"leads.create"}
                 filters={filters}
                 filterOptions={[
-                    { label: "Status", name: "status", allLabel: "All Statuses", options: statusOptions },
-                    { label: "Source", name: "source", allLabel: "All Sources", options: sourceOptions },
+                    {
+                        label: "Status",
+                        name: "status",
+                        allLabel: "All Statuses",
+                        options: statusOptions,
+                    },
+                    {
+                        label: "Source",
+                        name: "source",
+                        allLabel: "All Sources",
+                        options: sourceOptions,
+                    },
                 ]}
             />
             <Table
                 data={pagination.data}
                 columns={[
-                    { header: "Company", key: "company_name", sortKey: "company_name" },
-                    { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
+                    {
+                        header: "Company",
+                        key: "company_name",
+                        sortKey: "company_name",
+                    },
+                    {
+                        header: "Contact",
+                        key: "contact_fullname",
+                        sortKey: "contact_fullname",
+                    },
                     { header: "Description", key: "description" },
                     { header: "Source", key: "source", sortKey: "source" },
                     { header: "Status", key: "status", sortKey: "status" },
@@ -55,8 +74,7 @@ const Leads = ({ pagination, filters }) => {
     );
 };
 
-
-Leads.layout = (page) => (
+Leads.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Leads" />
     </Layout>

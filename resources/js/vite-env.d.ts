@@ -1,10 +1,13 @@
 /// <reference types="vite/client" />
 
-import { AxiosInstance } from 'axios';
-import { route as routeFn } from 'ziggy-js';
+import { AxiosInstance } from "axios";
+import { route as routeFn } from "ziggy-js";
 
 interface ImportMeta {
-  readonly glob: (pattern: string, options?: { eager?: boolean }) => Record<string, any>;
+    readonly glob: (
+        pattern: string,
+        options?: { eager?: boolean },
+    ) => Record<string, any>;
 }
 
 declare global {
@@ -17,7 +20,7 @@ interface Window {
     axios: AxiosInstance;
 }
 
-declare module '@inertiajs/core' {
+declare module "@inertiajs/core" {
     interface PageProps {
         auth: {
             user: any;

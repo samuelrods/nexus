@@ -15,7 +15,7 @@ const Create = () => {
         memberInfo: "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("members.store", { organization: organizationSlug }));
     };
@@ -24,11 +24,19 @@ const Create = () => {
         <div className="max-w-2xl bg-card p-8 rounded-lg shadow-sm border border-border">
             <div className="flex items-center justify-between mb-8 border-b pb-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-foreground">Invite Member</h2>
-                    <p className="text-muted-foreground">Send an invitation to a user to join your organization.</p>
+                    <h2 className="text-2xl font-bold text-foreground">
+                        Invite Member
+                    </h2>
+                    <p className="text-muted-foreground">
+                        Send an invitation to a user to join your organization.
+                    </p>
                 </div>
                 <Button variant="ghost" asChild>
-                    <Link href={route("members.index", { organization: organizationSlug })}>
+                    <Link
+                        href={route("members.index", {
+                            organization: organizationSlug,
+                        })}
+                    >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
                     </Link>
@@ -43,14 +51,17 @@ const Create = () => {
                         data-testid="invitation-member-info"
                         placeholder="Enter username or email address"
                         value={data.memberInfo}
-                        onChange={(e) => setData("memberInfo", e.target.value)}
+                        onChange={(e: any) =>
+                            setData("memberInfo", e.target.value)
+                        }
                         required
                         autoComplete="off"
                         className="bg-card"
                     />
                     <InputError message={errors.memberInfo} />
                     <p className="text-xs text-muted-foreground">
-                        The user must already have an account in Nexus to be invited.
+                        The user must already have an account in Nexus to be
+                        invited.
                     </p>
                 </div>
 
@@ -74,7 +85,7 @@ const Create = () => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Invite Member" />
     </Layout>

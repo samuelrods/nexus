@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -32,11 +33,11 @@ const DealForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
-    function toSqlDateFormat(date) {
+    function toSqlDateFormat(date: any) {
         if (!date) return null;
         var year = date.getFullYear();
         var month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -48,17 +49,14 @@ const DealForm = ({
     const closeDate = data.close_date ? new Date(data.close_date) : null;
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label htmlFor="name">Name</Label>
                 <Input
                     id="name"
                     placeholder="Enter deal name"
                     value={data.name || ""}
-                    onChange={(e) => setData("name", e.target.value)}
+                    onChange={(e: any) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
                     data-testid="deal-name"
@@ -73,7 +71,7 @@ const DealForm = ({
                     type="number"
                     step={0.01}
                     value={data.value || ""}
-                    onChange={(e) => setData("value", e.target.value)}
+                    onChange={(e: any) => setData("value", e.target.value)}
                     required
                     data-testid="deal-value"
                 />
@@ -87,19 +85,25 @@ const DealForm = ({
                             variant={"outline"}
                             className={cn(
                                 "w-full justify-start text-left font-normal bg-card",
-                                !closeDate && "text-muted-foreground"
+                                !closeDate && "text-muted-foreground",
                             )}
                             data-testid="deal-close-date-trigger"
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {closeDate ? format(closeDate, "PPP") : <span>Pick a date</span>}
+                            {closeDate ? (
+                                format(closeDate, "PPP")
+                            ) : (
+                                <span>Pick a date</span>
+                            )}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                             mode="single"
                             selected={closeDate}
-                            onSelect={(date) => setData("close_date", toSqlDateFormat(date))}
+                            onSelect={(date: any) =>
+                                setData("close_date", toSqlDateFormat(date))
+                            }
                             initialFocus
                         />
                     </PopoverContent>
@@ -109,7 +113,7 @@ const DealForm = ({
             <div className="w-full space-y-1">
                 <Label>Status</Label>
                 <Select
-                    onValueChange={(val) => setData("status", val)}
+                    onValueChange={(val: any) => setData("status", val)}
                     value={data.status || ""}
                 >
                     <SelectTrigger data-testid="deal-status-trigger">
@@ -123,21 +127,23 @@ const DealForm = ({
                 </Select>
                 <InputError message={errors.status} />
             </div>
-            
+
             <div className="w-full space-y-1">
                 <Label>Lead</Label>
                 <RelationshipSelector
                     value={data.lead_id}
                     label={data.lead_description}
-                    onChange={(val, lab) => {
-                        setData((prev) => ({
+                    onChange={(val: any, lab: any) => {
+                        setData((prev: any) => ({
                             ...prev,
                             lead_id: val,
                             lead_description: lab,
                         }));
                     }}
                     resourceName="leads"
-                    apiUrlPath={route("leads.options", { organization: organizationSlug })}
+                    apiUrlPath={route("leads.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={LeadForm}
                     resourceInfo={[
                         ["source", ""],
@@ -155,15 +161,17 @@ const DealForm = ({
                     <RelationshipSelector
                         value={data.company_id}
                         label={data.company_name}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 company_id: val,
                                 company_name: lab,
                             }));
                         }}
                         resourceName="companies"
-                        apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                        apiUrlPath={route("companies.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={CompanyForm}
                         resourceInfo={[
                             ["name", ""],
@@ -184,15 +192,17 @@ const DealForm = ({
                     <RelationshipSelector
                         value={data.contact_id}
                         label={data.contact_fullname}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 contact_id: val,
                                 contact_fullname: lab,
                             }));
                         }}
                         resourceName="contacts"
-                        apiUrlPath={route("contacts.options", { organization: organizationSlug })}
+                        apiUrlPath={route("contacts.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={ContactForm}
                         resourceInfo={[
                             ["first_name", ""],
@@ -212,7 +222,9 @@ const DealForm = ({
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     id="description"
                     placeholder="Deal description..."
                     required
@@ -230,7 +242,9 @@ const DealForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="deal-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

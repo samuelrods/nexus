@@ -17,16 +17,15 @@ const Create = () => {
         zip_code: "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("companies.store", { organization: organizationSlug }));
     };
 
     return (
         <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
-
-
-            <CompanyForm                data={data}
+            <CompanyForm
+                data={data}
                 setData={setData}
                 errors={errors}
                 onSubmit={onSubmit}
@@ -36,7 +35,7 @@ const Create = () => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Create Company" />
     </Layout>

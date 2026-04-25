@@ -15,16 +15,15 @@ const Create = () => {
         description: "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("leads.store", { organization: organizationSlug }));
     };
 
     return (
         <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
-
-
-            <LeadForm                data={data}
+            <LeadForm
+                data={data}
                 setData={setData}
                 errors={errors}
                 onSubmit={onSubmit}
@@ -34,7 +33,7 @@ const Create = () => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Create Lead" />
     </Layout>

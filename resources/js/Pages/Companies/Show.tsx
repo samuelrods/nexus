@@ -2,18 +2,18 @@ import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
-import { 
-    Building2, 
-    Globe, 
-    Factory, 
-    MapPin, 
-    Pencil, 
-    Trash2, 
+import {
+    Building2,
+    Globe,
+    Factory,
+    MapPin,
+    Pencil,
+    Trash2,
     ArrowLeft,
     Phone,
     Mail,
     Calendar,
-    AlertTriangle
+    AlertTriangle,
 } from "lucide-react";
 import {
     Dialog,
@@ -24,39 +24,69 @@ import {
 } from "@/Components/ui/dialog";
 import { useState } from "react";
 
-const Show = ({ company }) => {
+const Show = ({ company }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("companies.destroy", { organization: organizationSlug, company: company.data.id }), {
-            onStart: () => setIsDeleting(true),
-            onFinish: () => setIsDeleting(false),
-        });
+        router.delete(
+            route("companies.destroy", {
+                organization: organizationSlug,
+                company: company.data.id,
+            }),
+            {
+                onStart: () => setIsDeleting(true),
+                onFinish: () => setIsDeleting(false),
+            },
+        );
     };
 
     return (
         <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
-                <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("companies.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                <Button
+                    variant="ghost"
+                    asChild
+                    className="pl-0 hover:bg-transparent"
+                >
+                    <Link
+                        href={route("companies.index", {
+                            organization: organizationSlug,
+                        })}
+                        className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200"
+                    >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Companies
                     </Link>
                 </Button>
                 <div className="flex gap-2">
-                    <Button variant="outline" asChild data-testid="company-edit-btn">
-                        <Link href={route("companies.edit", { organization: organizationSlug, company: company.data.id })}>
+                    <Button
+                        variant="outline"
+                        asChild
+                        data-testid="company-edit-btn"
+                    >
+                        <Link
+                            href={route("companies.edit", {
+                                organization: organizationSlug,
+                                company: company.data.id,
+                            })}
+                        >
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>
                     </Button>
-                    
-                    <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
+
+                    <Dialog
+                        open={openDeleteModal}
+                        onOpenChange={setOpenDeleteModal}
+                    >
                         <DialogTrigger asChild>
-                            <Button variant="destructive" data-testid="company-delete-btn">
+                            <Button
+                                variant="destructive"
+                                data-testid="company-delete-btn"
+                            >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete
                             </Button>
@@ -70,7 +100,9 @@ const Show = ({ company }) => {
                             </DialogHeader>
                             <div className="text-center py-4">
                                 <p className="text-muted-foreground">
-                                    Are you sure you want to delete <strong>{company.data.name}</strong>? This action cannot be undone.
+                                    Are you sure you want to delete{" "}
+                                    <strong>{company.data.name}</strong>? This
+                                    action cannot be undone.
                                 </p>
                             </div>
                             <div className="flex justify-center gap-4 mt-4">
@@ -80,7 +112,9 @@ const Show = ({ company }) => {
                                     onClick={handleDelete}
                                     data-testid="company-delete-confirm"
                                 >
-                                    {isDeleting ? "Deleting..." : "Yes, I'm sure"}
+                                    {isDeleting
+                                        ? "Deleting..."
+                                        : "Yes, I'm sure"}
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -103,7 +137,12 @@ const Show = ({ company }) => {
                                     <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-foreground" data-testid="company-name">{company.data.name}</h1>
+                                    <h1
+                                        className="text-3xl font-bold text-foreground"
+                                        data-testid="company-name"
+                                    >
+                                        {company.data.name}
+                                    </h1>
                                     <p className="text-muted-foreground flex items-center mt-1">
                                         <Factory className="h-4 w-4 mr-1" />
                                         {company.data.industry}
@@ -114,7 +153,9 @@ const Show = ({ company }) => {
 
                         <div className="space-y-6">
                             <div>
-                                <h3 className="text-lg font-semibold mb-2 text-foreground">Description</h3>
+                                <h3 className="text-lg font-semibold mb-2 text-foreground">
+                                    Description
+                                </h3>
                                 <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                                     {company.data.description}
                                 </p>
@@ -122,7 +163,9 @@ const Show = ({ company }) => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-border">
                                 <div>
-                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Website</h3>
+                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                                        Website
+                                    </h3>
                                     <a
                                         href={company.data.website}
                                         target="_blank"
@@ -131,14 +174,20 @@ const Show = ({ company }) => {
                                     >
                                         <Globe className="h-4 w-4 mr-2 shrink-0" />
                                         {company.data.website}
-                                    </a>                                </div>
+                                    </a>{" "}
+                                </div>
                                 <div>
-                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Location</h3>
+                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                                        Location
+                                    </h3>
                                     <p className="text-muted-foreground flex items-start">
                                         <MapPin className="h-4 w-4 mr-2 mt-1 shrink-0" />
                                         <span>
-                                            {company.data.street_address}<br />
-                                            {company.data.city}, {company.data.state} {company.data.zip_code}
+                                            {company.data.street_address}
+                                            <br />
+                                            {company.data.city},{" "}
+                                            {company.data.state}{" "}
+                                            {company.data.zip_code}
                                         </span>
                                     </p>
                                 </div>
@@ -149,13 +198,19 @@ const Show = ({ company }) => {
 
                 <div className="space-y-6">
                     <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
-                        <h3 className="text-lg font-semibold mb-4 text-foreground border-b pb-2">Details</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-foreground border-b pb-2">
+                            Details
+                        </h3>
                         <dl className="space-y-4">
                             <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Added On</dt>
+                                <dt className="text-sm font-medium text-muted-foreground">
+                                    Added On
+                                </dt>
                                 <dd className="text-base text-foreground flex items-center">
                                     <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                                    {new Date(company.data.created_at).toLocaleDateString()}
+                                    {new Date(
+                                        company.data.created_at,
+                                    ).toLocaleDateString()}
                                 </dd>
                             </div>
                         </dl>
@@ -166,9 +221,13 @@ const Show = ({ company }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout>
-        <ResourceLayout children={page} title={`Company: ${page.props.company.data.name}`} hideHeader={true} />
+        <ResourceLayout
+            children={page}
+            title={`Company: ${page.props.company.data.name}`}
+            hideHeader={true}
+        />
     </Layout>
 );
 

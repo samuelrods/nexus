@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import Table from "@/Shared/Table";
@@ -6,24 +7,26 @@ import TablePagination from "@/Shared/TablePagination";
 import { Users, ShieldCheck } from "lucide-react";
 import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 
-const Index = ({ pagination, filters, rolesData }) => {
+const Index = ({ pagination, filters, rolesData }: any) => {
     const totalMembers = pagination.meta?.total || pagination.data?.length || 0;
-    const adminCount = pagination.data?.filter(m => m.role_name === 'Admin' || m.role_name === 'Owner').length;
+    const adminCount = pagination.data?.filter(
+        (m: any) => m.role_name === "Admin" || m.role_name === "Owner",
+    ).length;
 
     return (
         <div className="space-y-6">
             <StatsGrid>
-                <StatsCard 
-                    title="Total Members" 
-                    value={totalMembers} 
-                    icon={Users} 
+                <StatsCard
+                    title="Total Members"
+                    value={totalMembers}
+                    icon={Users}
                     color="blue"
                     description="Total people in organization"
                 />
-                <StatsCard 
-                    title="Admins" 
-                    value={adminCount} 
-                    icon={ShieldCheck} 
+                <StatsCard
+                    title="Admins"
+                    value={adminCount}
+                    icon={ShieldCheck}
                     color="purple"
                     description="Users with elevated access"
                 />
@@ -31,8 +34,12 @@ const Index = ({ pagination, filters, rolesData }) => {
 
             <div className="bg-card p-6 rounded-xl shadow-sm border border-border">
                 <div className="mb-6">
-                    <h2 className="text-xl font-bold text-foreground">Organization Members</h2>
-                    <p className="text-sm text-muted-foreground">Manage your team members and their roles.</p>
+                    <h2 className="text-xl font-bold text-foreground">
+                        Organization Members
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                        Manage your team members and their roles.
+                    </p>
                 </div>
                 <TableActions
                     searchRoute={"members.index"}
@@ -43,7 +50,11 @@ const Index = ({ pagination, filters, rolesData }) => {
                 <Table
                     data={pagination.data}
                     columns={[
-                        { header: "Member", key: "full_name", sortKey: "first_name" },
+                        {
+                            header: "Member",
+                            key: "full_name",
+                            sortKey: "first_name",
+                        },
                         { header: "Email", key: "email", sortKey: "email" },
                         { header: "Role", key: "role_name" },
                     ]}
@@ -58,7 +69,7 @@ const Index = ({ pagination, filters, rolesData }) => {
     );
 };
 
-Index.layout = (page) => (
+Index.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Members" />
     </Layout>

@@ -1,5 +1,4 @@
 services:
-
   # 1. PHP Application (Test)
   app_test:
     build:
@@ -57,7 +56,17 @@ services:
     tmpfs:
       - /var/lib/mysql:mode=777
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "nexus_user", "-pnexus_password"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "127.0.0.1",
+          "-u",
+          "nexus_user",
+          "-pnexus_password",
+        ]
       interval: 5s
       timeout: 5s
       retries: 10

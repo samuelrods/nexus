@@ -43,10 +43,10 @@ const TableActions = ({
             router.get(
                 route(searchRoute, { organization: organizationSlug }),
                 { ...filters, query: query || undefined, page: undefined },
-                { preserveState: true }
+                { preserveState: true },
             );
         }, 300),
-        [filters, searchRoute, organizationSlug]
+        [filters, searchRoute, organizationSlug],
     );
 
     useEffect(() => {
@@ -58,18 +58,30 @@ const TableActions = ({
     const handleFilterChange = (name: string, value: string) => {
         router.get(
             route(searchRoute, { organization: organizationSlug }),
-            { ...filters, [name]: value === "all" ? undefined : value, page: undefined },
-            { preserveState: true }
+            {
+                ...filters,
+                [name]: value === "all" ? undefined : value,
+                page: undefined,
+            },
+            { preserveState: true },
         );
     };
 
     const clearFilters = () => {
-        router.get(route(searchRoute, { organization: organizationSlug }), {}, { preserveState: true });
+        router.get(
+            route(searchRoute, { organization: organizationSlug }),
+            {},
+            { preserveState: true },
+        );
         setSearchValue("");
     };
 
     const hasActiveFilters = Object.keys(filters).some(
-        (key) => filters[key] && key !== "sort_by" && key !== "sort_dir" && key !== "page"
+        (key: any) =>
+            filters[key] &&
+            key !== "sort_by" &&
+            key !== "sort_dir" &&
+            key !== "page",
     );
 
     const createRouteUrl = useMemo(() => {
@@ -86,7 +98,9 @@ const TableActions = ({
                     </div>
                     <Input
                         type="text"
-                        placeholder={"Search " + resourceType.toLowerCase() + "..."}
+                        placeholder={
+                            "Search " + resourceType.toLowerCase() + "..."
+                        }
                         className="pl-10 bg-muted/50 border-border focus:ring-primary focus:border-primary block w-full text-foreground rounded-xl transition-all duration-200"
                         value={searchValue}
                         onChange={(e: any) => setSearchValue(e.target.value)}
@@ -113,7 +127,11 @@ const TableActions = ({
                             formData={formData}
                         />
                     ) : createRoute ? (
-                        <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95" data-testid="create-resource-link">
+                        <Button
+                            asChild
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm rounded-xl px-5 transition-all active:scale-95"
+                            data-testid="create-resource-link"
+                        >
                             <Link href={createRouteUrl || "#"}>
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add {singularize(resourceType)}
@@ -129,15 +147,25 @@ const TableActions = ({
                         <div key={filter.name} className="w-full sm:w-40">
                             <Select
                                 value={filters[filter.name] || "all"}
-                                onValueChange={(value) => handleFilterChange(filter.name, value)}
+                                onValueChange={(value: any) =>
+                                    handleFilterChange(filter.name, value)
+                                }
                             >
                                 <SelectTrigger className="w-full bg-card border-border">
-                                    <SelectValue placeholder={`Filter by ${filter.label}`} />
+                                    <SelectValue
+                                        placeholder={`Filter by ${filter.label}`}
+                                    />
                                 </SelectTrigger>
                                 <SelectContent className="bg-card border-border">
-                                    <SelectItem value="all">{filter.allLabel || `All ${filter.label}`}</SelectItem>
+                                    <SelectItem value="all">
+                                        {filter.allLabel ||
+                                            `All ${filter.label}`}
+                                    </SelectItem>
                                     {filter.options.map((option: any) => (
-                                        <SelectItem key={option.value} value={option.value}>
+                                        <SelectItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
                                             {option.label}
                                         </SelectItem>
                                     ))}

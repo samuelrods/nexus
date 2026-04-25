@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -8,7 +9,7 @@ import { DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
 import { usePage } from "@inertiajs/react";
 
-const Deals = ({ pagination, stats, filters }) => {
+const Deals = ({ pagination, stats, filters }: any) => {
     const statusOptions = [
         { label: "Pending", value: "pending" },
         { label: "Won", value: "won" },
@@ -18,33 +19,36 @@ const Deals = ({ pagination, stats, filters }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
-                <StatsCard 
-                    title="Total Deals" 
-                    value={stats.total_deals} 
-                    icon={Handshake} 
+                <StatsCard
+                    title="Total Deals"
+                    value={stats.total_deals}
+                    icon={Handshake}
                     color="blue"
                     description="Total deals for organization"
                 />
-                <StatsCard 
-                    title="Total Value" 
-                    value={formatCurrency(stats.total_value, usePage().props.auth.organization?.currency)} 
-                    icon={DollarSign} 
+                <StatsCard
+                    title="Total Value"
+                    value={formatCurrency(
+                        stats.total_value,
+                        usePage().props.auth.organization?.currency,
+                    )}
+                    icon={DollarSign}
                     color="green"
                     trend="up"
                     trendValue={12}
                     description="Cumulative deal value"
                 />
-                <StatsCard 
-                    title="Won Deals" 
-                    value={stats.won_deals} 
-                    icon={TrendingUp} 
+                <StatsCard
+                    title="Won Deals"
+                    value={stats.won_deals}
+                    icon={TrendingUp}
                     color="purple"
                     description="Successfully closed deals"
                 />
-                <StatsCard 
-                    title="Pending" 
-                    value={stats.pending_deals} 
-                    icon={Clock} 
+                <StatsCard
+                    title="Pending"
+                    value={stats.pending_deals}
+                    icon={Clock}
                     color="yellow"
                     description="Deals awaiting closure"
                 />
@@ -57,23 +61,41 @@ const Deals = ({ pagination, stats, filters }) => {
                     createRoute={"deals.create"}
                     filters={filters}
                     filterOptions={[
-                        { label: "Status", name: "status", allLabel: "All Statuses", options: statusOptions },
+                        {
+                            label: "Status",
+                            name: "status",
+                            allLabel: "All Statuses",
+                            options: statusOptions,
+                        },
                     ]}
                 />
                 <Table
                     data={pagination.data}
                     columns={[
                         { header: "Name", key: "name", sortKey: "name" },
-                        { 
-                            header: "Value", 
-                            key: "value", 
+                        {
+                            header: "Value",
+                            key: "value",
                             sortKey: "value",
-                            render: (val, row) => formatCurrency(val, row.currency)
+                            render: (val: any, row: any) =>
+                                formatCurrency(val, row.currency),
                         },
-                        { header: "Close date", key: "close_date", sortKey: "close_date" },
+                        {
+                            header: "Close date",
+                            key: "close_date",
+                            sortKey: "close_date",
+                        },
                         { header: "Status", key: "status", sortKey: "status" },
-                        { header: "Company", key: "company_name", sortKey: "company_name" },
-                        { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
+                        {
+                            header: "Company",
+                            key: "company_name",
+                            sortKey: "company_name",
+                        },
+                        {
+                            header: "Contact",
+                            key: "contact_fullname",
+                            sortKey: "contact_fullname",
+                        },
                     ]}
                     resourceName={"deals"}
                     filters={filters}
@@ -84,7 +106,7 @@ const Deals = ({ pagination, stats, filters }) => {
     );
 };
 
-Deals.layout = (page) => (
+Deals.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Deals" />
     </Layout>

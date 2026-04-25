@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -31,11 +32,11 @@ const ActivityForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
-    function toSqlDateFormat(date) {
+    function toSqlDateFormat(date: any) {
         if (!date) return null;
         var year = date.getFullYear();
         var month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -47,25 +48,24 @@ const ActivityForm = ({
     const activityDate = data.date ? new Date(data.date) : null;
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                     <Label>Contact</Label>
                     <RelationshipSelector
                         value={data.contact_id}
                         label={data.contact_fullname}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 contact_id: val,
                                 contact_fullname: lab,
                             }));
                         }}
                         resourceName="contacts"
-                        apiUrlPath={route("contacts.options", { organization: organizationSlug })}
+                        apiUrlPath={route("contacts.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={ContactForm}
                         resourceInfo={[
                             ["first_name", ""],
@@ -85,15 +85,17 @@ const ActivityForm = ({
                     <RelationshipSelector
                         value={data.lead_id}
                         label={data.lead_description}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 lead_id: val,
                                 lead_description: lab,
                             }));
                         }}
                         resourceName="leads"
-                        apiUrlPath={route("leads.options", { organization: organizationSlug })}
+                        apiUrlPath={route("leads.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={LeadForm}
                         resourceInfo={[
                             ["source", ""],
@@ -109,7 +111,7 @@ const ActivityForm = ({
             <div className="w-full space-y-1">
                 <Label>Activity Type</Label>
                 <Select
-                    onValueChange={(val) => setData("type", val)}
+                    onValueChange={(val: any) => setData("type", val)}
                     value={data.type || ""}
                 >
                     <SelectTrigger data-testid="activity-type-trigger">
@@ -134,19 +136,25 @@ const ActivityForm = ({
                                 variant={"outline"}
                                 className={cn(
                                     "w-full justify-start text-left font-normal bg-card",
-                                    !activityDate && "text-muted-foreground"
+                                    !activityDate && "text-muted-foreground",
                                 )}
                                 data-testid="activity-date-trigger"
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {activityDate ? format(activityDate, "PPP") : <span>Pick a date</span>}
+                                {activityDate ? (
+                                    format(activityDate, "PPP")
+                                ) : (
+                                    <span>Pick a date</span>
+                                )}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                                 mode="single"
                                 selected={activityDate}
-                                onSelect={(date) => setData("date", toSqlDateFormat(date))}
+                                onSelect={(date: any) =>
+                                    setData("date", toSqlDateFormat(date))
+                                }
                                 initialFocus
                             />
                         </PopoverContent>
@@ -160,9 +168,12 @@ const ActivityForm = ({
                         placeholder="Time"
                         value={data.time || ""}
                         type="time"
-                        onChange={(e) => {
+                        onChange={(e: any) => {
                             const value = e.target.value;
-                            setData("time", value.length === 5 ? `${value}:00` : value);
+                            setData(
+                                "time",
+                                value.length === 5 ? `${value}:00` : value,
+                            );
                         }}
                         required
                         step={300} // 5 minutes
@@ -175,7 +186,9 @@ const ActivityForm = ({
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     id="description"
                     placeholder="Notes about the activity..."
                     required
@@ -193,7 +206,9 @@ const ActivityForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="activity-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

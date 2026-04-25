@@ -15,14 +15,11 @@ const ContactForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="grid grid-cols-2 gap-4 w-full">
                 <div className="space-y-1">
                     <Label htmlFor="first_name">First Name</Label>
@@ -30,7 +27,9 @@ const ContactForm = ({
                         id="first_name"
                         placeholder="John"
                         value={data.first_name || ""}
-                        onChange={(e) => setData("first_name", e.target.value)}
+                        onChange={(e: any) =>
+                            setData("first_name", e.target.value)
+                        }
                         required
                         className="bg-card"
                         data-testid="contact-first-name"
@@ -43,7 +42,9 @@ const ContactForm = ({
                         id="last_name"
                         placeholder="Doe"
                         value={data.last_name || ""}
-                        onChange={(e) => setData("last_name", e.target.value)}
+                        onChange={(e: any) =>
+                            setData("last_name", e.target.value)
+                        }
                         required
                         className="bg-card"
                         data-testid="contact-last-name"
@@ -51,7 +52,7 @@ const ContactForm = ({
                     <InputError message={errors.last_name} />
                 </div>
             </div>
-            
+
             <div className="w-full space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -59,21 +60,23 @@ const ContactForm = ({
                     type="email"
                     placeholder="john.doe@example.com"
                     value={data.email || ""}
-                    onChange={(e) => setData("email", e.target.value)}
+                    onChange={(e: any) => setData("email", e.target.value)}
                     required
                     className="bg-card"
                     data-testid="contact-email"
                 />
                 <InputError message={errors.email} />
             </div>
-            
+
             <div className="w-full space-y-1">
                 <Label htmlFor="phone_number">Phone Number</Label>
                 <Input
                     id="phone_number"
                     placeholder="+1 (555) 000-0000"
                     value={data.phone_number || ""}
-                    onChange={(e) => setData("phone_number", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("phone_number", e.target.value)
+                    }
                     required
                     className="bg-card"
                     data-testid="contact-phone"
@@ -86,15 +89,17 @@ const ContactForm = ({
                 <RelationshipSelector
                     value={data.company_id}
                     label={data.organization_name}
-                    onChange={(val, lab) => {
-                        setData((prev) => ({
+                    onChange={(val: any, lab: any) => {
+                        setData((prev: any) => ({
                             ...prev,
                             company_id: val,
                             organization_name: lab,
                         }));
                     }}
                     resourceName="companies"
-                    apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                    apiUrlPath={route("companies.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={CompanyForm}
                     resourceInfo={[
                         ["name", ""],
@@ -117,7 +122,7 @@ const ContactForm = ({
                     id="job_title"
                     placeholder="e.g. Software Engineer"
                     value={data.job_title || ""}
-                    onChange={(e) => setData("job_title", e.target.value)}
+                    onChange={(e: any) => setData("job_title", e.target.value)}
                     required
                     className="bg-card"
                     data-testid="contact-job-title"
@@ -131,7 +136,9 @@ const ContactForm = ({
                     id="description"
                     placeholder="Background info, notes, etc."
                     value={data.description || ""}
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     required
                     rows={4}
                     className="bg-card"
@@ -139,7 +146,7 @@ const ContactForm = ({
                 />
                 <InputError message={errors.description} />
             </div>
-            
+
             <div className="pt-6">
                 <Button
                     type="submit"
@@ -147,7 +154,9 @@ const ContactForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="contact-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

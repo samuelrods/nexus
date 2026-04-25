@@ -3,6 +3,12 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Configure Git to trust the mounted repository to avoid dubious ownership errors
+git config --global --add safe.directory /var/www
+
+# Fix permissions for Laravel storage and bootstrap cache
+chmod -R 777 storage bootstrap/cache
+
 echo "Running entrypoint script..."
 
 # Install composer dependencies if vendor folder is missing

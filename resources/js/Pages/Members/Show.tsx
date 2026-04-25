@@ -2,16 +2,16 @@ import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
-import { 
-    User, 
-    Pencil, 
-    Trash2, 
+import {
+    User,
+    Pencil,
+    Trash2,
     ArrowLeft,
     Mail,
     Shield,
     Calendar,
     AlertTriangle,
-    BadgeCheck
+    BadgeCheck,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { Badge } from "@/Components/ui/badge";
@@ -25,7 +25,7 @@ import {
 } from "@/Components/ui/dialog";
 import { useState } from "react";
 
-const Show = ({ member }) => {
+const Show = ({ member }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const memberData = member?.data ?? member;
@@ -33,30 +33,53 @@ const Show = ({ member }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("members.destroy", { organization: organizationSlug, member: memberData?.id }), {
-            onStart: () => setIsDeleting(true),
-            onFinish: () => setIsDeleting(false),
-        });
+        router.delete(
+            route("members.destroy", {
+                organization: organizationSlug,
+                member: memberData?.id,
+            }),
+            {
+                onStart: () => setIsDeleting(true),
+                onFinish: () => setIsDeleting(false),
+            },
+        );
     };
 
     return (
         <div className="space-y-6 max-w-5xl">
             <div className="flex items-center justify-between">
-                <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("members.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                <Button
+                    variant="ghost"
+                    asChild
+                    className="pl-0 hover:bg-transparent"
+                >
+                    <Link
+                        href={route("members.index", {
+                            organization: organizationSlug,
+                        })}
+                        className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200"
+                    >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Members
                     </Link>
                 </Button>
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>
-                        <Link href={route("members.edit", { organization: organizationSlug, member: memberData?.id })}>
+                        <Link
+                            href={route("members.edit", {
+                                organization: organizationSlug,
+                                member: memberData?.id,
+                            })}
+                        >
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>
                     </Button>
-                    
-                    <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
+
+                    <Dialog
+                        open={openDeleteModal}
+                        onOpenChange={setOpenDeleteModal}
+                    >
                         <DialogTrigger asChild>
                             <Button variant="destructive">
                                 <Trash2 className="mr-2 h-4 w-4" />
@@ -72,7 +95,9 @@ const Show = ({ member }) => {
                             </DialogHeader>
                             <div className="text-center py-4">
                                 <p className="text-muted-foreground">
-                                    Are you sure you want to remove <strong>{memberData?.full_name}</strong> from this organization?
+                                    Are you sure you want to remove{" "}
+                                    <strong>{memberData?.full_name}</strong>{" "}
+                                    from this organization?
                                 </p>
                             </div>
                             <div className="flex justify-center gap-4 mt-4">
@@ -103,18 +128,28 @@ const Show = ({ member }) => {
                             <div className="relative flex justify-between items-end -mt-12 mb-6">
                                 <Avatar className="h-24 w-24 border-4 border-card shadow-lg">
                                     <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
-                                        {memberData?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+                                        {memberData?.full_name
+                                            ?.split(" ")
+                                            .map((n: any) => n[0])
+                                            .join("")
+                                            .toUpperCase()
+                                            .substring(0, 2)}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="pb-2">
-                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800">
+                                    <Badge
+                                        variant="outline"
+                                        className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800"
+                                    >
                                         Active Account
                                     </Badge>
                                 </div>
                             </div>
-                            
+
                             <div className="mb-8">
-                                <h1 className="text-3xl font-bold text-foreground mb-1">{memberData?.full_name}</h1>
+                                <h1 className="text-3xl font-bold text-foreground mb-1">
+                                    {memberData?.full_name}
+                                </h1>
                                 <p className="text-muted-foreground flex items-center">
                                     <Mail className="h-4 w-4 mr-2" />
                                     {memberData?.email}
@@ -123,21 +158,29 @@ const Show = ({ member }) => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t">
                                 <div>
-                                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Organization Role</h3>
+                                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                                        Organization Role
+                                    </h3>
                                     <div className="flex items-center gap-3">
                                         <div className="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-lg">
                                             <Shield className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                                         </div>
-                                        <span className="text-lg font-bold text-foreground">{memberData?.role_name}</span>
+                                        <span className="text-lg font-bold text-foreground">
+                                            {memberData?.role_name}
+                                        </span>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Member Status</h3>
+                                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                                        Member Status
+                                    </h3>
                                     <div className="flex items-center gap-3">
                                         <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
                                             <BadgeCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                         </div>
-                                        <span className="text-lg font-bold text-foreground">Verified Member</span>
+                                        <span className="text-lg font-bold text-foreground">
+                                            Verified Member
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -156,16 +199,28 @@ const Show = ({ member }) => {
                         <CardContent className="pt-6">
                             <dl className="space-y-4">
                                 <div>
-                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">First Name</dt>
-                                    <dd className="text-base font-medium text-foreground mt-1">{memberData?.first_name}</dd>
+                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                        First Name
+                                    </dt>
+                                    <dd className="text-base font-medium text-foreground mt-1">
+                                        {memberData?.first_name}
+                                    </dd>
                                 </div>
                                 <div>
-                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Last Name</dt>
-                                    <dd className="text-base font-medium text-foreground mt-1">{memberData?.last_name}</dd>
+                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                        Last Name
+                                    </dt>
+                                    <dd className="text-base font-medium text-foreground mt-1">
+                                        {memberData?.last_name}
+                                    </dd>
                                 </div>
                                 <div>
-                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email Address</dt>
-                                    <dd className="text-base font-medium text-foreground mt-1 truncate">{memberData?.email}</dd>
+                                    <dt className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                        Email Address
+                                    </dt>
+                                    <dd className="text-base font-medium text-foreground mt-1 truncate">
+                                        {memberData?.email}
+                                    </dd>
                                 </div>
                             </dl>
                         </CardContent>
@@ -176,9 +231,16 @@ const Show = ({ member }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout>
-        <ResourceLayout children={page} title={`Member: ${page.props.member?.full_name ?? page.props.member?.data?.full_name}`} hideHeader={true} />
+        <ResourceLayout
+            children={page}
+            title={`Member: ${
+                page.props.member?.full_name ??
+                page.props.member?.data?.full_name
+            }`}
+            hideHeader={true}
+        />
     </Layout>
 );
 

@@ -22,29 +22,28 @@ const LeadForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-6 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-6 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label>Company</Label>
                 <RelationshipSelector
                     value={data.company_id}
                     label={data.company_name}
-                    onChange={(val, lab) => {
-                        setData((prev) => ({
+                    onChange={(val: any, lab: any) => {
+                        setData((prev: any) => ({
                             ...prev,
                             company_id: val,
                             company_name: lab,
                         }));
                     }}
                     resourceName="companies"
-                    apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                    apiUrlPath={route("companies.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={CompanyForm}
                     resourceInfo={[
                         ["name", ""],
@@ -65,15 +64,17 @@ const LeadForm = ({
                 <RelationshipSelector
                     value={data.contact_id}
                     label={data.contact_fullname}
-                    onChange={(val, lab) => {
-                        setData((prev) => ({
+                    onChange={(val: any, lab: any) => {
+                        setData((prev: any) => ({
                             ...prev,
                             contact_id: val,
                             contact_fullname: lab,
                         }));
                     }}
                     resourceName="contacts"
-                    apiUrlPath={route("contacts.options", { organization: organizationSlug })}
+                    apiUrlPath={route("contacts.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={ContactForm}
                     resourceInfo={[
                         ["first_name", ""],
@@ -90,7 +91,7 @@ const LeadForm = ({
             <div className="w-full space-y-1">
                 <Label>Source</Label>
                 <Select
-                    onValueChange={(val) => setData("source", val)}
+                    onValueChange={(val: any) => setData("source", val)}
                     value={data.source || ""}
                 >
                     <SelectTrigger data-testid="lead-source-trigger">
@@ -99,7 +100,9 @@ const LeadForm = ({
                     <SelectContent>
                         <SelectItem value="website">Website</SelectItem>
                         <SelectItem value="referral">Referral</SelectItem>
-                        <SelectItem value="social_media">Social Media</SelectItem>
+                        <SelectItem value="social_media">
+                            Social Media
+                        </SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                 </Select>
@@ -108,7 +111,7 @@ const LeadForm = ({
             <div className="w-full space-y-1">
                 <Label>Status</Label>
                 <Select
-                    onValueChange={(val) => setData("status", val)}
+                    onValueChange={(val: any) => setData("status", val)}
                     value={data.status || ""}
                 >
                     <SelectTrigger data-testid="lead-status-trigger">
@@ -125,7 +128,9 @@ const LeadForm = ({
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     id="description"
                     placeholder="Provide some details about this lead..."
                     required
@@ -142,8 +147,14 @@ const LeadForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="lead-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {processing ? "Saving..." : updating ? "Update Lead" : "Add Lead"}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {processing
+                        ? "Saving..."
+                        : updating
+                          ? "Update Lead"
+                          : "Add Lead"}
                 </Button>
             </div>
         </form>

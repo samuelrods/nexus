@@ -25,7 +25,7 @@ interface NavbarProps {
     toggleSidebar: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }: any) => {
     const { auth } = usePage().props;
 
     const handleOrganizationSelection = (organizationId: number) => {
@@ -131,7 +131,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                             <CreateOrganizationModal
                                 trigger={
                                     <DropdownMenuItem
-                                        onSelect={(e) => e.preventDefault()}
+                                        onSelect={(e: any) =>
+                                            e.preventDefault()
+                                        }
                                         className="cursor-pointer text-blue-600 focus:text-blue-600 focus:bg-blue-50 dark:focus:bg-blue-900/20"
                                     >
                                         <Plus className="h-4 w-4 mr-2" />
