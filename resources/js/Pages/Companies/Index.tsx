@@ -69,7 +69,9 @@ const CompanyForm = ({
                     id="description"
                     placeholder="Company overview, notes, etc."
                     value={data.description}
-                    onChange={(e: any) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     required
                     rows={4}
                     className="bg-card"
@@ -102,7 +104,9 @@ const CompanyForm = ({
                             id="city"
                             placeholder="City"
                             value={data.city}
-                            onChange={(e: any) => setData("city", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("city", e.target.value)
+                            }
                             required
                             className="bg-card"
                         />
@@ -114,7 +118,9 @@ const CompanyForm = ({
                             id="state"
                             placeholder="State"
                             value={data.state}
-                            onChange={(e: any) => setData("state", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("state", e.target.value)
+                            }
                             required
                             className="bg-card"
                         />

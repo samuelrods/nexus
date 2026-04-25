@@ -9,7 +9,9 @@ export default function singularize(str: any) {
         // But be careful with "Deals" (if it was somehow "Deales")
         // Most common -es plurals in English: -ses, -ches, -shes, -xes, -zes
         const esEndings = ["ses", "ches", "shes", "xes", "zes"];
-        if (esEndings.some((ending: any) => str.toLowerCase().endsWith(ending))) {
+        if (
+            esEndings.some((ending: any) => str.toLowerCase().endsWith(ending))
+        ) {
             return str.slice(0, -2);
         }
     }

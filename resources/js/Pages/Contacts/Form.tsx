@@ -27,7 +27,9 @@ const ContactForm = ({
                         id="first_name"
                         placeholder="John"
                         value={data.first_name || ""}
-                        onChange={(e: any) => setData("first_name", e.target.value)}
+                        onChange={(e: any) =>
+                            setData("first_name", e.target.value)
+                        }
                         required
                         className="bg-card"
                         data-testid="contact-first-name"
@@ -40,7 +42,9 @@ const ContactForm = ({
                         id="last_name"
                         placeholder="Doe"
                         value={data.last_name || ""}
-                        onChange={(e: any) => setData("last_name", e.target.value)}
+                        onChange={(e: any) =>
+                            setData("last_name", e.target.value)
+                        }
                         required
                         className="bg-card"
                         data-testid="contact-last-name"
@@ -70,7 +74,9 @@ const ContactForm = ({
                     id="phone_number"
                     placeholder="+1 (555) 000-0000"
                     value={data.phone_number || ""}
-                    onChange={(e: any) => setData("phone_number", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("phone_number", e.target.value)
+                    }
                     required
                     className="bg-card"
                     data-testid="contact-phone"
@@ -130,7 +136,9 @@ const ContactForm = ({
                     id="description"
                     placeholder="Background info, notes, etc."
                     value={data.description || ""}
-                    onChange={(e: any) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     required
                     rows={4}
                     className="bg-card"

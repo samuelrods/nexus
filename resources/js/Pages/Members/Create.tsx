@@ -51,7 +51,9 @@ const Create = () => {
                         data-testid="invitation-member-info"
                         placeholder="Enter username or email address"
                         value={data.memberInfo}
-                        onChange={(e: any) => setData("memberInfo", e.target.value)}
+                        onChange={(e: any) =>
+                            setData("memberInfo", e.target.value)
+                        }
                         required
                         autoComplete="off"
                         className="bg-card"

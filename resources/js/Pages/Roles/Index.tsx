@@ -10,12 +10,15 @@ import { Badge } from "@/Components/ui/badge";
 
 const Roles = ({ pagination, permissions }: any) => {
     const totalRoles = pagination.meta?.total || pagination.data?.length || 0;
-    const totalPermissions = Object.values(permissions).reduce((acc: any, curr: any) => {
-        const count = Array.isArray(curr)
-            ? curr.length
-            : Object.keys(curr).length;
-        return acc + count;
-    }, 0);
+    const totalPermissions = Object.values(permissions).reduce(
+        (acc: any, curr: any) => {
+            const count = Array.isArray(curr)
+                ? curr.length
+                : Object.keys(curr).length;
+            return acc + count;
+        },
+        0,
+    );
 
     return (
         <div className="space-y-6">

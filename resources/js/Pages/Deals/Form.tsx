@@ -222,7 +222,9 @@ const DealForm = ({
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
-                    onChange={(e: any) => setData("description", e.target.value)}
+                    onChange={(e: any) =>
+                        setData("description", e.target.value)
+                    }
                     id="description"
                     placeholder="Deal description..."
                     required

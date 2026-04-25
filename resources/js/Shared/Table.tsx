@@ -76,7 +76,9 @@ function EditButton({
     const [openModal, setOpenModal] = useState(false);
     const { data, setData, put, processing, setDefaults, errors, reset } =
         useForm(
-            Object.fromEntries(resourceInfoKeys.map((key: any) => [key, item[key]])),
+            Object.fromEntries(
+                resourceInfoKeys.map((key: any) => [key, item[key]]),
+            ),
         );
 
     function onCloseModal() {
@@ -341,7 +343,10 @@ const Table = ({
                                                     <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                                                         {item[column.key]
                                                             ?.split(" ")
-                                                            .map((n: any) => n[0])
+                                                            .map(
+                                                                (n: any) =>
+                                                                    n[0],
+                                                            )
                                                             .join("")
                                                             .toUpperCase()
                                                             .substring(0, 2)}

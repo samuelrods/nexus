@@ -41,7 +41,9 @@ const Login = ({ status, canResetPassword }: any) => {
                             className="mt-1 block w-full"
                             autoComplete="username"
                             autoFocus
-                            onChange={(e: any) => setData("email", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("email", e.target.value)
+                            }
                             data-testid="login-email"
                         />
                         <InputError

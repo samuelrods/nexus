@@ -160,7 +160,9 @@ const RoleForm = ({
                             id="name"
                             placeholder="e.g. Sales Manager, Support Specialist"
                             value={data.name || ""}
-                            onChange={(e: any) => setData("name", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("name", e.target.value)
+                            }
                             required
                             autoComplete="off"
                             className={cn(

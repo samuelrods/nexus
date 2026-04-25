@@ -96,7 +96,9 @@ const UpdateProfileInformationForm = ({
                             data-testid="profile-email"
                             type="email"
                             value={data.email}
-                            onChange={(e: any) => setData("email", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("email", e.target.value)
+                            }
                             required
                             autoComplete="username"
                         />

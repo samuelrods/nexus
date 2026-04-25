@@ -94,7 +94,9 @@ const Register = () => {
                             id="email"
                             data-testid="register-email"
                             value={data.email}
-                            onChange={(e: any) => setData("email", e.target.value)}
+                            onChange={(e: any) =>
+                                setData("email", e.target.value)
+                            }
                             type="email"
                             placeholder="name@example.com"
                             required

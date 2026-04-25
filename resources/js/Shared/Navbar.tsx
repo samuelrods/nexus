@@ -131,7 +131,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }: any) => {
                             <CreateOrganizationModal
                                 trigger={
                                     <DropdownMenuItem
-                                        onSelect={(e: any) => e.preventDefault()}
+                                        onSelect={(e: any) =>
+                                            e.preventDefault()
+                                        }
                                         className="cursor-pointer text-blue-600 focus:text-blue-600 focus:bg-blue-50 dark:focus:bg-blue-900/20"
                                     >
                                         <Plus className="h-4 w-4 mr-2" />

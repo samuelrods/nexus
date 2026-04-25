@@ -280,16 +280,18 @@ const Show = ({ role }: any) => {
                                     </CardHeader>
                                     <CardContent className="p-4">
                                         <div className="flex flex-wrap gap-2">
-                                            {permissions.map((permission: any) => (
-                                                <div
-                                                    key={permission.id}
-                                                    className="group transition-transform hover:scale-105"
-                                                >
-                                                    {getActionBadge(
-                                                        permission.action,
-                                                    )}
-                                                </div>
-                                            ))}
+                                            {permissions.map(
+                                                (permission: any) => (
+                                                    <div
+                                                        key={permission.id}
+                                                        className="group transition-transform hover:scale-105"
+                                                    >
+                                                        {getActionBadge(
+                                                            permission.action,
+                                                        )}
+                                                    </div>
+                                                ),
+                                            )}
                                         </div>
                                     </CardContent>
                                 </Card>
