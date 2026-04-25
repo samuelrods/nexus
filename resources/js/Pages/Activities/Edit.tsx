@@ -20,7 +20,12 @@ const Edit = ({ activity }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("activities.update", { organization: organizationSlug, activity: activity.data.id }));
+        put(
+            route("activities.update", {
+                organization: organizationSlug,
+                activity: activity.data.id,
+            }),
+        );
     };
 
     return (

@@ -47,10 +47,7 @@ const ActivityForm = ({
     const activityDate = data.date ? new Date(data.date) : null;
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                     <Label>Contact</Label>
@@ -65,7 +62,9 @@ const ActivityForm = ({
                             }));
                         }}
                         resourceName="contacts"
-                        apiUrlPath={route("contacts.options", { organization: organizationSlug })}
+                        apiUrlPath={route("contacts.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={ContactForm}
                         resourceInfo={[
                             ["first_name", ""],
@@ -93,7 +92,9 @@ const ActivityForm = ({
                             }));
                         }}
                         resourceName="leads"
-                        apiUrlPath={route("leads.options", { organization: organizationSlug })}
+                        apiUrlPath={route("leads.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={LeadForm}
                         resourceInfo={[
                             ["source", ""],
@@ -134,19 +135,25 @@ const ActivityForm = ({
                                 variant={"outline"}
                                 className={cn(
                                     "w-full justify-start text-left font-normal bg-card",
-                                    !activityDate && "text-muted-foreground"
+                                    !activityDate && "text-muted-foreground",
                                 )}
                                 data-testid="activity-date-trigger"
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {activityDate ? format(activityDate, "PPP") : <span>Pick a date</span>}
+                                {activityDate ? (
+                                    format(activityDate, "PPP")
+                                ) : (
+                                    <span>Pick a date</span>
+                                )}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                                 mode="single"
                                 selected={activityDate}
-                                onSelect={(date) => setData("date", toSqlDateFormat(date))}
+                                onSelect={(date) =>
+                                    setData("date", toSqlDateFormat(date))
+                                }
                                 initialFocus
                             />
                         </PopoverContent>
@@ -162,7 +169,10 @@ const ActivityForm = ({
                         type="time"
                         onChange={(e) => {
                             const value = e.target.value;
-                            setData("time", value.length === 5 ? `${value}:00` : value);
+                            setData(
+                                "time",
+                                value.length === 5 ? `${value}:00` : value,
+                            );
                         }}
                         required
                         step={300} // 5 minutes
@@ -193,7 +203,9 @@ const ActivityForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="activity-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

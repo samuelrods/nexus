@@ -25,7 +25,11 @@ const chartConfig = {
 
 const DealsPieChart = ({ data }) => {
     const chartData = [
-        { status: "pending", value: data.pending ?? 0, fill: chartConfig.pending.color },
+        {
+            status: "pending",
+            value: data.pending ?? 0,
+            fill: chartConfig.pending.color,
+        },
         { status: "won", value: data.won ?? 0, fill: chartConfig.won.color },
         { status: "lost", value: data.lost ?? 0, fill: chartConfig.lost.color },
     ];

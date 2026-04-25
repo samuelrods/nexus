@@ -2,18 +2,18 @@ import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
-import { 
-    User, 
-    Mail, 
-    Phone, 
-    Building2, 
-    Briefcase, 
-    Pencil, 
-    Trash2, 
+import {
+    User,
+    Mail,
+    Phone,
+    Building2,
+    Briefcase,
+    Pencil,
+    Trash2,
     ArrowLeft,
     Calendar,
     AlertTriangle,
-    Info
+    Info,
 } from "lucide-react";
 import {
     Dialog,
@@ -31,32 +31,62 @@ const Show = ({ contact }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const handleDelete = () => {
-        router.delete(route("contacts.destroy", { organization: organizationSlug, contact: contact.data.id }), {
-            onStart: () => setIsDeleting(true),
-            onFinish: () => setIsDeleting(false),
-        });
+        router.delete(
+            route("contacts.destroy", {
+                organization: organizationSlug,
+                contact: contact.data.id,
+            }),
+            {
+                onStart: () => setIsDeleting(true),
+                onFinish: () => setIsDeleting(false),
+            },
+        );
     };
 
     return (
         <div className="space-y-6 max-w-5_xl">
             <div className="flex items-center justify-between">
-                <Button variant="ghost" asChild className="pl-0 hover:bg-transparent">
-                    <Link href={route("contacts.index", { organization: organizationSlug })} className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200">
+                <Button
+                    variant="ghost"
+                    asChild
+                    className="pl-0 hover:bg-transparent"
+                >
+                    <Link
+                        href={route("contacts.index", {
+                            organization: organizationSlug,
+                        })}
+                        className="flex items-center text-gray-500 hover:text-muted-foreground dark:hover:text-gray-200"
+                    >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Contacts
                     </Link>
                 </Button>
                 <div className="flex gap-2">
-                    <Button variant="outline" asChild data-testid="contact-edit-btn">
-                        <Link href={route("contacts.edit", { organization: organizationSlug, contact: contact.data.id })}>
+                    <Button
+                        variant="outline"
+                        asChild
+                        data-testid="contact-edit-btn"
+                    >
+                        <Link
+                            href={route("contacts.edit", {
+                                organization: organizationSlug,
+                                contact: contact.data.id,
+                            })}
+                        >
                             <Pencil className="mr-2 h-4 w-4" />
                             Edit
                         </Link>
                     </Button>
-                    
-                    <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
+
+                    <Dialog
+                        open={openDeleteModal}
+                        onOpenChange={setOpenDeleteModal}
+                    >
                         <DialogTrigger asChild>
-                            <Button variant="destructive" data-testid="contact-delete-btn">
+                            <Button
+                                variant="destructive"
+                                data-testid="contact-delete-btn"
+                            >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Delete
                             </Button>
@@ -70,7 +100,9 @@ const Show = ({ contact }) => {
                             </DialogHeader>
                             <div className="text-center py-4">
                                 <p className="text-muted-foreground">
-                                    Are you sure you want to delete <strong>{contact.data.full_name}</strong>? This action cannot be undone.
+                                    Are you sure you want to delete{" "}
+                                    <strong>{contact.data.full_name}</strong>?
+                                    This action cannot be undone.
                                 </p>
                             </div>
                             <div className="flex justify-center gap-4 mt-4">
@@ -80,7 +112,9 @@ const Show = ({ contact }) => {
                                     onClick={handleDelete}
                                     data-testid="contact-delete-confirm"
                                 >
-                                    {isDeleting ? "Deleting..." : "Yes, I'm sure"}
+                                    {isDeleting
+                                        ? "Deleting..."
+                                        : "Yes, I'm sure"}
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -103,10 +137,16 @@ const Show = ({ contact }) => {
                                     <User className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold text-foreground" data-testid="contact-full-name">{contact.data.full_name}</h1>
+                                    <h1
+                                        className="text-3xl font-bold text-foreground"
+                                        data-testid="contact-full-name"
+                                    >
+                                        {contact.data.full_name}
+                                    </h1>
                                     <p className="text-muted-foreground flex items-center mt-1">
                                         <Briefcase className="h-4 w-4 mr-1" />
-                                        {contact.data.job_title} at {contact.data.organization_name}
+                                        {contact.data.job_title} at{" "}
+                                        {contact.data.organization_name}
                                     </p>
                                 </div>
                             </div>
@@ -114,17 +154,22 @@ const Show = ({ contact }) => {
 
                         <div className="space-y-6">
                             <div>
-                                <h3 className="text-lg font-semibold mb-2 text-foreground">Description</h3>
+                                <h3 className="text-lg font-semibold mb-2 text-foreground">
+                                    Description
+                                </h3>
                                 <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                                    {contact.data.description || "No description provided."}
+                                    {contact.data.description ||
+                                        "No description provided."}
                                 </p>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-border">
                                 <div>
-                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Email</h3>
-                                    <a 
-                                        href={`mailto:${contact.data.email}`} 
+                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                                        Email
+                                    </h3>
+                                    <a
+                                        href={`mailto:${contact.data.email}`}
                                         className="text-blue-600 hover:underline flex items-center"
                                     >
                                         <Mail className="h-4 w-4 mr-2" />
@@ -132,7 +177,9 @@ const Show = ({ contact }) => {
                                     </a>
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Phone</h3>
+                                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                                        Phone
+                                    </h3>
                                     <p className="text-muted-foreground flex items-center">
                                         <Phone className="h-4 w-4 mr-2" />
                                         {contact.data.phone_number}
@@ -151,21 +198,31 @@ const Show = ({ contact }) => {
                         </h3>
                         <dl className="space-y-4">
                             <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Organization</dt>
+                                <dt className="text-sm font-medium text-muted-foreground">
+                                    Organization
+                                </dt>
                                 <dd className="text-base text-foreground flex items-center">
                                     <Building2 className="h-4 w-4 mr-2 text-gray-400" />
                                     {contact.data.organization_name}
                                 </dd>
                             </div>
                             <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Job Title</dt>
-                                <dd className="text-base text-foreground">{contact.data.job_title}</dd>
+                                <dt className="text-sm font-medium text-muted-foreground">
+                                    Job Title
+                                </dt>
+                                <dd className="text-base text-foreground">
+                                    {contact.data.job_title}
+                                </dd>
                             </div>
                             <div>
-                                <dt className="text-sm font-medium text-muted-foreground">Added On</dt>
+                                <dt className="text-sm font-medium text-muted-foreground">
+                                    Added On
+                                </dt>
                                 <dd className="text-base text-foreground flex items-center">
                                     <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                                    {new Date(contact.data.created_at).toLocaleDateString()}
+                                    {new Date(
+                                        contact.data.created_at,
+                                    ).toLocaleDateString()}
                                 </dd>
                             </div>
                         </dl>
@@ -178,7 +235,11 @@ const Show = ({ contact }) => {
 
 Show.layout = (page) => (
     <Layout>
-        <ResourceLayout children={page} title={`Contact: ${page.props.contact.data.full_name}`} hideHeader={true} />
+        <ResourceLayout
+            children={page}
+            title={`Contact: ${page.props.contact.data.full_name}`}
+            hideHeader={true}
+        />
     </Layout>
 );
 

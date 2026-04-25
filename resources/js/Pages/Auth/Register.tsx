@@ -39,16 +39,15 @@ const Register = () => {
                             placeholder="cskiles"
                             required
                         />
-                        <InputError message={errors.username} className="mt-2" />
+                        <InputError
+                            message={errors.username}
+                            className="mt-2"
+                        />
                     </div>
                     <div className="flex gap-2">
                         <div className="w-full">
                             <div className="mb-2 block">
-                                <Label
-                                    htmlFor="first_name"
-                                >
-                                    First name
-                                </Label>
+                                <Label htmlFor="first_name">First name</Label>
                             </div>
                             <Input
                                 id="first_name"
@@ -61,7 +60,10 @@ const Register = () => {
                                 placeholder="Oren"
                                 required
                             />
-                            <InputError message={errors.first_name} className="mt-2" />
+                            <InputError
+                                message={errors.first_name}
+                                className="mt-2"
+                            />
                         </div>
                         <div className="w-full">
                             <div className="mb-2 block">
@@ -78,7 +80,10 @@ const Register = () => {
                                 placeholder="Emmerich"
                                 required
                             />
-                            <InputError message={errors.last_name} className="mt-2" />
+                            <InputError
+                                message={errors.last_name}
+                                className="mt-2"
+                            />
                         </div>
                     </div>
                     <div>
@@ -111,13 +116,14 @@ const Register = () => {
                             placeholder="********"
                             required
                         />
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError
+                            message={errors.password}
+                            className="mt-2"
+                        />
                     </div>
                     <div>
                         <div className="mb-2 block">
-                            <Label
-                                htmlFor="password_confirmation"
-                            >
+                            <Label htmlFor="password_confirmation">
                                 Confirmation Password
                             </Label>
                         </div>
@@ -132,7 +138,10 @@ const Register = () => {
                             placeholder="********"
                             required
                         />
-                        <InputError message={errors.password_confirmation} className="mt-2" />
+                        <InputError
+                            message={errors.password_confirmation}
+                            className="mt-2"
+                        />
                     </div>
                     <div className="flex w-full justify-end items-center gap-3">
                         <Link

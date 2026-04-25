@@ -37,13 +37,22 @@ const Activities = ({ pagination, filters }) => {
                 createRoute={"activities.create"}
                 filters={filters}
                 filterOptions={[
-                    { label: "Type", name: "type", allLabel: "All Types", options: typeOptions },
+                    {
+                        label: "Type",
+                        name: "type",
+                        allLabel: "All Types",
+                        options: typeOptions,
+                    },
                 ]}
             />
             <Table
                 data={pagination.data}
                 columns={[
-                    { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
+                    {
+                        header: "Contact",
+                        key: "contact_fullname",
+                        sortKey: "contact_fullname",
+                    },
                     { header: "Type", key: "type", sortKey: "type" },
                     { header: "Date", key: "date", sortKey: "date" },
                     { header: "Time", key: "time" },

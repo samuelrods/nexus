@@ -27,10 +27,7 @@ const LeadForm = ({
     const organizationSlug = auth.organization?.slug;
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-6 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-6 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label>Company</Label>
                 <RelationshipSelector
@@ -44,7 +41,9 @@ const LeadForm = ({
                         }));
                     }}
                     resourceName="companies"
-                    apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                    apiUrlPath={route("companies.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={CompanyForm}
                     resourceInfo={[
                         ["name", ""],
@@ -73,7 +72,9 @@ const LeadForm = ({
                         }));
                     }}
                     resourceName="contacts"
-                    apiUrlPath={route("contacts.options", { organization: organizationSlug })}
+                    apiUrlPath={route("contacts.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={ContactForm}
                     resourceInfo={[
                         ["first_name", ""],
@@ -99,7 +100,9 @@ const LeadForm = ({
                     <SelectContent>
                         <SelectItem value="website">Website</SelectItem>
                         <SelectItem value="referral">Referral</SelectItem>
-                        <SelectItem value="social_media">Social Media</SelectItem>
+                        <SelectItem value="social_media">
+                            Social Media
+                        </SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                 </Select>
@@ -142,8 +145,14 @@ const LeadForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="lead-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {processing ? "Saving..." : updating ? "Update Lead" : "Add Lead"}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {processing
+                        ? "Saving..."
+                        : updating
+                          ? "Update Lead"
+                          : "Add Lead"}
                 </Button>
             </div>
         </form>

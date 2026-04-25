@@ -48,10 +48,7 @@ const DealForm = ({
     const closeDate = data.close_date ? new Date(data.close_date) : null;
 
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -87,19 +84,25 @@ const DealForm = ({
                             variant={"outline"}
                             className={cn(
                                 "w-full justify-start text-left font-normal bg-card",
-                                !closeDate && "text-muted-foreground"
+                                !closeDate && "text-muted-foreground",
                             )}
                             data-testid="deal-close-date-trigger"
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {closeDate ? format(closeDate, "PPP") : <span>Pick a date</span>}
+                            {closeDate ? (
+                                format(closeDate, "PPP")
+                            ) : (
+                                <span>Pick a date</span>
+                            )}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                             mode="single"
                             selected={closeDate}
-                            onSelect={(date) => setData("close_date", toSqlDateFormat(date))}
+                            onSelect={(date) =>
+                                setData("close_date", toSqlDateFormat(date))
+                            }
                             initialFocus
                         />
                     </PopoverContent>
@@ -123,7 +126,7 @@ const DealForm = ({
                 </Select>
                 <InputError message={errors.status} />
             </div>
-            
+
             <div className="w-full space-y-1">
                 <Label>Lead</Label>
                 <RelationshipSelector
@@ -137,7 +140,9 @@ const DealForm = ({
                         }));
                     }}
                     resourceName="leads"
-                    apiUrlPath={route("leads.options", { organization: organizationSlug })}
+                    apiUrlPath={route("leads.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={LeadForm}
                     resourceInfo={[
                         ["source", ""],
@@ -163,7 +168,9 @@ const DealForm = ({
                             }));
                         }}
                         resourceName="companies"
-                        apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                        apiUrlPath={route("companies.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={CompanyForm}
                         resourceInfo={[
                             ["name", ""],
@@ -192,7 +199,9 @@ const DealForm = ({
                             }));
                         }}
                         resourceName="contacts"
-                        apiUrlPath={route("contacts.options", { organization: organizationSlug })}
+                        apiUrlPath={route("contacts.options", {
+                            organization: organizationSlug,
+                        })}
                         ResourceForm={ContactForm}
                         resourceInfo={[
                             ["first_name", ""],
@@ -230,7 +239,9 @@ const DealForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="deal-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

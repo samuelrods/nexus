@@ -44,7 +44,11 @@ const Login = ({ status, canResetPassword }) => {
                             onChange={(e) => setData("email", e.target.value)}
                             data-testid="login-email"
                         />
-                        <InputError message={errors.email} className="mt-2" data-testid="login-error-email" />
+                        <InputError
+                            message={errors.email}
+                            className="mt-2"
+                            data-testid="login-error-email"
+                        />
                     </div>
 
                     <div className="mt-4">
@@ -62,7 +66,11 @@ const Login = ({ status, canResetPassword }) => {
                             }
                             data-testid="login-password"
                         />
-                        <InputError message={errors.password} className="mt-2" data-testid="login-error-password" />
+                        <InputError
+                            message={errors.password}
+                            className="mt-2"
+                            data-testid="login-error-password"
+                        />
                     </div>
 
                     <div className="block mt-4">
@@ -75,7 +83,10 @@ const Login = ({ status, canResetPassword }) => {
                                     setData("remember", checked)
                                 }
                             />
-                            <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
+                            <Label
+                                htmlFor="remember"
+                                className="text-sm font-normal text-muted-foreground"
+                            >
                                 Remember me
                             </Label>
                         </label>
@@ -91,7 +102,12 @@ const Login = ({ status, canResetPassword }) => {
                             </Link>
                         )}
 
-                        <Button type="submit" className="ml-4" disabled={processing} data-testid="login-submit">
+                        <Button
+                            type="submit"
+                            className="ml-4"
+                            disabled={processing}
+                            data-testid="login-submit"
+                        >
                             Log in
                         </Button>
                     </div>

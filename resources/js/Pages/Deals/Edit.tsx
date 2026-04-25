@@ -23,7 +23,12 @@ const Edit = ({ deal }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("deals.update", { organization: organizationSlug, deal: deal.data.id }));
+        put(
+            route("deals.update", {
+                organization: organizationSlug,
+                deal: deal.data.id,
+            }),
+        );
     };
 
     return (

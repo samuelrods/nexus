@@ -17,7 +17,12 @@ const Edit = ({ member, roles }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("members.update", { organization: organizationSlug, member: memberData?.id }));
+        put(
+            route("members.update", {
+                organization: organizationSlug,
+                member: memberData?.id,
+            }),
+        );
     };
 
     return (
@@ -28,12 +33,20 @@ const Edit = ({ member, roles }) => {
                         <User className="h-6 w-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-foreground">{memberData?.full_name}</h2>
-                        <p className="text-sm text-muted-foreground">{memberData?.email}</p>
+                        <h2 className="text-2xl font-bold text-foreground">
+                            {memberData?.full_name}
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                            {memberData?.email}
+                        </p>
                     </div>
                 </div>
                 <Button variant="ghost" asChild>
-                    <Link href={route("members.index", { organization: organizationSlug })}>
+                    <Link
+                        href={route("members.index", {
+                            organization: organizationSlug,
+                        })}
+                    >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
                     </Link>
@@ -42,23 +55,32 @@ const Edit = ({ member, roles }) => {
 
             <form onSubmit={onSubmit} className="space-y-8">
                 <div className="space-y-4">
-                    <Label className="text-lg font-semibold block mb-4">Assign Role</Label>
+                    <Label className="text-lg font-semibold block mb-4">
+                        Assign Role
+                    </Label>
                     <div className="grid grid-cols-1 gap-3">
                         {roles.data.map((role) => (
-                            <div 
-                                key={role.id} 
-                                className={`flex items-center space-x-3 p-4 border rounded-lg transition-colors cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${data.role_id === role.id ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'border-border'}`}
-                                onClick={() => setData('role_id', role.id)}
+                            <div
+                                key={role.id}
+                                className={`flex items-center space-x-3 p-4 border rounded-lg transition-colors cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
+                                    data.role_id === role.id
+                                        ? "border-blue-500 bg-blue-50/50 dark:bg-blue-900/20"
+                                        : "border-border"
+                                }`}
+                                onClick={() => setData("role_id", role.id)}
                             >
                                 <input
                                     checked={data.role_id === role.id}
-                                    onChange={() => setData('role_id', role.id)}
+                                    onChange={() => setData("role_id", role.id)}
                                     name="role"
                                     type="radio"
                                     id={role.id}
                                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                                 />
-                                <Label htmlFor={role.id} className="cursor-pointer font-medium text-foreground flex-1">
+                                <Label
+                                    htmlFor={role.id}
+                                    className="cursor-pointer font-medium text-foreground flex-1"
+                                >
                                     {role.name}
                                 </Label>
                             </div>

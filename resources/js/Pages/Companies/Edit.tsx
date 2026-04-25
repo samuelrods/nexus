@@ -19,7 +19,12 @@ const Edit = ({ company }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("companies.update", { organization: organizationSlug, company: company.data.id }));
+        put(
+            route("companies.update", {
+                organization: organizationSlug,
+                company: company.data.id,
+            }),
+        );
     };
 
     return (

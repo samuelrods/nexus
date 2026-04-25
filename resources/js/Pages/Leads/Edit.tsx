@@ -19,7 +19,12 @@ const Edit = ({ lead }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        put(route("leads.update", { organization: organizationSlug, lead: lead.data.id }));
+        put(
+            route("leads.update", {
+                organization: organizationSlug,
+                lead: lead.data.id,
+            }),
+        );
     };
 
     return (

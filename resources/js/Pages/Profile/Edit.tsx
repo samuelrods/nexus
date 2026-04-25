@@ -131,10 +131,18 @@ const UpdateProfileInformationForm = ({
                     )}
                 </CardContent>
                 <CardFooter className="flex items-center gap-4">
-                    <Button disabled={processing} data-testid="profile-info-submit">Save Changes</Button>
+                    <Button
+                        disabled={processing}
+                        data-testid="profile-info-submit"
+                    >
+                        Save Changes
+                    </Button>
 
                     {recentlySuccessful && (
-                        <p className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300" data-testid="profile-info-success">
+                        <p
+                            className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300"
+                            data-testid="profile-info-success"
+                        >
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
                             Saved.
                         </p>
@@ -244,10 +252,18 @@ const UpdatePasswordForm = () => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex items-center gap-4">
-                    <Button disabled={processing} data-testid="profile-password-submit">Update Password</Button>
+                    <Button
+                        disabled={processing}
+                        data-testid="profile-password-submit"
+                    >
+                        Update Password
+                    </Button>
 
                     {recentlySuccessful && (
-                        <p className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300" data-testid="profile-password-success">
+                        <p
+                            className="text-sm text-muted-foreground flex items-center gap-1 animate-in fade-in duration-300"
+                            data-testid="profile-password-success"
+                        >
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
                             Saved.
                         </p>

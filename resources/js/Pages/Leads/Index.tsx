@@ -34,15 +34,33 @@ const Leads = ({ pagination, filters }) => {
                 createRoute={"leads.create"}
                 filters={filters}
                 filterOptions={[
-                    { label: "Status", name: "status", allLabel: "All Statuses", options: statusOptions },
-                    { label: "Source", name: "source", allLabel: "All Sources", options: sourceOptions },
+                    {
+                        label: "Status",
+                        name: "status",
+                        allLabel: "All Statuses",
+                        options: statusOptions,
+                    },
+                    {
+                        label: "Source",
+                        name: "source",
+                        allLabel: "All Sources",
+                        options: sourceOptions,
+                    },
                 ]}
             />
             <Table
                 data={pagination.data}
                 columns={[
-                    { header: "Company", key: "company_name", sortKey: "company_name" },
-                    { header: "Contact", key: "contact_fullname", sortKey: "contact_fullname" },
+                    {
+                        header: "Company",
+                        key: "company_name",
+                        sortKey: "company_name",
+                    },
+                    {
+                        header: "Contact",
+                        key: "contact_fullname",
+                        sortKey: "contact_fullname",
+                    },
                     { header: "Description", key: "description" },
                     { header: "Source", key: "source", sortKey: "source" },
                     { header: "Status", key: "status", sortKey: "status" },
@@ -54,7 +72,6 @@ const Leads = ({ pagination, filters }) => {
         </div>
     );
 };
-
 
 Leads.layout = (page) => (
     <Layout>

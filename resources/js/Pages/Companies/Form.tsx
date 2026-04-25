@@ -14,10 +14,7 @@ const CompanyForm = ({
     updating = false,
 }) => {
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label htmlFor="name">Company Name</Label>
                 <Input
@@ -74,9 +71,11 @@ const CompanyForm = ({
                 />
                 <InputError message={errors.description} />
             </div>
-            
+
             <div className="w-full space-y-4 pt-2">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">Address Information</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">
+                    Address Information
+                </h3>
                 <div className="space-y-1">
                     <Label htmlFor="street_address">Street Address</Label>
                     <Input
@@ -125,7 +124,9 @@ const CompanyForm = ({
                             id="zip_code"
                             placeholder="Zip"
                             value={data.zip_code || ""}
-                            onChange={(e) => setData("zip_code", e.target.value)}
+                            onChange={(e) =>
+                                setData("zip_code", e.target.value)
+                            }
                             required
                             className="bg-card"
                             data-testid="company-zip-code"
@@ -134,7 +135,7 @@ const CompanyForm = ({
                     </div>
                 </div>
             </div>
-            
+
             <div className="pt-6">
                 <Button
                     type="submit"
@@ -142,7 +143,9 @@ const CompanyForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="company-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

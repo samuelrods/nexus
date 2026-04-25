@@ -23,8 +23,17 @@ const Create = ({ permissions }) => {
         <div className="max-w-5xl mx-auto space-y-6 pb-12">
             <div className="flex items-center justify-between">
                 <div>
-                    <Button variant="ghost" asChild className="pl-0 hover:bg-transparent -ml-2 mb-2 group">
-                        <Link href={route("roles.index", { organization: organizationSlug })} className="flex items-center text-muted-foreground hover:text-foreground">
+                    <Button
+                        variant="ghost"
+                        asChild
+                        className="pl-0 hover:bg-transparent -ml-2 mb-2 group"
+                    >
+                        <Link
+                            href={route("roles.index", {
+                                organization: organizationSlug,
+                            })}
+                            className="flex items-center text-muted-foreground hover:text-foreground"
+                        >
                             <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                             Back to Roles
                         </Link>
@@ -35,7 +44,9 @@ const Create = ({ permissions }) => {
                         </div>
                         Create New Role
                     </h1>
-                    <p className="text-muted-foreground mt-2">Define a new set of permissions for your team members.</p>
+                    <p className="text-muted-foreground mt-2">
+                        Define a new set of permissions for your team members.
+                    </p>
                 </div>
             </div>
 

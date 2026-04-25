@@ -34,7 +34,7 @@ function FloatingOrb({ className, delay = 0 }) {
         <div
             className={cn(
                 "absolute rounded-full blur-3xl opacity-20 animate-pulse pointer-events-none",
-                className
+                className,
             )}
             style={{ animationDelay: `${delay}s`, animationDuration: "4s" }}
         />
@@ -66,7 +66,7 @@ function NavbarLP() {
                 "sticky top-0 z-50 transition-all duration-300",
                 scrolled
                     ? "bg-card/80 backdrop-blur-xl border-b border-border shadow-sm"
-                    : "bg-transparent border-b border-transparent"
+                    : "bg-transparent border-b border-transparent",
             )}
         >
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -82,15 +82,24 @@ function NavbarLP() {
                 <div className="flex md:order-2 space-x-3 items-center">
                     <ModeToggle />
                     {user ? (
-                        <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20" asChild>
+                        <Button
+                            className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20"
+                            asChild
+                        >
                             <Link href="/dashboard">Dashboard</Link>
                         </Button>
                     ) : (
                         <div className="flex items-center gap-4">
-                            <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                            <Link
+                                href="/login"
+                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                            >
                                 Log in
                             </Link>
-                            <Button className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20" asChild>
+                            <Button
+                                className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20"
+                                asChild
+                            >
                                 <Link href="/register">Get started</Link>
                             </Button>
                         </div>
@@ -99,14 +108,20 @@ function NavbarLP() {
                         onClick={() => setIsOpen(!isOpen)}
                         className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-muted-foreground rounded-lg md:hidden hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
                     >
-                        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        {isOpen ? (
+                            <X className="w-6 h-6" />
+                        ) : (
+                            <Menu className="w-6 h-6" />
+                        )}
                     </button>
                 </div>
 
-                <div className={cn(
-                    "items-center justify-between w-full md:flex md:w-auto md:order-1",
-                    !isOpen && "hidden"
-                )}>
+                <div
+                    className={cn(
+                        "items-center justify-between w-full md:flex md:w-auto md:order-1",
+                        !isOpen && "hidden",
+                    )}
+                >
                     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-border rounded-lg bg-card/80 backdrop-blur-xl md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-transparent">
                         {navLinks.map((link) => (
                             <li key={link.href}>
@@ -133,9 +148,18 @@ function HeroSection() {
     return (
         <section id="home" className="relative overflow-hidden bg-background">
             {/* Floating gradient orbs */}
-            <FloatingOrb className="w-96 h-96 bg-blue-500 -top-48 -left-48" delay={0} />
-            <FloatingOrb className="w-80 h-80 bg-violet-500 top-1/3 -right-40" delay={1.5} />
-            <FloatingOrb className="w-64 h-64 bg-cyan-500 bottom-0 left-1/3" delay={3} />
+            <FloatingOrb
+                className="w-96 h-96 bg-blue-500 -top-48 -left-48"
+                delay={0}
+            />
+            <FloatingOrb
+                className="w-80 h-80 bg-violet-500 top-1/3 -right-40"
+                delay={1.5}
+            />
+            <FloatingOrb
+                className="w-64 h-64 bg-cyan-500 bottom-0 left-1/3"
+                delay={3}
+            />
 
             <div className="relative py-24 px-4 mx-auto max-w-screen-xl lg:py-36">
                 {/* Badge */}
@@ -156,14 +180,18 @@ function HeroSection() {
                 </h1>
 
                 <p className="mb-12 text-lg font-normal text-muted-foreground lg:text-xl text-center max-w-2xl mx-auto leading-relaxed">
-                    Manage contacts, track deals, log activities, and collaborate
-                    across organizations — all with role-based permissions and
-                    real-time dashboards.
+                    Manage contacts, track deals, log activities, and
+                    collaborate across organizations — all with role-based
+                    permissions and real-time dashboards.
                 </p>
 
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     {user ? (
-                        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6 h-auto shadow-xl shadow-blue-600/20 group" asChild>
+                        <Button
+                            size="lg"
+                            className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6 h-auto shadow-xl shadow-blue-600/20 group"
+                            asChild
+                        >
                             <Link href="/dashboard">
                                 Go to Dashboard
                                 <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
@@ -171,13 +199,22 @@ function HeroSection() {
                         </Button>
                     ) : (
                         <>
-                            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6 h-auto shadow-xl shadow-blue-600/20 group" asChild>
+                            <Button
+                                size="lg"
+                                className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6 h-auto shadow-xl shadow-blue-600/20 group"
+                                asChild
+                            >
                                 <Link href="/register">
                                     Get started free
                                     <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </Button>
-                            <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-border hover:bg-accent group" asChild>
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                className="text-lg px-8 py-6 h-auto border-border hover:bg-accent group"
+                                asChild
+                            >
                                 <a href="#features">
                                     See features
                                     <ChevronRight className="w-5 h-5 ml-1 transition-transform group-hover:translate-x-1" />
@@ -195,9 +232,16 @@ function HeroSection() {
                         { label: "Multi-org", value: "Built-in" },
                         { label: "Cost", value: "Free" },
                     ].map((stat, i) => (
-                        <div key={i} className="text-center p-4 rounded-xl bg-card/50 backdrop-blur border border-border/50">
-                            <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-                            <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+                        <div
+                            key={i}
+                            className="text-center p-4 rounded-xl bg-card/50 backdrop-blur border border-border/50"
+                        >
+                            <div className="text-2xl font-bold text-foreground">
+                                {stat.value}
+                            </div>
+                            <div className="text-sm text-muted-foreground mt-1">
+                                {stat.label}
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -281,8 +325,8 @@ function FeaturesSection() {
                         Everything you need to close more deals
                     </h2>
                     <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                        From first contact to closed deal, Nexus gives your team full visibility
-                        into every step of the sales process.
+                        From first contact to closed deal, Nexus gives your team
+                        full visibility into every step of the sales process.
                     </p>
                 </div>
 
@@ -292,10 +336,12 @@ function FeaturesSection() {
                             key={i}
                             className="group relative p-6 bg-card rounded-2xl border border-border transition-all duration-300 hover:shadow-lg hover:border-border/80 hover:-translate-y-0.5"
                         >
-                            <div className={cn(
-                                "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110",
-                                colorMap[f.color]
-                            )}>
+                            <div
+                                className={cn(
+                                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110",
+                                    colorMap[f.color],
+                                )}
+                            >
                                 <f.icon className="w-6 h-6" />
                             </div>
                             <h3 className="text-lg font-bold text-foreground mb-2">
@@ -334,7 +380,8 @@ function PricingSection() {
                         Free. No strings attached.
                     </h2>
                     <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-                        Nexus is open-source. Deploy it yourself and get every feature at zero cost.
+                        Nexus is open-source. Deploy it yourself and get every
+                        feature at zero cost.
                     </p>
                 </div>
 
@@ -347,8 +394,12 @@ function PricingSection() {
                             Self-hosted
                         </CardTitle>
                         <div className="flex items-baseline justify-center gap-1">
-                            <span className="text-5xl font-extrabold tracking-tight text-foreground">$0</span>
-                            <span className="text-muted-foreground font-medium">/ forever</span>
+                            <span className="text-5xl font-extrabold tracking-tight text-foreground">
+                                $0
+                            </span>
+                            <span className="text-muted-foreground font-medium">
+                                / forever
+                            </span>
                         </div>
                     </CardHeader>
                     <CardContent className="p-8 pt-4">
@@ -358,11 +409,16 @@ function PricingSection() {
                                     <div className="h-5 w-5 bg-blue-500/10 rounded-full flex items-center justify-center shrink-0">
                                         <Check className="h-3 w-3 text-blue-600 dark:text-blue-400" />
                                     </div>
-                                    <span className="text-muted-foreground font-medium text-sm">{b}</span>
+                                    <span className="text-muted-foreground font-medium text-sm">
+                                        {b}
+                                    </span>
                                 </li>
                             ))}
                         </ul>
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700 py-6 h-auto text-lg shadow-lg shadow-blue-600/20" asChild>
+                        <Button
+                            className="w-full bg-blue-600 hover:bg-blue-700 py-6 h-auto text-lg shadow-lg shadow-blue-600/20"
+                            asChild
+                        >
                             <Link href="/register">Start building</Link>
                         </Button>
                     </CardContent>
@@ -408,13 +464,22 @@ function FaqSection() {
                         Frequently Asked Questions
                     </h2>
                     <p className="text-muted-foreground">
-                        Everything you need to know about Nexus and getting started.
+                        Everything you need to know about Nexus and getting
+                        started.
                     </p>
                 </div>
 
-                <Accordion type="single" collapsible className="w-full bg-card rounded-2xl border border-border p-2">
+                <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full bg-card rounded-2xl border border-border p-2"
+                >
                     {faqs.map((faq, i) => (
-                        <AccordionItem key={i} value={`item-${i}`} className="border-b border-border last:border-0 px-4">
+                        <AccordionItem
+                            key={i}
+                            value={`item-${i}`}
+                            className="border-b border-border last:border-0 px-4"
+                        >
                             <AccordionTrigger className="text-left text-lg font-semibold hover:text-blue-600 transition-colors py-6 text-foreground">
                                 {faq.q}
                             </AccordionTrigger>
@@ -444,12 +509,28 @@ function FooterSection() {
                         </span>
                     </div>
                     <p className="text-muted-foreground text-sm">
-                        © {new Date().getFullYear()} samuelrods. All rights reserved.
+                        © {new Date().getFullYear()} samuelrods. All rights
+                        reserved.
                     </p>
                     <div className="flex gap-6">
-                        <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">About</a>
-                        <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">Privacy</a>
-                        <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">GitHub</a>
+                        <a
+                            href="#"
+                            className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+                        >
+                            About
+                        </a>
+                        <a
+                            href="#"
+                            className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+                        >
+                            Privacy
+                        </a>
+                        <a
+                            href="#"
+                            className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+                        >
+                            GitHub
+                        </a>
                     </div>
                 </div>
             </div>

@@ -22,9 +22,8 @@ const Create = () => {
 
     return (
         <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
-
-
-            <LeadForm                data={data}
+            <LeadForm
+                data={data}
                 setData={setData}
                 errors={errors}
                 onSubmit={onSubmit}

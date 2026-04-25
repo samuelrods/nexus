@@ -1,5 +1,9 @@
 import { usePage } from "@inertiajs/react";
-import { Alert as AlertUI, AlertDescription, AlertTitle } from "@/Components/ui/alert";
+import {
+    Alert as AlertUI,
+    AlertDescription,
+    AlertTitle,
+} from "@/Components/ui/alert";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
@@ -17,7 +21,10 @@ const Alert = () => {
 
     if (!showAlert) return null;
 
-    const variant = flash.alert.type === "failure" || flash.alert.type === "error" ? "destructive" : "default";
+    const variant =
+        flash.alert.type === "failure" || flash.alert.type === "error"
+            ? "destructive"
+            : "default";
 
     return (
         <div className="fixed top-0 left-0 flex justify-center w-full pointer-events-none p-5 z-[100]">
@@ -27,7 +34,9 @@ const Alert = () => {
             >
                 <div className="flex justify-between items-start w-full">
                     <div className="flex-1">
-                        <AlertTitle className="capitalize">{flash.alert.type ?? "Success"}</AlertTitle>
+                        <AlertTitle className="capitalize">
+                            {flash.alert.type ?? "Success"}
+                        </AlertTitle>
                         <AlertDescription>
                             {flash.alert.message}
                         </AlertDescription>

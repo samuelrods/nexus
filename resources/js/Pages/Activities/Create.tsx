@@ -11,7 +11,7 @@ const Create = () => {
         contact_id: null,
         lead_id: null,
         type: "call",
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split("T")[0],
         time: "10:00",
         description: "",
     });
@@ -23,9 +23,8 @@ const Create = () => {
 
     return (
         <div className="max-w-4xl bg-card p-8 rounded-lg shadow-sm border border-border">
-
-
-            <ActivityForm                data={data}
+            <ActivityForm
+                data={data}
                 setData={setData}
                 errors={errors}
                 onSubmit={onSubmit}

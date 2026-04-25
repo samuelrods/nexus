@@ -30,9 +30,21 @@ const chartConfig = {
 const ActivitiesPieChart = ({ data }) => {
     const chartData = [
         { type: "call", value: data.call ?? 0, fill: chartConfig.call.color },
-        { type: "email", value: data.email ?? 0, fill: chartConfig.email.color },
-        { type: "meeting", value: data.meeting ?? 0, fill: chartConfig.meeting.color },
-        { type: "other", value: data.other ?? 0, fill: chartConfig.other.color },
+        {
+            type: "email",
+            value: data.email ?? 0,
+            fill: chartConfig.email.color,
+        },
+        {
+            type: "meeting",
+            value: data.meeting ?? 0,
+            fill: chartConfig.meeting.color,
+        },
+        {
+            type: "other",
+            value: data.other ?? 0,
+            fill: chartConfig.other.color,
+        },
     ];
 
     return (

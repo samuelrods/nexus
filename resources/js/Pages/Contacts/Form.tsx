@@ -19,10 +19,7 @@ const ContactForm = ({
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="grid grid-cols-2 gap-4 w-full">
                 <div className="space-y-1">
                     <Label htmlFor="first_name">First Name</Label>
@@ -51,7 +48,7 @@ const ContactForm = ({
                     <InputError message={errors.last_name} />
                 </div>
             </div>
-            
+
             <div className="w-full space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -66,7 +63,7 @@ const ContactForm = ({
                 />
                 <InputError message={errors.email} />
             </div>
-            
+
             <div className="w-full space-y-1">
                 <Label htmlFor="phone_number">Phone Number</Label>
                 <Input
@@ -94,7 +91,9 @@ const ContactForm = ({
                         }));
                     }}
                     resourceName="companies"
-                    apiUrlPath={route("companies.options", { organization: organizationSlug })}
+                    apiUrlPath={route("companies.options", {
+                        organization: organizationSlug,
+                    })}
                     ResourceForm={CompanyForm}
                     resourceInfo={[
                         ["name", ""],
@@ -139,7 +138,7 @@ const ContactForm = ({
                 />
                 <InputError message={errors.description} />
             </div>
-            
+
             <div className="pt-6">
                 <Button
                     type="submit"
@@ -147,7 +146,9 @@ const ContactForm = ({
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                     data-testid="contact-submit"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating

@@ -22,10 +22,7 @@ const CompanyForm = ({
     updating = false,
 }) => {
     return (
-        <form
-            onSubmit={onSubmit}
-            className="space-y-4 w-full max-w-2xl"
-        >
+        <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full space-y-1">
                 <Label htmlFor="name">Company Name</Label>
                 <Input
@@ -78,9 +75,11 @@ const CompanyForm = ({
                 />
                 <InputError message={errors.description} />
             </div>
-            
+
             <div className="w-full space-y-4 pt-2">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">Address Information</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 border-b pb-1">
+                    Address Information
+                </h3>
                 <div className="space-y-1">
                     <Label htmlFor="street_address">Street Address</Label>
                     <Input
@@ -126,7 +125,9 @@ const CompanyForm = ({
                             id="zip_code"
                             placeholder="Zip"
                             value={data.zip_code}
-                            onChange={(e) => setData("zip_code", e.target.value)}
+                            onChange={(e) =>
+                                setData("zip_code", e.target.value)
+                            }
                             required
                             className="bg-card"
                         />
@@ -134,14 +135,16 @@ const CompanyForm = ({
                     </div>
                 </div>
             </div>
-            
+
             <div className="pt-6">
                 <Button
                     type="submit"
                     disabled={processing ?? false}
                     className="bg-blue-600 hover:bg-blue-700 min-w-[200px]"
                 >
-                    {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {processing && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {processing
                         ? "Saving..."
                         : updating
@@ -157,33 +160,33 @@ const Companies = ({ pagination, stats, filters, industries = [] }) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
-                <StatsCard 
-                    title="Total Companies" 
-                    value={stats.total_companies} 
-                    icon={Building2} 
+                <StatsCard
+                    title="Total Companies"
+                    value={stats.total_companies}
+                    icon={Building2}
                     color="blue"
                     description="Registered organizations"
                 />
-                <StatsCard 
-                    title="Industries" 
-                    value={stats.industries} 
-                    icon={Factory} 
+                <StatsCard
+                    title="Industries"
+                    value={stats.industries}
+                    icon={Factory}
                     color="purple"
                     description="Diverse market sectors"
                 />
-                <StatsCard 
-                    title="Active Sites" 
-                    value={stats.total_companies} 
-                    icon={Globe} 
+                <StatsCard
+                    title="Active Sites"
+                    value={stats.total_companies}
+                    icon={Globe}
                     color="green"
                     trend="up"
                     trendValue={5}
                     description="Digital presence"
                 />
-                <StatsCard 
-                    title="HQ Locations" 
-                    value={stats.total_companies} 
-                    icon={MapPin} 
+                <StatsCard
+                    title="HQ Locations"
+                    value={stats.total_companies}
+                    icon={MapPin}
                     color="yellow"
                     description="Global distribution"
                 />
@@ -196,11 +199,14 @@ const Companies = ({ pagination, stats, filters, industries = [] }) => {
                     createRoute={"companies.create"}
                     filters={filters}
                     filterOptions={[
-                        { 
-                            label: "Industry", 
-                            name: "industry", 
+                        {
+                            label: "Industry",
+                            name: "industry",
                             allLabel: "All Industries",
-                            options: industries.map(i => ({ label: i, value: i }))
+                            options: industries.map((i) => ({
+                                label: i,
+                                value: i,
+                            })),
                         },
                     ]}
                 />
@@ -208,8 +214,16 @@ const Companies = ({ pagination, stats, filters, industries = [] }) => {
                     data={pagination.data}
                     columns={[
                         { header: "Name", key: "name", sortKey: "name" },
-                        { header: "Website", key: "website", sortKey: "website" },
-                        { header: "Industry", key: "industry", sortKey: "industry" },
+                        {
+                            header: "Website",
+                            key: "website",
+                            sortKey: "website",
+                        },
+                        {
+                            header: "Industry",
+                            key: "industry",
+                            sortKey: "industry",
+                        },
                         { header: "Address", key: "address_full" },
                     ]}
                     resourceName={"companies"}
