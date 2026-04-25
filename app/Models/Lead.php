@@ -49,7 +49,7 @@ class Lead extends Model
 
         $array['id'] = (int) $this->id;
         $array['organization_id'] = (int) $this->organization_id;
-        $array['company_name'] = $this->company->name;
+        $array['company_name'] = $this->company?->name;
 
         return $array;
     }
