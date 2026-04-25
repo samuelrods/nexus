@@ -17,7 +17,7 @@ const Create = () => {
         zip_code: "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("companies.store", { organization: organizationSlug }));
     };
@@ -35,7 +35,7 @@ const Create = () => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Create Company" />
     </Layout>

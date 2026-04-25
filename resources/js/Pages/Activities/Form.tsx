@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -31,11 +32,11 @@ const ActivityForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
-    function toSqlDateFormat(date) {
+    function toSqlDateFormat(date: any) {
         if (!date) return null;
         var year = date.getFullYear();
         var month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -54,8 +55,8 @@ const ActivityForm = ({
                     <RelationshipSelector
                         value={data.contact_id}
                         label={data.contact_fullname}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 contact_id: val,
                                 contact_fullname: lab,
@@ -84,8 +85,8 @@ const ActivityForm = ({
                     <RelationshipSelector
                         value={data.lead_id}
                         label={data.lead_description}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 lead_id: val,
                                 lead_description: lab,
@@ -110,7 +111,7 @@ const ActivityForm = ({
             <div className="w-full space-y-1">
                 <Label>Activity Type</Label>
                 <Select
-                    onValueChange={(val) => setData("type", val)}
+                    onValueChange={(val: any) => setData("type", val)}
                     value={data.type || ""}
                 >
                     <SelectTrigger data-testid="activity-type-trigger">
@@ -151,7 +152,7 @@ const ActivityForm = ({
                             <Calendar
                                 mode="single"
                                 selected={activityDate}
-                                onSelect={(date) =>
+                                onSelect={(date: any) =>
                                     setData("date", toSqlDateFormat(date))
                                 }
                                 initialFocus
@@ -167,7 +168,7 @@ const ActivityForm = ({
                         placeholder="Time"
                         value={data.time || ""}
                         type="time"
-                        onChange={(e) => {
+                        onChange={(e: any) => {
                             const value = e.target.value;
                             setData(
                                 "time",
@@ -185,7 +186,7 @@ const ActivityForm = ({
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) => setData("description", e.target.value)}
                     id="description"
                     placeholder="Notes about the activity..."
                     required

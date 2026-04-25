@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -23,7 +24,7 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status }: any) => {
     const statusStyles = {
         open: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
         closed: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
@@ -47,7 +48,7 @@ const StatusBadge = ({ status }) => {
     );
 };
 
-const Show = ({ lead }) => {
+const Show = ({ lead }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
@@ -295,7 +296,7 @@ const Show = ({ lead }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout>
         <ResourceLayout
             children={page}

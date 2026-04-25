@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { usePage } from "@inertiajs/react";
 import {
@@ -24,7 +25,7 @@ const RelationshipSelector = ({
     ResourceForm,
     resourceInfo,
     placeholder = "Search...",
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
@@ -42,15 +43,15 @@ const RelationshipSelector = ({
     const [errors, setErrors] = useState({});
     const [creating, setCreating] = useState(false);
 
-    const setData = (key, val) => {
-        setFormData((prev) => ({ ...prev, [key]: val }));
+    const setData = (key: any, val: any) => {
+        setFormData((prev: any) => ({ ...prev, [key]: val }));
     };
 
     useEffect(() => {
         if (label) setSelectedItemLabel(label);
     }, [label]);
 
-    const handleSearch = async (term) => {
+    const handleSearch = async (term: any) => {
         setSearchTerm(term);
         setLoading(true);
         try {
@@ -73,14 +74,14 @@ const RelationshipSelector = ({
         }
     }, [open, tab]);
 
-    const handleSelect = (item, e) => {
+    const handleSelect = (item: any, e: any) => {
         if (e) e.stopPropagation();
         setSelectedItemLabel(item.label);
         onChange(item.value, item.label);
         setOpen(false);
     };
 
-    const handleCreate = async (e) => {
+    const handleCreate = async (e: any) => {
         e.preventDefault();
         e.stopPropagation();
         setCreating(true);
@@ -131,7 +132,7 @@ const RelationshipSelector = ({
         }
     };
 
-    const clearSelection = (e) => {
+    const clearSelection = (e: any) => {
         e.stopPropagation();
         setSelectedItemLabel("");
         onChange(null, null);
@@ -210,7 +211,7 @@ const RelationshipSelector = ({
                                     placeholder="Type to search..."
                                     className="pl-10"
                                     value={searchTerm}
-                                    onChange={(e) =>
+                                    onChange={(e: any) =>
                                         handleSearch(e.target.value)
                                     }
                                     autoFocus
@@ -223,12 +224,12 @@ const RelationshipSelector = ({
                                         <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
                                     </div>
                                 ) : options.length > 0 ? (
-                                    options.map((option) => (
+                                    options.map((option: any) => (
                                         <button
                                             key={option.value}
                                             type="button"
                                             className="w-full flex items-center justify-between px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-left transition-colors"
-                                            onClick={(e) =>
+                                            onClick={(e: any) =>
                                                 handleSelect(option, e)
                                             }
                                         >

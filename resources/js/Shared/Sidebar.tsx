@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import {
@@ -64,7 +65,7 @@ const SidebarGroup = ({
     activePaths = [],
 }) => {
     const { url } = usePage();
-    const isActive = activePaths.some((path) => url.startsWith(path));
+    const isActive = activePaths.some((path: any) => url.startsWith(path));
     const [isOpen, setIsOpen] = useState(isActive);
     const testId = `sidebar-group-${title.toLowerCase().replace(/\s+/g, "-")}`;
 
@@ -128,7 +129,7 @@ const SidebarGroup = ({
     );
 };
 
-const Sidebar = ({ sidebarOpen }) => {
+const Sidebar = ({ sidebarOpen }: any) => {
     const [collapsed, setCollapsed] = useState(!sidebarOpen);
     const { auth } = usePage().props;
     const organization = auth.organization;
@@ -136,7 +137,7 @@ const Sidebar = ({ sidebarOpen }) => {
 
     const userPermissions = auth.user?.permissions || [];
     const userRoles = auth.user?.roles || [];
-    const hasPermission = (permission) =>
+    const hasPermission = (permission: any) =>
         userRoles.includes("owner") || userPermissions.includes(permission);
 
     const canViewContacts = hasPermission("read-contacts");

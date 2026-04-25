@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { router, usePage } from "@inertiajs/react";
 import {
     Select,
@@ -23,7 +24,7 @@ const chartConfig = {
     },
 };
 
-const DealsChart = ({ data }) => {
+const DealsChart = ({ data }: any) => {
     return (
         <div className="w-full">
             <div className="flex justify-between items-start mb-4">

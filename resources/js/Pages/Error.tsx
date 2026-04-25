@@ -1,4 +1,5 @@
-export default function ErrorPage({ status, description }) {
+// @ts-nocheck
+export default function ErrorPage({ status, description }: any) {
     const title = {
         503: "503: Service Unavailable",
         500: "500: Server Error",

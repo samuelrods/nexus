@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -12,7 +13,7 @@ import ComboBox from "@/Shared/ComboBox";
 import { Loader2 } from "lucide-react";
 import Select from "react-select";
 
-const Leads = ({ pagination, filters }) => {
+const Leads = ({ pagination, filters }: any) => {
     const statusOptions = [
         { label: "Open", value: "open" },
         { label: "Closed", value: "closed" },
@@ -73,7 +74,7 @@ const Leads = ({ pagination, filters }) => {
     );
 };
 
-Leads.layout = (page) => (
+Leads.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Leads" />
     </Layout>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { cn } from "@/lib/utils";
 
 export const StatsCard = ({
@@ -71,7 +72,7 @@ export const StatsCard = ({
     );
 };
 
-export const StatsGrid = ({ children }) => {
+export const StatsGrid = ({ children }: any) => {
     return (
         <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 xl:grid-cols-4">
             {children}

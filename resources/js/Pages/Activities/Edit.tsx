@@ -3,7 +3,7 @@ import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, usePage } from "@inertiajs/react";
 import ActivityForm from "./Form";
 
-const Edit = ({ activity }) => {
+const Edit = ({ activity }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
@@ -18,7 +18,7 @@ const Edit = ({ activity }) => {
         description: activity.data.description,
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(
             route("activities.update", {
@@ -42,7 +42,7 @@ const Edit = ({ activity }) => {
     );
 };
 
-Edit.layout = (page) => (
+Edit.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Edit Activity" />
     </Layout>

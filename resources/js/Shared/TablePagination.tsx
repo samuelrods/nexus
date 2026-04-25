@@ -1,7 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 
-const TablePagination = ({ pagination }) => {
+const TablePagination = ({ pagination }: any) => {
     if (!pagination) return null;
 
     return (

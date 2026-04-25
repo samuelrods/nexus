@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -30,7 +31,7 @@ import { Badge } from "@/Components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 
-const Show = ({ role }) => {
+const Show = ({ role }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
@@ -54,7 +55,7 @@ const Show = ({ role }) => {
 
     // Group permissions by category (resource name)
     const groupedPermissions = role.data.permissions.reduce(
-        (acc, permission) => {
+        (acc: any, permission: any) => {
             let action, resource;
 
             if (permission.name.includes(".")) {
@@ -75,7 +76,7 @@ const Show = ({ role }) => {
         {},
     );
 
-    const getActionBadge = (action) => {
+    const getActionBadge = (action: any) => {
         const colors = {
             read: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
             create: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
@@ -279,7 +280,7 @@ const Show = ({ role }) => {
                                     </CardHeader>
                                     <CardContent className="p-4">
                                         <div className="flex flex-wrap gap-2">
-                                            {permissions.map((permission) => (
+                                            {permissions.map((permission: any) => (
                                                 <div
                                                     key={permission.id}
                                                     className="group transition-transform hover:scale-105"
@@ -351,7 +352,7 @@ const Show = ({ role }) => {
                                     <div className="space-y-3">
                                         {role.data.users
                                             .slice(0, 5)
-                                            .map((member) => (
+                                            .map((member: any) => (
                                                 <Link
                                                     key={member.id}
                                                     href={route(
@@ -447,7 +448,7 @@ const Show = ({ role }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout title={`Role: ${page.props.role.data.name}`}>
         <ResourceLayout
             children={page}

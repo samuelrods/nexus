@@ -6,7 +6,7 @@ import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 import { Loader2, ArrowLeft, Save, User } from "lucide-react";
 
-const Edit = ({ member, roles }) => {
+const Edit = ({ member, roles }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const memberData = member?.data ?? member;
@@ -15,7 +15,7 @@ const Edit = ({ member, roles }) => {
         role_id: memberData?.role_id,
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(
             route("members.update", {
@@ -59,7 +59,7 @@ const Edit = ({ member, roles }) => {
                         Assign Role
                     </Label>
                     <div className="grid grid-cols-1 gap-3">
-                        {roles.data.map((role) => (
+                        {roles.data.map((role: any) => (
                             <div
                                 key={role.id}
                                 className={`flex items-center space-x-3 p-4 border rounded-lg transition-colors cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
@@ -108,7 +108,7 @@ const Edit = ({ member, roles }) => {
     );
 };
 
-Edit.layout = (page) => (
+Edit.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Edit Member" />
     </Layout>

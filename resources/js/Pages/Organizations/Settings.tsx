@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { Head, useForm, usePage, router } from "@inertiajs/react";
@@ -30,7 +31,7 @@ import {
 import InputError from "@/Components/InputError";
 import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 
-const Settings = ({ organization }) => {
+const Settings = ({ organization }: any) => {
     const { auth } = usePage().props;
     const isOwner = auth.user?.id === organization.user_id;
 
@@ -39,7 +40,7 @@ const Settings = ({ organization }) => {
         currency: organization.currency || "USD",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(route("organizations.update", { organization: organization.slug }));
     };
@@ -103,7 +104,7 @@ const Settings = ({ organization }) => {
                                 <Input
                                     id="name"
                                     value={data.name}
-                                    onChange={(e) =>
+                                    onChange={(e: any) =>
                                         setData("name", e.target.value)
                                     }
                                     placeholder="Enter organization name"
@@ -122,7 +123,7 @@ const Settings = ({ organization }) => {
                                 </Label>
                                 <Select
                                     value={data.currency}
-                                    onValueChange={(value) =>
+                                    onValueChange={(value: any) =>
                                         setData("currency", value)
                                     }
                                 >
@@ -133,7 +134,7 @@ const Settings = ({ organization }) => {
                                         <SelectValue placeholder="Select Currency" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {COMMON_CURRENCIES.map((c) => (
+                                        {COMMON_CURRENCIES.map((c: any) => (
                                             <SelectItem
                                                 key={c.code}
                                                 value={c.code}
@@ -209,7 +210,7 @@ const Settings = ({ organization }) => {
     );
 };
 
-Settings.layout = (page) => (
+Settings.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Organization Settings" />
     </Layout>

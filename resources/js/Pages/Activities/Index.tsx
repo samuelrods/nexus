@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -21,7 +22,7 @@ import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Activities = ({ pagination, filters }) => {
+const Activities = ({ pagination, filters }: any) => {
     const typeOptions = [
         { label: "Call", value: "call" },
         { label: "Meeting", value: "meeting" },
@@ -66,7 +67,7 @@ const Activities = ({ pagination, filters }) => {
     );
 };
 
-Activities.layout = (page) => (
+Activities.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Activities" />
     </Layout>

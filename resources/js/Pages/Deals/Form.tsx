@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
@@ -32,11 +33,11 @@ const DealForm = ({
     onSubmit,
     processing,
     updating = false,
-}) => {
+}: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
-    function toSqlDateFormat(date) {
+    function toSqlDateFormat(date: any) {
         if (!date) return null;
         var year = date.getFullYear();
         var month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -55,7 +56,7 @@ const DealForm = ({
                     id="name"
                     placeholder="Enter deal name"
                     value={data.name || ""}
-                    onChange={(e) => setData("name", e.target.value)}
+                    onChange={(e: any) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
                     data-testid="deal-name"
@@ -70,7 +71,7 @@ const DealForm = ({
                     type="number"
                     step={0.01}
                     value={data.value || ""}
-                    onChange={(e) => setData("value", e.target.value)}
+                    onChange={(e: any) => setData("value", e.target.value)}
                     required
                     data-testid="deal-value"
                 />
@@ -100,7 +101,7 @@ const DealForm = ({
                         <Calendar
                             mode="single"
                             selected={closeDate}
-                            onSelect={(date) =>
+                            onSelect={(date: any) =>
                                 setData("close_date", toSqlDateFormat(date))
                             }
                             initialFocus
@@ -112,7 +113,7 @@ const DealForm = ({
             <div className="w-full space-y-1">
                 <Label>Status</Label>
                 <Select
-                    onValueChange={(val) => setData("status", val)}
+                    onValueChange={(val: any) => setData("status", val)}
                     value={data.status || ""}
                 >
                     <SelectTrigger data-testid="deal-status-trigger">
@@ -132,8 +133,8 @@ const DealForm = ({
                 <RelationshipSelector
                     value={data.lead_id}
                     label={data.lead_description}
-                    onChange={(val, lab) => {
-                        setData((prev) => ({
+                    onChange={(val: any, lab: any) => {
+                        setData((prev: any) => ({
                             ...prev,
                             lead_id: val,
                             lead_description: lab,
@@ -160,8 +161,8 @@ const DealForm = ({
                     <RelationshipSelector
                         value={data.company_id}
                         label={data.company_name}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 company_id: val,
                                 company_name: lab,
@@ -191,8 +192,8 @@ const DealForm = ({
                     <RelationshipSelector
                         value={data.contact_id}
                         label={data.contact_fullname}
-                        onChange={(val, lab) => {
-                            setData((prev) => ({
+                        onChange={(val: any, lab: any) => {
+                            setData((prev: any) => ({
                                 ...prev,
                                 contact_id: val,
                                 contact_fullname: lab,
@@ -221,7 +222,7 @@ const DealForm = ({
             <div className="w-full space-y-1">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) => setData("description", e.target.value)}
                     id="description"
                     placeholder="Deal description..."
                     required

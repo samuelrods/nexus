@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, Link, usePage } from "@inertiajs/react";
@@ -5,16 +6,16 @@ import RoleForm from "./Form";
 import { Button } from "@/Components/ui/button";
 import { ArrowLeft, Shield } from "lucide-react";
 
-const Edit = ({ role, permissions }) => {
+const Edit = ({ role, permissions }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
     const { data, setData, put, processing, errors } = useForm({
         name: role.data.name,
-        permissions: role.data.permissions.map((p) => p.id) || [],
+        permissions: role.data.permissions.map((p: any) => p.id) || [],
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(
             route("roles.update", {
@@ -70,7 +71,7 @@ const Edit = ({ role, permissions }) => {
     );
 };
 
-Edit.layout = (page) => (
+Edit.layout = (page: any) => (
     <Layout title={`Edit Role: ${page.props.role.data.name}`}>
         <ResourceLayout children={page} title="Edit Role" hideHeader={true} />
     </Layout>

@@ -14,12 +14,12 @@ import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { Plus } from "lucide-react";
 
-const CreateOrganizationModal = ({ trigger }) => {
+const CreateOrganizationModal = ({ trigger }: any) => {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [processing, setProcessing] = useState(false);
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         setProcessing(true);
         router.post(
@@ -64,7 +64,7 @@ const CreateOrganizationModal = ({ trigger }) => {
                             placeholder="e.g. Acme Corp"
                             autoComplete="off"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e: any) => setName(e.target.value)}
                             required
                             className="h-11"
                         />

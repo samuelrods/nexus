@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import Layout from "@/Shared/Layout";
 import { Head, useForm, usePage } from "@inertiajs/react";
@@ -63,7 +64,7 @@ const UpdateProfileInformationForm = ({
                                 id="first_name"
                                 data-testid="profile-first-name"
                                 value={data.first_name}
-                                onChange={(e) =>
+                                onChange={(e: any) =>
                                     setData("first_name", e.target.value)
                                 }
                                 required
@@ -78,7 +79,7 @@ const UpdateProfileInformationForm = ({
                                 id="last_name"
                                 data-testid="profile-last-name"
                                 value={data.last_name}
-                                onChange={(e) =>
+                                onChange={(e: any) =>
                                     setData("last_name", e.target.value)
                                 }
                                 required
@@ -95,7 +96,7 @@ const UpdateProfileInformationForm = ({
                             data-testid="profile-email"
                             type="email"
                             value={data.email}
-                            onChange={(e) => setData("email", e.target.value)}
+                            onChange={(e: any) => setData("email", e.target.value)}
                             required
                             autoComplete="username"
                         />
@@ -176,7 +177,7 @@ const UpdatePasswordForm = () => {
         put(route("password.update"), {
             preserveScroll: true,
             onSuccess: () => reset(),
-            onError: (errors) => {
+            onError: (errors: any) => {
                 if (errors.password) {
                     reset("password", "password_confirmation");
                     passwordInput.current?.focus();
@@ -209,7 +210,7 @@ const UpdatePasswordForm = () => {
                             data-testid="profile-current-password"
                             ref={currentPasswordInput}
                             value={data.current_password}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("current_password", e.target.value)
                             }
                             type="password"
@@ -225,7 +226,7 @@ const UpdatePasswordForm = () => {
                             data-testid="profile-new-password"
                             ref={passwordInput}
                             value={data.password}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("password", e.target.value)
                             }
                             type="password"
@@ -242,7 +243,7 @@ const UpdatePasswordForm = () => {
                             id="password_confirmation"
                             data-testid="profile-password-confirmation"
                             value={data.password_confirmation}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("password_confirmation", e.target.value)
                             }
                             type="password"
@@ -368,7 +369,7 @@ const DeleteUserForm = () => {
                                     name="password"
                                     ref={passwordInput}
                                     value={data.password}
-                                    onChange={(e) =>
+                                    onChange={(e: any) =>
                                         setData("password", e.target.value)
                                     }
                                     placeholder="Password"

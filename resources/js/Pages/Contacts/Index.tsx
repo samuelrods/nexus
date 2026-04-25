@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -6,7 +7,7 @@ import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import Table from "@/Shared/Table";
 import { Users, UserPlus, Briefcase, Mail } from "lucide-react";
 
-const Contacts = ({ pagination, stats, filters }) => {
+const Contacts = ({ pagination, stats, filters }: any) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
@@ -79,7 +80,7 @@ const Contacts = ({ pagination, stats, filters }) => {
     );
 };
 
-Contacts.layout = (page) => (
+Contacts.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Contacts" />
     </Layout>

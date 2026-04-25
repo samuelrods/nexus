@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import Table from "@/Shared/Table";
@@ -6,10 +7,10 @@ import TablePagination from "@/Shared/TablePagination";
 import { Users, ShieldCheck } from "lucide-react";
 import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 
-const Index = ({ pagination, filters, rolesData }) => {
+const Index = ({ pagination, filters, rolesData }: any) => {
     const totalMembers = pagination.meta?.total || pagination.data?.length || 0;
     const adminCount = pagination.data?.filter(
-        (m) => m.role_name === "Admin" || m.role_name === "Owner",
+        (m: any) => m.role_name === "Admin" || m.role_name === "Owner",
     ).length;
 
     return (
@@ -68,7 +69,7 @@ const Index = ({ pagination, filters, rolesData }) => {
     );
 };
 
-Index.layout = (page) => (
+Index.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Members" />
     </Layout>

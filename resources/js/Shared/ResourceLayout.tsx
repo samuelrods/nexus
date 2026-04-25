@@ -6,15 +6,15 @@ const ResourceLayout = ({
     title,
     description,
     hideHeader = false,
-}) => {
+}: any) => {
     const { url, props } = usePage();
     const organization = props.auth.organization;
 
     // Split by '/', then filter and map
     let pathParts = url
         .split("/")
-        .filter((part) => part)
-        .map((part) => part.split("?")[0]);
+        .filter((part: any) => part)
+        .map((part: any) => part.split("?")[0]);
 
     // If the first part is the organization slug, remove it from breadcrumbs
     if (organization && pathParts[0] === organization.slug) {
@@ -40,7 +40,7 @@ const ResourceLayout = ({
                                 Dashboard
                             </Link>
                         </li>
-                        {pathParts.map((part, index) => (
+                        {pathParts.map((part: any, index: any) => (
                             <li key={index}>
                                 <div className="flex items-center">
                                     <ChevronRight className="w-4 h-4 text-muted-foreground" />

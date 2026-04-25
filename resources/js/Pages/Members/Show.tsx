@@ -25,7 +25,7 @@ import {
 } from "@/Components/ui/dialog";
 import { useState } from "react";
 
-const Show = ({ member }) => {
+const Show = ({ member }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const memberData = member?.data ?? member;
@@ -130,7 +130,7 @@ const Show = ({ member }) => {
                                     <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
                                         {memberData?.full_name
                                             ?.split(" ")
-                                            .map((n) => n[0])
+                                            .map((n: any) => n[0])
                                             .join("")
                                             .toUpperCase()
                                             .substring(0, 2)}
@@ -231,7 +231,7 @@ const Show = ({ member }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout>
         <ResourceLayout
             children={page}

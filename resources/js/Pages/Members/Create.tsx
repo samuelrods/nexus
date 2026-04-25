@@ -15,7 +15,7 @@ const Create = () => {
         memberInfo: "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("members.store", { organization: organizationSlug }));
     };
@@ -51,7 +51,7 @@ const Create = () => {
                         data-testid="invitation-member-info"
                         placeholder="Enter username or email address"
                         value={data.memberInfo}
-                        onChange={(e) => setData("memberInfo", e.target.value)}
+                        onChange={(e: any) => setData("memberInfo", e.target.value)}
                         required
                         autoComplete="off"
                         className="bg-card"
@@ -83,7 +83,7 @@ const Create = () => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Invite Member" />
     </Layout>

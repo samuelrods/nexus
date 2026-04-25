@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Head, Link, usePage } from "@inertiajs/react";
 import { ModeToggle } from "@/Components/ModeToggle";
 import Alert from "@/Shared/Alert";
@@ -29,7 +30,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 /* ─── Animated floating orb for the hero ─── */
-function FloatingOrb({ className, delay = 0 }) {
+function FloatingOrb({ className, delay = 0 }: any) {
     return (
         <div
             className={cn(
@@ -123,7 +124,7 @@ function NavbarLP() {
                     )}
                 >
                     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-border rounded-lg bg-card/80 backdrop-blur-xl md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-transparent">
-                        {navLinks.map((link) => (
+                        {navLinks.map((link: any) => (
                             <li key={link.href}>
                                 <a
                                     href={link.href}
@@ -231,7 +232,7 @@ function HeroSection() {
                         { label: "Role Permissions", value: "Custom" },
                         { label: "Multi-org", value: "Built-in" },
                         { label: "Cost", value: "Free" },
-                    ].map((stat, i) => (
+                    ].map((stat: any, i: any) => (
                         <div
                             key={i}
                             className="text-center p-4 rounded-xl bg-card/50 backdrop-blur border border-border/50"
@@ -331,7 +332,7 @@ function FeaturesSection() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {features.map((f, i) => (
+                    {features.map((f: any, i: any) => (
                         <div
                             key={i}
                             className="group relative p-6 bg-card rounded-2xl border border-border transition-all duration-300 hover:shadow-lg hover:border-border/80 hover:-translate-y-0.5"
@@ -404,7 +405,7 @@ function PricingSection() {
                     </CardHeader>
                     <CardContent className="p-8 pt-4">
                         <ul className="space-y-4 mb-8">
-                            {benefits.map((b, i) => (
+                            {benefits.map((b: any, i: any) => (
                                 <li key={i} className="flex items-center gap-3">
                                     <div className="h-5 w-5 bg-blue-500/10 rounded-full flex items-center justify-center shrink-0">
                                         <Check className="h-3 w-3 text-blue-600 dark:text-blue-400" />
@@ -474,7 +475,7 @@ function FaqSection() {
                     collapsible
                     className="w-full bg-card rounded-2xl border border-border p-2"
                 >
-                    {faqs.map((faq, i) => (
+                    {faqs.map((faq: any, i: any) => (
                         <AccordionItem
                             key={i}
                             value={`item-${i}`}

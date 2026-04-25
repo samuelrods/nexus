@@ -5,7 +5,7 @@
  * @param {string} currencyCode - The ISO currency code (e.g., 'USD', 'EUR')
  * @returns {string} - The formatted currency string
  */
-export function formatCurrency(value, currencyCode = "USD") {
+export function formatCurrency(value: any, currencyCode: string = "USD") {
     const numericValue = typeof value === "string" ? parseFloat(value) : value;
 
     if (isNaN(numericValue)) {

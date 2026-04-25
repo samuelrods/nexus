@@ -7,7 +7,7 @@ import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "@/Components/ThemeProvider";
 
 createInertiaApp({
-    resolve: (name) => {
+    resolve: (name: any) => {
         const pages = import.meta.glob("./Pages/**/*.tsx", { eager: true });
         return pages[`./Pages/${name}.tsx`] as any;
     },

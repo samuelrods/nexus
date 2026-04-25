@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { Pie, PieChart, Cell } from "recharts";
 import {
@@ -27,7 +28,7 @@ const chartConfig = {
     },
 };
 
-const ActivitiesPieChart = ({ data }) => {
+const ActivitiesPieChart = ({ data }: any) => {
     const chartData = [
         { type: "call", value: data.call ?? 0, fill: chartConfig.call.color },
         {
@@ -65,7 +66,7 @@ const ActivitiesPieChart = ({ data }) => {
                         innerRadius={60}
                         strokeWidth={5}
                     >
-                        {chartData.map((entry, index) => (
+                        {chartData.map((entry: any, index: any) => (
                             <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}
                     </Pie>

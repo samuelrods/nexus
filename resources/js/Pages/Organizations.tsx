@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const OrganizationCard = ({ membership }) => {
+const OrganizationCard = ({ membership }: any) => {
     const { auth } = usePage().props;
     const organization = membership.organization;
     const isOwner = auth.user?.id === organization.user_id;
@@ -65,7 +65,7 @@ const OrganizationCard = ({ membership }) => {
 
     const initials = organization.name
         .split(" ")
-        .map((n) => n[0])
+        .map((n: any) => n[0])
         .join("")
         .toUpperCase()
         .substring(0, 2);
@@ -181,8 +181,8 @@ const OrganizationCard = ({ membership }) => {
     );
 };
 
-const InvitationItem = ({ invitation }) => {
-    const handleInvitation = (accepted) => {
+const InvitationItem = ({ invitation }: any) => {
+    const handleInvitation = (accepted: any) => {
         router.put(route("invitations.update", invitation.id), {
             status: accepted,
         });
@@ -231,7 +231,7 @@ const InvitationItem = ({ invitation }) => {
     );
 };
 
-const Organizations = ({ memberships, invitations }) => {
+const Organizations = ({ memberships, invitations }: any) => {
     return (
         <div className="min-h-screen bg-background relative overflow-hidden">
             {/* Background elements */}
@@ -283,7 +283,7 @@ const Organizations = ({ memberships, invitations }) => {
                             <div className="h-px flex-1 bg-blue-500/10" />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {invitations.map((invitation) => (
+                            {invitations.map((invitation: any) => (
                                 <InvitationItem
                                     key={"inv-" + invitation.id}
                                     invitation={invitation}
@@ -303,7 +303,7 @@ const Organizations = ({ memberships, invitations }) => {
 
                     {memberships.length ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-700">
-                            {memberships.map((membership) => (
+                            {memberships.map((membership: any) => (
                                 <OrganizationCard
                                     key={membership.organization.id}
                                     membership={membership}

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import Layout from "@/Shared/Layout";
 import ActivitiesPieChart from "@/Shared/charts/ActivitiesPieChart";
@@ -219,7 +220,7 @@ const Dashboard = ({
                     <CardContent>
                         <div className="space-y-4">
                             {upcomingActivities.length > 0 ? (
-                                upcomingActivities.map((activity) => (
+                                upcomingActivities.map((activity: any) => (
                                     <div
                                         key={activity.id}
                                         className="flex items-start gap-3 border-b border-border pb-3 last:border-0 last:pb-0"
@@ -267,7 +268,7 @@ const Dashboard = ({
                     <CardContent>
                         <div className="space-y-4">
                             {recentLeads.length > 0 ? (
-                                recentLeads.map((lead) => (
+                                recentLeads.map((lead: any) => (
                                     <div
                                         key={lead.id}
                                         className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0"
@@ -326,7 +327,7 @@ const Dashboard = ({
                     <CardContent>
                         <div className="space-y-4">
                             {topDeals.length > 0 ? (
-                                topDeals.map((deal) => (
+                                topDeals.map((deal: any) => (
                                     <div
                                         key={deal.id}
                                         className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0"

@@ -43,7 +43,7 @@ function Calendar({
             )}
             captionLayout={captionLayout}
             formatters={{
-                formatMonthDropdown: (date) =>
+                formatMonthDropdown: (date: any) =>
                     date.toLocaleString("default", { month: "short" }),
                 ...formatters,
             }}
@@ -141,7 +141,7 @@ function Calendar({
                 ...classNames,
             }}
             components={{
-                Root: ({ className, rootRef, ...props }) => {
+                Root: ({ className, rootRef, ...props }: any) => {
                     return (
                         <div
                             data-slot="calendar"
@@ -151,7 +151,7 @@ function Calendar({
                         />
                     );
                 },
-                Chevron: ({ className, orientation, ...props }) => {
+                Chevron: ({ className, orientation, ...props }: any) => {
                     if (orientation === "left") {
                         return (
                             <ChevronLeftIcon

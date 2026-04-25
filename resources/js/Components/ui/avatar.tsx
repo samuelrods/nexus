@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 const Avatar = React.forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+>(({ className, ...props }: any, ref: any) => (
     <div
         ref={ref}
         className={cn(
@@ -19,7 +19,7 @@ Avatar.displayName = "Avatar";
 const AvatarImage = React.forwardRef<
     HTMLImageElement,
     React.ImgHTMLAttributes<HTMLImageElement>
->(({ className, ...props }, ref) => (
+>(({ className, ...props }: any, ref: any) => (
     <img
         ref={ref}
         className={cn("aspect-square h-full w-full", className)}
@@ -31,7 +31,7 @@ AvatarImage.displayName = "AvatarImage";
 const AvatarFallback = React.forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+>(({ className, ...props }: any, ref: any) => (
     <div
         ref={ref}
         className={cn(

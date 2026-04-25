@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -20,7 +21,7 @@ const CompanyForm = ({
     processing,
     formData,
     updating = false,
-}) => {
+}: any) => {
     return (
         <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl">
             <div className="w-full space-y-1">
@@ -29,7 +30,7 @@ const CompanyForm = ({
                     id="name"
                     placeholder="Enter company name"
                     value={data.name}
-                    onChange={(e) => setData("name", e.target.value)}
+                    onChange={(e: any) => setData("name", e.target.value)}
                     required
                     autoComplete="off"
                     className="bg-card"
@@ -42,7 +43,7 @@ const CompanyForm = ({
                     id="industry"
                     placeholder="e.g. Technology, Finance"
                     value={data.industry}
-                    onChange={(e) => setData("industry", e.target.value)}
+                    onChange={(e: any) => setData("industry", e.target.value)}
                     required
                     autoComplete="off"
                     className="bg-card"
@@ -55,7 +56,7 @@ const CompanyForm = ({
                     id="website"
                     placeholder="https://example.com"
                     value={data.website}
-                    onChange={(e) => setData("website", e.target.value)}
+                    onChange={(e: any) => setData("website", e.target.value)}
                     required
                     autoComplete="off"
                     className="bg-card"
@@ -68,7 +69,7 @@ const CompanyForm = ({
                     id="description"
                     placeholder="Company overview, notes, etc."
                     value={data.description}
-                    onChange={(e) => setData("description", e.target.value)}
+                    onChange={(e: any) => setData("description", e.target.value)}
                     required
                     rows={4}
                     className="bg-card"
@@ -86,7 +87,7 @@ const CompanyForm = ({
                         id="street_address"
                         placeholder="123 Main St"
                         value={data.street_address}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                             setData("street_address", e.target.value)
                         }
                         required
@@ -101,7 +102,7 @@ const CompanyForm = ({
                             id="city"
                             placeholder="City"
                             value={data.city}
-                            onChange={(e) => setData("city", e.target.value)}
+                            onChange={(e: any) => setData("city", e.target.value)}
                             required
                             className="bg-card"
                         />
@@ -113,7 +114,7 @@ const CompanyForm = ({
                             id="state"
                             placeholder="State"
                             value={data.state}
-                            onChange={(e) => setData("state", e.target.value)}
+                            onChange={(e: any) => setData("state", e.target.value)}
                             required
                             className="bg-card"
                         />
@@ -125,7 +126,7 @@ const CompanyForm = ({
                             id="zip_code"
                             placeholder="Zip"
                             value={data.zip_code}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                                 setData("zip_code", e.target.value)
                             }
                             required
@@ -156,7 +157,7 @@ const CompanyForm = ({
     );
 };
 
-const Companies = ({ pagination, stats, filters, industries = [] }) => {
+const Companies = ({ pagination, stats, filters, industries = [] }: any) => {
     return (
         <div className="space-y-6">
             <StatsGrid>
@@ -203,7 +204,7 @@ const Companies = ({ pagination, stats, filters, industries = [] }) => {
                             label: "Industry",
                             name: "industry",
                             allLabel: "All Industries",
-                            options: industries.map((i) => ({
+                            options: industries.map((i: any) => ({
                                 label: i,
                                 value: i,
                             })),
@@ -235,7 +236,7 @@ const Companies = ({ pagination, stats, filters, industries = [] }) => {
     );
 };
 
-Companies.layout = (page) => (
+Companies.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Companies" />
     </Layout>

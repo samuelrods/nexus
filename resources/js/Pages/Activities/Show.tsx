@@ -26,7 +26,7 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const TypeIcon = ({ type }) => {
+const TypeIcon = ({ type }: any) => {
     switch (type?.toLowerCase()) {
         case "call":
             return <Phone className="h-5 w-5" />;
@@ -39,7 +39,7 @@ const TypeIcon = ({ type }) => {
     }
 };
 
-const Show = ({ activity }) => {
+const Show = ({ activity }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
@@ -297,7 +297,7 @@ const Show = ({ activity }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout>
         <ResourceLayout
             children={page}

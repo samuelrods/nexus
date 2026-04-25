@@ -9,7 +9,7 @@ interface LayoutProps {
     children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children }: any) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const { auth } = usePage().props;
 

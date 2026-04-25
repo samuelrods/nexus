@@ -18,7 +18,7 @@ const Create = () => {
         contact_id: null,
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("deals.store", { organization: organizationSlug }));
     };
@@ -36,7 +36,7 @@ const Create = () => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Create Deal" />
     </Layout>

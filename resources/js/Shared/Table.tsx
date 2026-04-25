@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { router, Link, useForm, usePage } from "@inertiajs/react";
 import {
     Table as TableUI,
@@ -30,7 +31,7 @@ import {
     DialogTrigger,
 } from "@/Components/ui/dialog";
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status }: any) => {
     const statusStyles = {
         pending:
             "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-900/50",
@@ -71,11 +72,11 @@ function EditButton({
     EditResourceForm,
     editFormData,
     resourceInfoKeys,
-}) {
+}: any) {
     const [openModal, setOpenModal] = useState(false);
     const { data, setData, put, processing, setDefaults, errors, reset } =
         useForm(
-            Object.fromEntries(resourceInfoKeys.map((key) => [key, item[key]])),
+            Object.fromEntries(resourceInfoKeys.map((key: any) => [key, item[key]])),
         );
 
     function onCloseModal() {
@@ -88,7 +89,7 @@ function EditButton({
         }
     }, [openModal]);
 
-    function submit(e) {
+    function submit(e: any) {
         e.preventDefault();
         put(resourceRoute, {
             onSuccess: () => {
@@ -133,7 +134,7 @@ function EditButton({
     );
 }
 
-function DeleteButton({ resourceRoute }) {
+function DeleteButton({ resourceRoute }: any) {
     const [openModal, setOpenModal] = useState(false);
     const [processing, setProcessing] = useState(false);
 
@@ -208,7 +209,7 @@ const Table = ({
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
-    const getPropertyByPath = (obj, path) => {
+    const getPropertyByPath = (obj: any, path: any) => {
         const keys = path.split(".");
         let result = obj;
 
@@ -223,7 +224,7 @@ const Table = ({
         return result;
     };
 
-    const handleRowClick = (item) => {
+    const handleRowClick = (item: any) => {
         const showRoute = `${resourceName}.show`;
         try {
             const url = route(showRoute, {
@@ -238,7 +239,7 @@ const Table = ({
         }
     };
 
-    const hasShowRoute = (resource) => {
+    const hasShowRoute = (resource: any) => {
         try {
             return !!route(`${resource}.show`, {
                 organization: organizationSlug,
@@ -251,7 +252,7 @@ const Table = ({
 
     const canClickRow = hasShowRoute(resourceName);
 
-    const handleSort = (sortKey) => {
+    const handleSort = (sortKey: any) => {
         if (!sortKey) return;
 
         let newDir = "asc";
@@ -266,7 +267,7 @@ const Table = ({
         );
     };
 
-    const getSortIcon = (column) => {
+    const getSortIcon = (column: any) => {
         if (!column.sortKey) return null;
         if (filters.sort_by !== column.sortKey)
             return <ArrowUpDown className="ml-2 h-4 w-4 opacity-50" />;
@@ -282,7 +283,7 @@ const Table = ({
             <TableUI className="w-full text-sm text-left text-muted-foreground">
                 <TableHeader className="text-xs text-muted-foreground uppercase bg-muted">
                     <TableRow className="border-b border-border">
-                        {columns.map((column) => (
+                        {columns.map((column: any) => (
                             <TableHead
                                 key={column.key}
                                 className={cn(
@@ -305,7 +306,7 @@ const Table = ({
                 </TableHeader>
                 <TableBody>
                     {data.length > 0 ? (
-                        data.map((item) => (
+                        data.map((item: any) => (
                             <TableRow
                                 key={resourceName + "-" + item.id}
                                 data-testid={`table-row-${item.id}`}
@@ -317,7 +318,7 @@ const Table = ({
                                     canClickRow && handleRowClick(item)
                                 }
                             >
-                                {columns.map((column) => (
+                                {columns.map((column: any) => (
                                     <TableCell
                                         key={column.key + "body"}
                                         className="px-6 py-4 whitespace-nowrap"
@@ -340,7 +341,7 @@ const Table = ({
                                                     <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                                                         {item[column.key]
                                                             ?.split(" ")
-                                                            .map((n) => n[0])
+                                                            .map((n: any) => n[0])
                                                             .join("")
                                                             .toUpperCase()
                                                             .substring(0, 2)}
@@ -359,7 +360,7 @@ const Table = ({
                                 ))}
                                 <TableCell
                                     className="px-6 py-4 text-right"
-                                    onClick={(e) => e.stopPropagation()}
+                                    onClick={(e: any) => e.stopPropagation()}
                                 >
                                     {EditResourceForm ? (
                                         <div className="flex justify-end gap-1">

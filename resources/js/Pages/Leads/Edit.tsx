@@ -3,7 +3,7 @@ import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, usePage } from "@inertiajs/react";
 import LeadForm from "./Form";
 
-const Edit = ({ lead }) => {
+const Edit = ({ lead }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
@@ -17,7 +17,7 @@ const Edit = ({ lead }) => {
         description: lead.data.description,
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(
             route("leads.update", {
@@ -41,7 +41,7 @@ const Edit = ({ lead }) => {
     );
 };
 
-Edit.layout = (page) => (
+Edit.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Edit Lead" />
     </Layout>

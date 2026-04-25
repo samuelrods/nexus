@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from "@/Components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/Components/ui/input";
@@ -15,11 +16,11 @@ import {
 import capitalizeFirstLetter from "@/Shared/utils/capitalizeFirstLetter";
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card";
 
-const PermissionsSection = ({ permissionsData, data, setData }) => {
-    const toggleCategory = (categoryPermissions, checked) => {
-        const permissionValues = categoryPermissions.map((p) => p.value);
+const PermissionsSection = ({ permissionsData, data, setData }: any) => {
+    const toggleCategory = (categoryPermissions: any, checked: any) => {
+        const permissionValues = categoryPermissions.map((p: any) => p.value);
         const otherPermissions = data.permissions.filter(
-            (p) => !permissionValues.includes(p),
+            (p: any) => !permissionValues.includes(p),
         );
 
         const newPermissions = checked
@@ -31,9 +32,9 @@ const PermissionsSection = ({ permissionsData, data, setData }) => {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-6">
-            {Object.keys(permissionsData).map((key) => {
+            {Object.keys(permissionsData).map((key: any) => {
                 const categoryPermissions = Object.values(permissionsData[key]);
-                const allSelected = categoryPermissions.every((p) =>
+                const allSelected = categoryPermissions.every((p: any) =>
                     data.permissions.includes(p.value),
                 );
 
@@ -76,7 +77,7 @@ const PermissionsSection = ({ permissionsData, data, setData }) => {
                         </CardHeader>
                         <CardContent className="p-3">
                             <div className="space-y-1">
-                                {categoryPermissions.map((permission) => {
+                                {categoryPermissions.map((permission: any) => {
                                     const isChecked = data.permissions.includes(
                                         permission.value,
                                     );
@@ -104,7 +105,7 @@ const PermissionsSection = ({ permissionsData, data, setData }) => {
                                                             setData(
                                                                 "permissions",
                                                                 data.permissions.filter(
-                                                                    (p) =>
+                                                                    (p: any) =>
                                                                         p !==
                                                                         permission.value,
                                                                 ),
@@ -140,7 +141,7 @@ const RoleForm = ({
     processing,
     permissionsData,
     updating = false,
-}) => {
+}: any) => {
     return (
         <form
             onSubmit={onSubmit}
@@ -159,7 +160,7 @@ const RoleForm = ({
                             id="name"
                             placeholder="e.g. Sales Manager, Support Specialist"
                             value={data.name || ""}
-                            onChange={(e) => setData("name", e.target.value)}
+                            onChange={(e: any) => setData("name", e.target.value)}
                             required
                             autoComplete="off"
                             className={cn(

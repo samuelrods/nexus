@@ -77,7 +77,7 @@ const TableActions = ({
     };
 
     const hasActiveFilters = Object.keys(filters).some(
-        (key) =>
+        (key: any) =>
             filters[key] &&
             key !== "sort_by" &&
             key !== "sort_dir" &&
@@ -147,7 +147,7 @@ const TableActions = ({
                         <div key={filter.name} className="w-full sm:w-40">
                             <Select
                                 value={filters[filter.name] || "all"}
-                                onValueChange={(value) =>
+                                onValueChange={(value: any) =>
                                     handleFilterChange(filter.name, value)
                                 }
                             >

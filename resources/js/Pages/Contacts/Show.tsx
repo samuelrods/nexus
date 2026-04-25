@@ -24,7 +24,7 @@ import {
 } from "@/Components/ui/dialog";
 import { useState } from "react";
 
-const Show = ({ contact }) => {
+const Show = ({ contact }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const [isDeleting, setIsDeleting] = useState(false);
@@ -233,7 +233,7 @@ const Show = ({ contact }) => {
     );
 };
 
-Show.layout = (page) => (
+Show.layout = (page: any) => (
     <Layout>
         <ResourceLayout
             children={page}

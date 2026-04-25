@@ -3,7 +3,7 @@ import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, usePage } from "@inertiajs/react";
 import CompanyForm from "./Form";
 
-const Edit = ({ company }) => {
+const Edit = ({ company }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
     const { data, setData, put, processing, errors } = useForm({
@@ -17,7 +17,7 @@ const Edit = ({ company }) => {
         zip_code: company.data.zip_code || "",
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(
             route("companies.update", {
@@ -41,7 +41,7 @@ const Edit = ({ company }) => {
     );
 };
 
-Edit.layout = (page) => (
+Edit.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Edit Company" />
     </Layout>

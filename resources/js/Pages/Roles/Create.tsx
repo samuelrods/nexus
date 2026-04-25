@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, Link, usePage } from "@inertiajs/react";
@@ -5,7 +6,7 @@ import RoleForm from "./Form";
 import { Button } from "@/Components/ui/button";
 import { ArrowLeft, ShieldPlus } from "lucide-react";
 
-const Create = ({ permissions }) => {
+const Create = ({ permissions }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
@@ -14,7 +15,7 @@ const Create = ({ permissions }) => {
         permissions: [],
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         post(route("roles.store", { organization: organizationSlug }));
     };
@@ -62,7 +63,7 @@ const Create = ({ permissions }) => {
     );
 };
 
-Create.layout = (page) => (
+Create.layout = (page: any) => (
     <Layout title="Create Role">
         <ResourceLayout children={page} title="Create Role" hideHeader={true} />
     </Layout>

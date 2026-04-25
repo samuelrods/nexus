@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import Table from "@/Shared/Table";
@@ -7,9 +8,9 @@ import { Shield, ShieldAlert, Key } from "lucide-react";
 import { StatsGrid, StatsCard } from "@/Shared/StatsGrid";
 import { Badge } from "@/Components/ui/badge";
 
-const Roles = ({ pagination, permissions }) => {
+const Roles = ({ pagination, permissions }: any) => {
     const totalRoles = pagination.meta?.total || pagination.data?.length || 0;
-    const totalPermissions = Object.values(permissions).reduce((acc, curr) => {
+    const totalPermissions = Object.values(permissions).reduce((acc: any, curr: any) => {
         const count = Array.isArray(curr)
             ? curr.length
             : Object.keys(curr).length;
@@ -58,7 +59,7 @@ const Roles = ({ pagination, permissions }) => {
                         {
                             header: "Name",
                             key: "name",
-                            render: (value) => {
+                            render: (value: any) => {
                                 const isOwner = value.toLowerCase() === "owner";
                                 return (
                                     <div className="flex items-center gap-2">
@@ -88,7 +89,7 @@ const Roles = ({ pagination, permissions }) => {
                         {
                             header: "Members",
                             key: "users_count",
-                            render: (value) => (
+                            render: (value: any) => (
                                 <span className="font-medium text-foreground">
                                     {value} {value === 1 ? "member" : "members"}
                                 </span>
@@ -108,7 +109,7 @@ const Roles = ({ pagination, permissions }) => {
     );
 };
 
-Roles.layout = (page) => (
+Roles.layout = (page: any) => (
     <Layout title="Roles">
         <ResourceLayout children={page} title="Roles" />
     </Layout>

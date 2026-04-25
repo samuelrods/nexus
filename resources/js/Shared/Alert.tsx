@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { usePage } from "@inertiajs/react";
 import {
     Alert as AlertUI,

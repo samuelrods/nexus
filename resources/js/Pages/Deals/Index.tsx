@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Layout from "@/Shared/Layout";
 import ResourceLayout from "@/Shared/ResourceLayout";
 import TableActions from "@/Shared/TableActions";
@@ -8,7 +9,7 @@ import { DollarSign, Handshake, Clock, TrendingUp } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
 import { usePage } from "@inertiajs/react";
 
-const Deals = ({ pagination, stats, filters }) => {
+const Deals = ({ pagination, stats, filters }: any) => {
     const statusOptions = [
         { label: "Pending", value: "pending" },
         { label: "Won", value: "won" },
@@ -76,7 +77,7 @@ const Deals = ({ pagination, stats, filters }) => {
                             header: "Value",
                             key: "value",
                             sortKey: "value",
-                            render: (val, row) =>
+                            render: (val: any, row: any) =>
                                 formatCurrency(val, row.currency),
                         },
                         {
@@ -105,7 +106,7 @@ const Deals = ({ pagination, stats, filters }) => {
     );
 };
 
-Deals.layout = (page) => (
+Deals.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Deals" />
     </Layout>

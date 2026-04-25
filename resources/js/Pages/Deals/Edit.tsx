@@ -3,7 +3,7 @@ import ResourceLayout from "@/Shared/ResourceLayout";
 import { useForm, usePage } from "@inertiajs/react";
 import DealForm from "./Form";
 
-const Edit = ({ deal }) => {
+const Edit = ({ deal }: any) => {
     const { auth } = usePage().props;
     const organizationSlug = auth.organization?.slug;
 
@@ -21,7 +21,7 @@ const Edit = ({ deal }) => {
         contact_fullname: deal.data.contact_fullname,
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault();
         put(
             route("deals.update", {
@@ -45,7 +45,7 @@ const Edit = ({ deal }) => {
     );
 };
 
-Edit.layout = (page) => (
+Edit.layout = (page: any) => (
     <Layout>
         <ResourceLayout children={page} title="Edit Deal" />
     </Layout>
