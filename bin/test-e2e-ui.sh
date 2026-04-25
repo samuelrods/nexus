@@ -14,6 +14,9 @@ $COMPOSE exec app_test php artisan migrate:fresh --seed --env=testing
 echo "📦 Installing Node dependencies..."
 $COMPOSE run --rm playwright npm install
 
+echo "🏗️ Building frontend assets..."
+$COMPOSE run --rm playwright npm run build
+
 echo "🎭 Launching Playwright UI (http://localhost:8060)..."
 $COMPOSE run --rm --service-ports playwright \
   npx playwright test --ui-host=0.0.0.0 --ui-port=8060

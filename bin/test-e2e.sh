@@ -26,6 +26,9 @@ $COMPOSE exec app_test php artisan migrate:fresh --seed --env=testing
 echo "📦 Installing Node dependencies..."
 $COMPOSE run --rm playwright npm install
 
+echo "🏗️ Building frontend assets..."
+$COMPOSE run --rm playwright npm run build
+
 echo "🎭 Running Playwright E2E tests..."
 # In CI emit both reporters: list for readable console output and html for the
 # artifact that gets uploaded to GitHub Actions after the job completes.
