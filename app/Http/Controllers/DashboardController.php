@@ -50,7 +50,7 @@ class DashboardController extends Controller
     protected function getDealAreaChartData(Organization $organization, int $range): array
     {
 
-        $daysAgo = now()->subDays($range - 1);
+        $daysAgo = now()->subDays($range - 1)->startOfDay();
 
         $totalValueRange = $organization->deals()
             ->where('close_date', '>=', $daysAgo)
@@ -70,6 +70,7 @@ class DashboardController extends Controller
         $previousRange = $organization->deals()
             ->where('close_date', '>=', $daysAgo->copy()->subDays($range))
             ->where('close_date', '<', $daysAgo)
+            ->where('status', 'won')
             ->sum('value');
 
         $percentage = $previousRange ? (($totalValueRange - $previousRange) / $previousRange) * 100 : 0;
@@ -84,7 +85,7 @@ class DashboardController extends Controller
     protected function getDealPieChartData(Organization $organization, int $range): array
     {
 
-        $daysAgo = now()->subDays($range - 1);
+        $daysAgo = now()->subDays($range - 1)->startOfDay();
 
         $statuses = ['pending', 'won', 'lost'];
 
@@ -101,7 +102,7 @@ class DashboardController extends Controller
     protected function getActivityPieChartData(Organization $organization, int $range): array
     {
 
-        $daysAgo = now()->subDays($range - 1);
+        $daysAgo = now()->subDays($range - 1)->startOfDay();
 
         $types = ['call', 'meeting', 'email', 'other'];
 
