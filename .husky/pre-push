@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+echo "Running Unit Tests before push..."
+npm run test:unit
