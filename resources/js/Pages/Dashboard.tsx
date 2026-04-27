@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from "react";
 import Layout from "@/Shared/Layout";
-import ActivitiesPieChart from "@/Shared/charts/ActivitiesPieChart";
+import ActivitiesDonutChart from "@/Shared/charts/ActivitiesDonutChart";
 import DealsAreaChart from "@/Shared/charts/DealsAreaChart";
-import DealsPieChart from "@/Shared/charts/DealsPieChart";
+import DealsDonutChart from "@/Shared/charts/DealsDonutChart";
 import { StatsCard } from "@/Shared/StatsGrid";
 import { Head, router, usePage, Link } from "@inertiajs/react";
 import {
@@ -161,96 +161,22 @@ const Dashboard = ({
                 />
             </div>
 
-            {/* Main Trends Chart */}
-            <Card className="shadow-sm bg-card">
-                <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-green-500" />
-                        Revenue Performance
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <DealsAreaChart data={dealAreaChartData} />
-                </CardContent>
-            </Card>
+            {/* Top Row: Revenue Chart & Recent Leads */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                    <Card className="shadow-sm bg-card h-full">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                                <DollarSign className="w-5 h-5 text-green-500" />
+                                Revenue Performance
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <DealsAreaChart data={dealAreaChartData} />
+                        </CardContent>
+                    </Card>
+                </div>
 
-            {/* Analytics Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="shadow-sm bg-card">
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                            <Target className="w-5 h-5 text-blue-500" />
-                            Deals by Status
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <DealsPieChart data={dealPieChartData} />
-                    </CardContent>
-                </Card>
-                <Card className="shadow-sm bg-card">
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                            <Calendar className="w-5 h-5 text-purple-500" />
-                            Activity Types
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <ActivitiesPieChart data={activityPieChartData} />
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Operational Lists Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {/* Upcoming Activities */}
-                <Card className="shadow-sm bg-card">
-                    <CardHeader className="flex flex-row items-center justify-between pb-4">
-                        <CardTitle className="text-lg font-semibold">
-                            Upcoming Activities
-                        </CardTitle>
-                        <Link
-                            href={route("activities.index", {
-                                organization: auth.organization.slug,
-                            })}
-                            className="text-blue-500 hover:text-blue-600"
-                        >
-                            <ArrowUpRight className="w-5 h-5" />
-                        </Link>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
-                            {upcomingActivities.length > 0 ? (
-                                upcomingActivities.map((activity: any) => (
-                                    <div
-                                        key={activity.id}
-                                        className="flex items-start gap-3 border-b border-border pb-3 last:border-0 last:pb-0"
-                                    >
-                                        <div className="p-2 bg-blue-50 dark:bg-blue-900/30 rounded text-blue-600 dark:text-blue-400 mt-1 uppercase text-[10px] font-bold">
-                                            {activity.type}
-                                        </div>
-                                        <div>
-                                            <p className="font-medium text-sm line-clamp-1 text-foreground">
-                                                {activity.description}
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {new Date(
-                                                    activity.date,
-                                                ).toLocaleDateString()}{" "}
-                                                at {activity.time}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-sm text-muted-foreground text-center py-4">
-                                    No upcoming activities
-                                </p>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Recent Leads */}
                 <Card className="shadow-sm bg-card">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <CardTitle className="text-lg font-semibold">
@@ -308,8 +234,37 @@ const Dashboard = ({
                         </div>
                     </CardContent>
                 </Card>
+            </div>
 
-                {/* Top Deals */}
+            {/* Analytics Row: Deals & Activities Donut Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="shadow-sm bg-card">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                            <Target className="w-5 h-5 text-blue-500" />
+                            Deals by Status
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <DealsDonutChart data={dealPieChartData} />
+                    </CardContent>
+                </Card>
+
+                <Card className="shadow-sm bg-card">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                            <Calendar className="w-5 h-5 text-purple-500" />
+                            Activity Types
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ActivitiesDonutChart data={activityPieChartData} />
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Operations Row: Top Deals & Upcoming Activities */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card className="shadow-sm bg-card">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <CardTitle className="text-lg font-semibold">
@@ -363,6 +318,53 @@ const Dashboard = ({
                             ) : (
                                 <p className="text-sm text-muted-foreground text-center py-4">
                                     No pending deals
+                                </p>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="shadow-sm bg-card">
+                    <CardHeader className="flex flex-row items-center justify-between pb-4">
+                        <CardTitle className="text-lg font-semibold">
+                            Upcoming Activities
+                        </CardTitle>
+                        <Link
+                            href={route("activities.index", {
+                                organization: auth.organization.slug,
+                            })}
+                            className="text-blue-500 hover:text-blue-600"
+                        >
+                            <ArrowUpRight className="w-5 h-5" />
+                        </Link>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {upcomingActivities.length > 0 ? (
+                                upcomingActivities.map((activity: any) => (
+                                    <div
+                                        key={activity.id}
+                                        className="flex items-start gap-3 border-b border-border pb-3 last:border-0 last:pb-0"
+                                    >
+                                        <div className="p-2 bg-blue-50 dark:bg-blue-900/30 rounded text-blue-600 dark:text-blue-400 mt-1 uppercase text-[10px] font-bold">
+                                            {activity.type}
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-sm line-clamp-1 text-foreground">
+                                                {activity.description}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {new Date(
+                                                    activity.date,
+                                                ).toLocaleDateString()}{" "}
+                                                at {activity.time}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-sm text-muted-foreground text-center py-4">
+                                    No upcoming activities
                                 </p>
                             )}
                         </div>
