@@ -7,7 +7,8 @@
         "test:unit": "bash bin/test-unit.sh",
         "test:e2e": "bash bin/test-e2e.sh",
         "test:e2e:ui": "bash bin/test-e2e-ui.sh",
-        "test:all": "bash bin/test-all.sh"
+        "test:all": "bash bin/test-all.sh",
+        "prepare": "husky"
     },
     "devDependencies": {
         "@inertiajs/react": "^1.0.14",
@@ -20,7 +21,9 @@
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.16",
         "axios": "^1.1.2",
+        "husky": "^9.1.7",
         "laravel-vite-plugin": "^3.0.1",
+        "lint-staged": "^16.4.0",
         "postcss": "^8.4.31",
         "prettier": "3.1.1",
         "tailwindcss": "^3.3.5",
