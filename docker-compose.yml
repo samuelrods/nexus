@@ -5,6 +5,8 @@ services:
             context: .
             dockerfile: Dockerfile
         restart: unless-stopped
+        environment:
+            - AUTORUN_LARAVEL_MIGRATION=true
         networks:
             - nexus-network
         healthcheck:

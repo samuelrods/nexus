@@ -35,6 +35,7 @@ WORKDIR /var/www/html
 
 # Set environment variables for production
 ENV AUTORUN_ENABLED=true
+ENV AUTORUN_LARAVEL_MIGRATION=false
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
