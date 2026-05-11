@@ -1,6 +1,16 @@
 # Stage 1: PHP Dependencies
-FROM composer:latest AS vendor
+FROM php:8.2-cli AS vendor
+
+# Install system dependencies for composer and common extensions
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    && docker-php-ext-install zip intl pdo_mysql
+
 WORKDIR /var/www/html
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
 RUN composer install \
     --no-dev \
