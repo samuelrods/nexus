@@ -3,7 +3,7 @@ services:
     app:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
         container_name: nexus_app
         restart: unless-stopped
         working_dir: /var/www
@@ -37,8 +37,6 @@ services:
         environment:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_USER: ${DB_USERNAME}
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - dbdata:/var/lib/mysql
