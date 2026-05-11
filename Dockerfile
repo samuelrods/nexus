@@ -1,36 +1,53 @@
-# Use PHP 8.2 FPM (FastCGI Process Manager)
-FROM php:8.2-fpm
+# Stage 1: PHP Dependencies
+FROM composer:latest AS vendor
+WORKDIR /var/www/html
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nodejs \
-    npm
+# Stage 2: Frontend Assets
+FROM node:20 AS frontend
+WORKDIR /var/www/html
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions required by Laravel
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Stage 3: Final Production Image
+FROM serversideup/php:8.2-fpm-nginx AS final
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-# Copy entrypoint script
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Set environment variables for production
+ENV AUTORUN_ENABLED=true
+ENV APP_ENV=production
+ENV APP_DEBUG=false
 
-# Use entrypoint script
-ENTRYPOINT ["entrypoint.sh"]
+# Copy PHP dependencies from Stage 1
+COPY --from=vendor /var/www/html/vendor ./vendor
 
-# Default command
-CMD ["php-fpm"]
+# Copy Frontend assets from Stage 2
+COPY --from=frontend /var/www/html/public/build ./public/build
+
+# Copy application code
+COPY . .
+
+# Ensure storage and bootstrap/cache are writable
+RUN mkdir -p \
+    storage/app/public \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/testing \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+# Fix ownership
+USER root
+RUN chown -R www-data:www-data /var/www/html
+USER www-data

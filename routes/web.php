@@ -26,6 +26,10 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/up', function () {
+    return response()->noContent();
+});
+
 Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
