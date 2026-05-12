@@ -1,0 +1,12 @@
+# Stage 1: Build assets
+FROM node:20 AS frontend
+WORKDIR /var/www
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 2: Nginx
+FROM nginx:alpine
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=frontend /var/www/public /var/www/public
