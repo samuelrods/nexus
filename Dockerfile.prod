@@ -1,11 +1,24 @@
 # Stage 1: PHP Dependencies
 FROM php:8.2-fpm AS vendor
 WORKDIR /var/www
-COPY composer.json composer.lock ./
-RUN apt-get update && apt-get install -y git unzip \
+
+# Install system dependencies for PHP extensions
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions required for dependency resolution
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+COPY composer.json composer.lock ./
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+
+# Install dependencies without scripts to avoid failure during autoload
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader --no-scripts
 
 # Stage 2: Frontend Assets
 FROM node:20 AS frontend
@@ -32,6 +45,9 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
+# Get latest Composer for the final stage to run dump-autoload
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 # Copy application code
 COPY . .
 
@@ -40,6 +56,9 @@ COPY --from=vendor /var/www/vendor ./vendor
 
 # Copy built assets from Stage 2
 COPY --from=frontend /var/www/public/build ./public/build
+
+# Run composer dump-autoload to trigger package discovery and optimize
+RUN composer dump-autoload --optimize
 
 # Set permissions and ownership
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
