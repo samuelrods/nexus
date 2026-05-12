@@ -63,3 +63,6 @@ RUN mkdir -p \
 
 # Fix ownership
 RUN chown -R www-data:www-data /var/www/html
+
+# Switch back to the default unprivileged user
+USER www-data
