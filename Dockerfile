@@ -30,6 +30,9 @@ RUN npm run build
 # Stage 3: Final Production Image
 FROM serversideup/php:8.2-fpm-nginx AS final
 
+# Switch to root to perform administrative tasks during build
+USER root
+
 # Set working directory
 WORKDIR /var/www/html
 
