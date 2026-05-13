@@ -1,3 +1,9 @@
 # Ignore artifacts:
 build
 coverage
+vendor
+node_modules
+composer.lock
+package-lock.json
+public/build
+storage
