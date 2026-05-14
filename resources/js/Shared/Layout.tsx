@@ -38,6 +38,13 @@ const Layout: React.FC<LayoutProps> = ({ children }: any) => {
                     )}
                 >
                     <div className="max-w-7xl mx-auto">{children}</div>
+
+                    <footer className="mt-auto pt-12 pb-6 text-center">
+                        <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest font-medium">
+                            Demo Environment &bull; Database Resets Every 24
+                            Hours
+                        </p>
+                    </footer>
                 </main>
             </div>
         </div>

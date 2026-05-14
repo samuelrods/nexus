@@ -114,6 +114,13 @@ const Login = ({ status, canResetPassword }: any) => {
                         </Button>
                     </div>
                 </form>
+
+                <div className="mt-8 pt-4 border-t border-border text-center">
+                    <p className="text-xs text-muted-foreground italic">
+                        Note: This is a demo environment. The database is
+                        automatically reset every 24 hours.
+                    </p>
+                </div>
             </div>
         </div>
     );
