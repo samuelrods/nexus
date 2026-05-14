@@ -21,10 +21,10 @@ echo "🚀 Starting test stack..."
 $COMPOSE up -d --wait --remove-orphans app_test db_test meilisearch_test
 
 echo "📦 Installing Node dependencies..."
-$COMPOSE exec app_test npm install
+$COMPOSE exec -T app_test npm install
 
 echo "🏗️ Building frontend assets..."
-$COMPOSE exec app_test npm run build
+$COMPOSE exec -T app_test npm run build
 
 echo "🧪 Running PHPUnit (unit + feature)..."
-$COMPOSE exec app_test php artisan test --env=testing
+$COMPOSE exec -T app_test php artisan test --env=testing
