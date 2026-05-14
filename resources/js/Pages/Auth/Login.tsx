@@ -7,8 +7,8 @@ import InputError from "@/Components/InputError";
 
 const Login = ({ status, canResetPassword }: any) => {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: "",
-        password: "",
+        email: "admin@example.com",
+        password: "password",
         remember: false,
     });
 
@@ -22,6 +22,15 @@ const Login = ({ status, canResetPassword }: any) => {
         <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-background">
             <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-card shadow-md overflow-hidden sm:rounded-lg">
                 <Head title="Log in" />
+
+                <div className="mb-6 p-3 bg-muted/50 border border-border rounded-md text-center">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                        Demo Credentials
+                    </p>
+                    <p className="text-sm font-medium">
+                        admin@example.com / password
+                    </p>
+                </div>
 
                 {status && (
                     <div className="mb-4 font-medium text-sm text-green-600">
